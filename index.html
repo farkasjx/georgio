@@ -754,7 +754,26 @@ Input lépések:
 
         <div class="tech" id="p-few-shot">
           <div class="tech-head"><span class="tech-num">03.02</span><h3 class="tech-name">Few-shot <em>példa-vezérelt</em></h3></div>
-          <p>1–5 input/output pár a promptban. Messze a leghatékonyabb technika a legtöbb strukturált feladaton. A modell a példákból következtet a kívánt formátumra, stílusra és logikára.</p>
+          <p>1–5 input/output pár a promptban. Messze a leghatékonyabb technika a legtöbb strukturált feladaton. A modell a példákból következtet a kívánt formátumra, stílusra és logikára — anélkül, hogy szabályokat kellene felsorolni.</p>
+
+          <h4>Miért működik?</h4>
+          <p>A modell nem szabályokat tanul a példákból, hanem <strong>mintát ismer fel</strong>. Ha háromszor látja, hogy az input→output pár mindig egy szót tartalmaz nagybetűkkel, tudni fogja a negyedikre is. Ez különösen erős ott, ahol a kívánt viselkedés nehezen verbalizálható szabályokba, de példákon egyértelműen látszik.</p>
+
+          <h4>Mikor érdemes és mikor nem?</h4>
+          <ul>
+            <li><strong>Érdemes:</strong> klasszifikáció, kinyerés, formátumkövetés, stílusutánzás, strukturált output — bármikor, ha van 2–5 reprezentatív példád.</li>
+            <li><strong>Nem érdemes:</strong> ha a példáid nem reprezentatívak (csak egyszerű eseteket mutatnak), vagy ha a feladat annyira egyedi, hogy a példák félrevezetnek. Rossz példa rosszabb, mint semmi.</li>
+          </ul>
+
+          <h4>Hogyan válassz jó példákat?</h4>
+          <ol>
+            <li><strong>Legyenek változatosak.</strong> Ne csak a „könnyű" eseteket mutasd. Ha van edge case, az kerüljön be.</li>
+            <li><strong>Legyenek rövidek.</strong> A hosszú, bonyolult példák zavaróak. Az inputnak és outputnak egyértelműnek kell lennie.</li>
+            <li><strong>A sorrend számít.</strong> Az utolsó példa van legközelebb az új inputhoz — a legnehezebb vagy a legjellemzőbb kerüljön oda.</li>
+            <li><strong>Ne keverd a formátumot.</strong> Ha az első példában „Output:", a másodikban „Válasz:", a modell összezavarodik.</li>
+          </ol>
+
+          <h4>Alap példa — sentiment klasszifikáció</h4>
 <pre data-lang="prompt"><code>Classify the sentiment. Reply with one word: POSITIVE, NEGATIVE, or NEUTRAL.
 
 Input: "This product is amazing, best purchase ever."
@@ -768,6 +787,24 @@ Output: NEUTRAL
 
 Input: "I wasn't expecting much, but this blew me away."
 Output:</code></pre>
+
+          <h4>Haladó példa — strukturált JSON kinyerés</h4>
+          <p>A few-shot nem csak egyszavas outputra jó. Komplex, strukturált kimeneteket is hatékonyan meg lehet mutatni két-három példán keresztül:</p>
+<pre data-lang="prompt"><code>Magyar számlaszövegből nyerd ki a mezőket JSON formátumban.
+
+Input: "Fizetendő összeg: 127.000 Ft (ÁFA-val együtt), nettó: 100.000 Ft"
+Output: {"gross": 127000, "net": 100000, "vat": 27000, "currency": "HUF"}
+
+Input: "Bruttó végösszeg: 59 990 Ft, amelyből ÁFA: 9 990 Ft"
+Output: {"gross": 59990, "net": 50000, "vat": 9990, "currency": "HUF"}
+
+Input: "Összesen fizetendő: 38.100 forint + 27% áfa"
+Output:</code></pre>
+
+          <div class="callout">
+            <div class="callout-label">Tipp — one-shot is elég lehet</div>
+            <p>Ha a formátum egyszerű és az output kiszámítható, <strong>egy jó példa</strong> (one-shot) sokszor elegendő, és olcsóbb is. Ne adj több példát, mint amennyit az eredmény minősége valóban indokol — minden extra példa extra token.</p>
+          </div>
         </div>
 
         <div class="tech" id="p-cot">
@@ -803,13 +840,57 @@ majd add meg az árat.</code></pre>
 
         <div class="tech" id="p-react">
           <div class="tech-head"><span class="tech-num">03.06</span><h3 class="tech-name">ReAct <em>(Reason + Act)</em></h3></div>
-          <p>A modell felváltva érvel (<em>Thought</em>) és cselekszik (<em>Action</em>), majd megfigyeli az eredményt (<em>Observation</em>). Ez az agent-rendszerek alapmintája.</p>
+          <p>A modell felváltva érvel (<em>Thought</em>) és cselekszik (<em>Action</em>), majd megfigyeli az eredményt (<em>Observation</em>). Ez az agent-rendszerek alapmintája — az a loop, ami lehetővé teszi, hogy egy LLM többlépéses, valódi eszközöket használó feladatot oldjon meg.</p>
+
+          <h4>A három lépés részletesen</h4>
+          <ul>
+            <li><strong>Thought (gondolat).</strong> A modell explicit módon leírja, mit akar tenni és miért. Ez a CoT rész — az érvelés, ami megelőzi a cselekvést. Nélküle a modell „vakon" hívna eszközöket.</li>
+            <li><strong>Action (cselekvés).</strong> Egy konkrét tool hívása paraméterekkel: keresés, kódvégrehajtás, API-hívás, adatbázis-lekérdezés. Az app valójában <em>végrehajtja</em> ezt — nem a modell.</li>
+            <li><strong>Observation (megfigyelés).</strong> A tool visszatérési értéke, amit a modell lát. Ez az új adat alapján dönt a következő Thought-Action párról.</li>
+          </ul>
+
+          <h4>Miért erős ez a minta?</h4>
+          <p>A ReAct nem csak arról szól, hogy a modell eszközöket hívhat. A kulcs a <strong>gondolkodás és cselekvés váltakozása</strong>: minden action előtt van egy thought, ami elmagyarázza a szándékot. Ez két dolgot ad:</p>
+          <ul>
+            <li>A modell saját érvelése <em>ellenőrizhetővé</em> válik — látod, miért hívta azt a toolt.</li>
+            <li>Ha az observation meglepő, a következő thought <em>alkalmazkodik</em> — nem folytatja vakon az eredeti tervet.</li>
+          </ul>
+
+          <h4>Alap példa — egy lépéses eszközhasználat</h4>
 <pre data-lang="prompt"><code>Thought: I need to find the current weather in Budapest.
 Action: search("Budapest weather today")
 Observation: Budapest, 22°C, partly cloudy
 
 Thought: Now I can answer.
 Answer: It's 22°C and partly cloudy in Budapest today.</code></pre>
+
+          <h4>Haladó példa — több lépés, döntés közben</h4>
+          <p>A ReAct igazi ereje a <strong>több körös</strong> feladatoknál látszik, ahol az egyik lépés eredménye meghatározza a következőt:</p>
+<pre data-lang="prompt"><code>Feladat: Nézd meg, hogy a ACME Kft legutóbbi számlája ki van-e fizetve,
+és ha nem, küldd el a fizetési emlékeztetőt.
+
+Thought: Először ki kell keresnem az ACME Kft legutóbbi számláját.
+Action: db_query("SELECT * FROM invoices WHERE client='ACME Kft' ORDER BY date DESC LIMIT 1")
+Observation: {id: 1042, amount: 450000, due: "2026-06-01", status: "unpaid"}
+
+Thought: A számla nincs kifizetve és lejárt. Meg kell keresnem a kapcsolattartó e-mail címét.
+Action: db_query("SELECT email FROM contacts WHERE company='ACME Kft'")
+Observation: {email: "kovacs.peter@acme.hu"}
+
+Thought: Megvan minden adat. Elküldöm az emlékeztetőt.
+Action: send_email(to="kovacs.peter@acme.hu", template="payment_reminder", invoice_id=1042)
+Observation: Email sent successfully.
+
+Answer: Az ACME Kft 1042-es számlája (450 000 Ft, határidő: 2026-06-01) nincs kifizetve.
+Elküldtem a fizetési emlékeztetőt Kovács Péternek.</code></pre>
+
+          <div class="callout warning">
+            <div class="callout-label">Fontos — ki hajtja végre az Actiont?</div>
+            <p>A modell <em>csak a szöveget generálja</em>: leírja, hogy <code>Action: send_email(...)</code>. Az alkalmazás kódja <strong>parse-olja</strong> ezt, <em>ténylegesen végrehajtja</em>, és az eredményt visszaadja Observation-ként. Maga a modell semmit nem „csinál" — az app az orchestrátor.</p>
+          </div>
+
+          <h4>ReAct vs sima tool calling</h4>
+          <p>A modern API-k (Claude, OpenAI) beépített tool callinggal is megvalósítják ezt a mintát — a Thought-Action-Observation struktúra ilyenkor <em>implicit</em> marad a JSON üzenetváltásokban. A ReAct-prompting értéke akkor a legnagyobb, ha explicit gondolkodást akarsz látni, vagy ha kis modelleket használsz, ahol a beépített reasoning gyengébb.</p>
         </div>
 
         <div class="tech" id="p-caveman">
