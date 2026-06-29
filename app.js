@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════ */
 
 /* ── PAGE NAVIGATION ── */
-const pages = ['map', 'roadmap', 'tools', 'prompting'];
+const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama'];
 
 function showPage(id) {
   // update topbar
@@ -83,6 +83,24 @@ function buildSidebar(id) {
         { href: '#p-rag', text: 'RAG prompting', sub: true },
         { href: '#p-eval', text: 'Értékelés & iteráció', sub: true },
         { href: '#p-cost', text: 'Költség & latency', sub: true },
+      ]},
+    ],
+    ollama: [
+      { label: 'Szintek', links: [
+        { href: '#ollama-overview', text: 'Áttekintés' },
+        { href: '#ol-0', text: 'Alap setup', num: '00' },
+        { href: '#ol-1', text: 'Model management', num: '01' },
+        { href: '#ol-2', text: 'API & paraméterek', num: '02' },
+        { href: '#ol-3', text: 'Streaming & UX', num: '03' },
+        { href: '#ol-4', text: 'Tool & agent', num: '04' },
+        { href: '#ol-5', text: 'Docker & deploy', num: '05' },
+        { href: '#ol-6', text: 'Security', num: '06' },
+        { href: '#ol-7', text: 'Performance', num: '07' },
+        { href: '#ol-8', text: 'Debugging', num: '08' },
+        { href: '#ol-9', text: 'Full dev projekt', num: '09' },
+      ]},
+      { label: 'Referencia', links: [
+        { href: '#ol-summary', text: 'Összefoglalás', sub: true },
       ]},
     ],
   };
