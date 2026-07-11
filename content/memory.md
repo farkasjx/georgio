@@ -30,6 +30,7 @@ footer:
   <a class="toc-card" href="#mem-4"><div class="tc-num">Feladat 2</div><div class="tc-name">Sliding window</div><div class="tc-desc">Fix token-plafon, token-számlálás.</div></a>
   <a class="toc-card" href="#mem-5"><div class="tc-num">Feladat 3</div><div class="tc-name">Summary memory</div><div class="tc-desc">Auto-összegzés threshold felett.</div></a>
   <a class="toc-card" href="#mem-6"><div class="tc-num">Feladat 4</div><div class="tc-name">Vektor memory</div><div class="tc-desc">ChromaDB, szemantikus long-term.</div></a>
+  <a class="toc-card" href="#mem-6b"><div class="tc-num">Kitérő</div><div class="tc-name">Memory vs. RAG</div><div class="tc-desc">Ugyanaz a technika, más a cél.</div></a>
   <a class="toc-card" href="#mem-7"><div class="tc-num">7. rész</div><div class="tc-name">Security</div><div class="tc-desc">Memory poisoning, PII, OWASP LLM.</div></a>
   <a class="toc-card" href="#mem-8"><div class="tc-num">8. rész</div><div class="tc-name">Frameworkök</div><div class="tc-desc">LangGraph, Mem0, Anthropic, saját.</div></a>
   <a class="toc-card" href="#mem-9"><div class="tc-num">9. rész</div><div class="tc-name">Best practices</div><div class="tc-desc">Eviction, pgvector, tesztelés.</div></a>
@@ -486,6 +487,67 @@ A Chroma JS-kliens egy **futó Chroma szerverhez** csatlakozik (`chroma run --pa
 
 ::::: callout label="Gyakorlat"
 Tölts be 10-15 vegyes emléket, majd kérdezz rá olyanra, ami *szemantikailag* rokon, de nem szó szerinti egyezés (tárolt: „Dockert használ", kérdés: „Konténerizációval dolgozik?"). Ez mutatja meg a vektor-keresés erejét a kulcsszó-kereséssel szemben.
+:::::
+::::::
+
+:::::: section id=mem-6b heading="Kitérő — Memory vs. RAG: mi a különbség?" nav="Memory vs. RAG" group="Architektúra"
+
+<p class="topic-tagline">Cél: tisztázd a gyakori félreértést — a technika ugyanaz, a cél más.</p>
+
+### Miért keverik össze?
+
+A vektor-memory (mem-6) és a RAG **ugyanazt a gépezetet** használja: szöveget embeddinggé alakít, vektor-DB-ben tárol, és lekérdezéskor a szemantikailag legrelevánsabbat visszakeresi. Ettől tűnik úgy, mintha ugyanaz lenne. A különbség nem a *hogyan*-ban van, hanem a **mit tárolsz és miért**.
+
+### A lényegi különbség
+
+::::: stack-grid
+:::: card label="RAG — tudás"
+**Külső, statikus tudásbázis.** Dokumentáció, PDF-ek, wiki, terméktudás. Célja: a modell olyan tényekre válaszoljon, amiket nem tanult meg. **Nem a felhasználóról szól, hanem a világról.**
+::::
+:::: card label="Memory — állapot"
+**A beszélgetés/felhasználó állapota.** Ki a user, mit mondott korábban, mit szeret, mire kérted. Célja: **folytonosság** session-ökön át. A felhasználóról szól.
+::::
+:::::
+
+### Összehasonlító tábla
+
+| Szempont | RAG | Memory |
+|---|---|---|
+| **Mit tárol** | Tudásbázist (dokumentumok, tények a világról) | Interakciós állapotot (ki a user, mi történt) |
+| **Forrás** | Előre betöltött, kurált korpusz | A beszélgetés közben keletkezik, dinamikusan |
+| **Élettartam** | Statikus, ritkán frissül | Folyamatosan nő és változik |
+| **Kihez kötött** | Mindenkinek ugyanaz (globális) | User-önként külön (perszonalizált) |
+| **Írás iránya** | Jellemzően read-only (te töltöd fel) | Read + write (az agent maga is ír bele) |
+| **Tipikus kérdés** | „Mit mond a doksi az X funkcióról?" | „Mit kértem tőled tegnap?" |
+
+### Egy mondatban
+
+> **RAG** = a modell *tudjon többet a világról.*
+> **Memory** = a modell *emlékezzen a beszélgetésre és a felhasználóra.*
+
+### A gyakorlatban gyakran együtt élnek
+
+Egy éles agent tipikusan **mindkettőt** használja, két külön collection-ben:
+
+```python
+# ugyanaz a Chroma kliens, két külön cél
+knowledge = db.get_or_create_collection("docs_rag")      # RAG: statikus tudás
+memory    = db.get_or_create_collection("user_memory")   # Memory: user-állapot
+
+def answer(user_input, user_id):
+    facts   = knowledge.query(query_texts=[user_input], n_results=3)  # világ-tudás
+    history = memory.query(query_texts=[user_input], n_results=3)     # user-emlék
+    # a system promptba mindkettő bekerül, de eltérő szereppel:
+    #  - facts  → "Ezt tudjuk a dokumentációból: ..."
+    #  - history→ "Ezt tudjuk a felhasználóról: ..."
+```
+
+::::: callout label="Gyakorlat"
+Vedd a mem-6 vektor-kódodat, és bontsd ketté: egy `docs_rag` collection-be tölts fel 3-4 „dokumentum-részletet" (pl. a Nevogate SimplePay API leírásából), egy `user_memory`-be pedig user-tényeket. Tegyél fel egy olyan kérdést, ami **mindkettőt** igényli (pl. „A korábban említett fizetési flow-hoz melyik API endpoint kell?") — és figyeld meg, hogy a kettő eltérő szerepe hogyan jelenik meg a system promptban.
+:::::
+
+::::: callout warning label="Következő tutorial"
+A RAG önmagában megér egy külön tutorialt — chunkolás, retrieval-minőség, re-ranking, hybrid search. A **vektor-adatbázisok** tutorial (lásd a végén) ennek az alapja lesz.
 :::::
 ::::::
 
