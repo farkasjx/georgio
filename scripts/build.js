@@ -34,6 +34,7 @@ const PAGE_ORDER = [
   { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
   { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
+  { key: 'vectordb',  label: 'Vector adatbázisok',  labelEn: 'Vector databases', dot: '#17cb11' },
 ];
 
 /* ── NYELVEK ──
