@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════ */
 
 /* ── PAGE NAVIGATION ── */
-const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama'];
+const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama', 'aiconfig'];
 
 function showPage(id) {
   // update topbar
@@ -101,6 +101,16 @@ function buildSidebar(id) {
       ]},
       { label: 'Referencia', links: [
         { href: '#ol-summary', text: 'Összefoglalás', sub: true },
+      ]},
+    ],
+    aiconfig: [
+      { label: 'Témák', links: [
+        { href: '#ac-overview', text: 'Miért kellenek?', num: '00' },
+        { href: '#ac-agents', text: 'AGENTS.md — közös alap', num: '01' },
+        { href: '#ac-instructions', text: 'Instructions fájlok', num: '02' },
+        { href: '#ac-skills', text: 'Skill fájlok', num: '03' },
+        { href: '#ac-persona', text: 'Persona / agent', num: '04' },
+        { href: '#ac-layout', text: 'Mappaszerkezet', num: '05' },
       ]},
     ],
   };
