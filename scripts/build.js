@@ -33,6 +33,7 @@ const PAGE_ORDER = [
   { key: 'ollama',    label: 'Lokális LLM',         labelEn: 'Local LLM',       dot: '#4ec9c9' },
   { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
+  { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
 ];
 
 /* ── NYELVEK ──
