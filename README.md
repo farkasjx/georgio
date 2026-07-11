@@ -70,13 +70,17 @@ Minden blokk a meglévő CSS-osztályokra képződik, tehát stílus-kompatibili
 | Blokk | Írásmód | Eredmény |
 |-------|---------|----------|
 | Szekció | `::: section id=… num=01 nav="…" group="…"` | `<section class="topic">` + topic-marker |
+| Szekció (szint-fejléc) | `::: section id=… heading="0. szint — …" nav="…"` | `<div class="section-heading">` fejléc |
+| Szekció (topic nélkül) | `::: section notopic id=… …` | `<section>` a "topic" osztály nélkül |
 | Callout | `::: callout label="Tipp"` | alap keret |
 | Callout (variáns) | `::: callout danger label="…"` | `danger` / `warning` / `success` |
 | Kártyarács | `::: stack-grid` | `<div class="stack-grid">` |
 | Kártya | `::: card label="🧠 Track 1" color="#c4a0ff"` | `stack-card` |
-| Összehasonlítás | `::: compare` + benne `::: bad` és `::: good` | két oszlop |
+| Összehasonlítás | `::: compare` + benne `::: bad`/`::: good` (vagy két `::: good`) | két oszlop |
 | Technika | `::: tech id=… num=03.01 name="…" nav="…"` | `tech` kártya |
 | Nyers HTML | `::: raw` … `:::` | a tartalom érintetlenül átmegy |
+
+A `heading=` attribútum a szintekre/fejlécekre való (ollama), a `num=` a számozott topic-markerre (prompting, security). A `nav=` bármelyikkel megy — az adja a sidebar-linket.
 
 Kódblokk: sima Markdown ```` ```python ````. Az **automatikus syntax highlight**
 a nyelvből jön (`python`, `bash`, `yaml`, `json`, `nginx`…). A nem valódi nyelvek
@@ -118,12 +122,16 @@ ezt a konvenciót követi — másold onnan a mintát.
    `{ key: '<kulcs>', label: 'Topbar felirat', dot: '#szín' }`.
 3. `npm run build`.
 
-## Fokozatos migráció
+## Migrációs állapot
 
-Az `roadmap.md`, `tools.md`, `ollama.md`, `aiconfig.md`, `security.md` jelenleg
-`::: raw` blokkban tartja az eredeti HTML-t — ez 1:1 működik. Amikor időd van,
-egy-egy oldalt átírsz `:::` blokkokra a `prompting.md` mintájára. Nem kell
-egyszerre mindent: a raw és a strukturált blokkok együtt élnek.
+A `prompting.md`, `ollama.md`, `aiconfig.md` és `security.md` **teljesen Markdown-blokkokra** van bontva (`:::` szintaxis) — ezek a referencia-oldalak, itt látod, hogyan néz ki minden blokk-típus a gyakorlatban.
+
+A `tools.md` és `roadmap.md` szándékosan `::: raw` blokkban tartja az eredeti HTML-t:
+
+- **tools.md** — a nagy összehasonlító táblák cellánként sok inline HTML-t (badge, tool-name, small) tartalmaznak; Markdown-táblában ez törékenyebb és nem olvashatóbb lenne. A cellák szövegét a raw HTML-ben szerkeszted.
+- **roadmap.md** — több egyedi vizuális blokkja van (`timeline-bar`, `phase-block` a `--phase-color` változóval, `paper-card`), amik nincsenek a standard blokk-készletben.
+
+Bármelyik raw-oldalt bármikor szétbonthatod `:::` blokkokra a többi mintájára — a raw és a strukturált blokkok együtt élnek, nem kell egyszerre mindent.
 
 ## Élesítés (Caddy)
 

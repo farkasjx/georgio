@@ -53,9 +53,11 @@ export function registerContainers(md, mdContainer, collector) {
     render(tokens, idx) {
       const t = tokens[idx];
       if (t.nesting === 1) {
-        const { attrs } = parseHeader(t.info);
+        const { attrs, flags } = parseHeader(t.info);
         const id = attrs.id || '';
-        const cls = ['topic', attrs.class].filter(Boolean).join(' ');
+        // notopic flag: a "topic" osztály nélküli sima section (ollama-szintek)
+        const noTopic = flags.includes('notopic');
+        const cls = [noTopic ? null : 'topic', attrs.class].filter(Boolean).join(' ');
         const style = attrs.style ? ` style="${esc(attrs.style)}"` : '';
 
         // sidebar-adat gyűjtése
@@ -69,9 +71,13 @@ export function registerContainers(md, mdContainer, collector) {
           });
         }
 
-        let out = `<section class="${cls}"${id ? ` id="${id}"` : ''}${style}>\n`;
+        let out = `<section${cls ? ` class="${cls}"` : ''}${id ? ` id="${id}"` : ''}${style}>\n`;
         if (attrs.num) {
           out += `<span class="topic-marker">&lt;${esc(attrs.num)}&gt; TOPIC</span>\n`;
+        }
+        // heading="..." -> <div class="section-heading"> (ollama-szintek fejléce)
+        if (attrs.heading) {
+          out += `<div class="section-heading">${esc(attrs.heading)}</div>\n`;
         }
         return out;
       }
