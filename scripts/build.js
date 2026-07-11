@@ -33,7 +33,6 @@ const PAGE_ORDER = [
   { key: 'ollama',    label: 'Lokális LLM',         labelEn: 'Local LLM',       dot: '#4ec9c9' },
   { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
-  { key: 'memory',    label: 'Memory',              labelEn: 'Memory',           dot: '#e3b5b9' },
 ];
 
 /* ── NYELVEK ──
@@ -329,13 +328,16 @@ function buildSearchIndex(pages) {
    index.html sablon összeállítása egy adott locale-hoz
 ───────────────────────────────────────────── */
 function buildHtml(pages, locale) {
-  const topbarNav = PAGE_ORDER.map(p => {
+  // az oldalváltó dropdown elemei (a sidebar tetején jelenik meg, nem a topbarban)
+  const defaultPage = PAGE_ORDER.find(p => p.key === 'roadmap');
+  const pageSwitcherItems = PAGE_ORDER.map(p => {
     const isDefault = p.key === 'roadmap';
     const label = locale.code === 'hu' ? p.label : p.labelEn;
-    return `    <button class="tnav-item${isDefault ? ' active' : ''}" data-page="${p.key}">
-      <span class="tnav-dot" style="background:${p.dot}"></span>${label}
-    </button>`;
+    return `      <button class="ps-item${isDefault ? ' active' : ''}" data-page="${p.key}" data-label="${label}" data-dot="${p.dot}">
+        <span class="ps-dot" style="background:${p.dot}"></span>${label}
+      </button>`;
   }).join('\n');
+  const defaultLabel = locale.code === 'hu' ? defaultPage.label : defaultPage.labelEn;
 
   const pagesHtml = PAGE_ORDER
     .filter(p => p.key !== 'map')
@@ -384,11 +386,7 @@ function buildHtml(pages, locale) {
     <div class="brand-icon">⬡</div>
     <span class="brand-name">AI Hub<span class="brand-version">v2.0</span></span>
   </a>
-  <div class="topbar-nav-wrap" id="topbar-nav-wrap">
-    <div class="topbar-nav" id="topbar-nav">
-${topbarNav}
-    </div>
-  </div>
+  <div class="topbar-spacer"></div>
   <div class="topbar-right">
     <a class="lang-switch" href="${locale.otherHref}" onclick="event.preventDefault(); location.href='${locale.otherHref}'+location.hash;" title="${otherLangLabel === 'EN' ? 'Switch to English' : 'Váltás magyarra'}">${otherLangLabel}</a>
     <button class="search-trigger" onclick="openSearch()" aria-label="${ui.searchLabel}" title="${ui.searchTitle}">
@@ -420,7 +418,19 @@ ${mapPage}
 
 <!-- ════════ MAIN SHELL ════════ -->
 <div class="shell" id="shell">
-  <aside class="sidebar"><nav id="sidebar-nav"></nav></aside>
+  <aside class="sidebar">
+    <div class="page-switcher" id="page-switcher">
+      <button class="ps-trigger" id="ps-trigger" onclick="togglePageSwitcher()" aria-haspopup="true" aria-expanded="false">
+        <span class="ps-dot" id="ps-current-dot" style="background:${defaultPage.dot}"></span>
+        <span class="ps-current-label" id="ps-current-label">${defaultLabel}</span>
+        <svg class="ps-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="page-switcher-panel" id="page-switcher-panel">
+${pageSwitcherItems}
+      </div>
+    </div>
+    <nav id="sidebar-nav"></nav>
+  </aside>
   <main class="content">
 
 ${pagesHtml}

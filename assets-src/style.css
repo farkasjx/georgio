@@ -112,83 +112,11 @@ body::before {
   margin-left: 4px;
 }
 
-.topbar-nav {
-  display: flex; align-items: center; gap: 2px;
-  padding: 0 16px;
+/* A menüsor a sidebar tetején lévő dropdown-ba (page-switcher) költözött —
+   a topbar most csak a brand-et és a jobb oldali eszközöket (nyelv, keresés,
+   téma) tartalmazza, ezért egy rugalmas kitöltő elem választja szét őket. */
+.topbar-spacer {
   flex: 1;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  /* látható, de diszkrét görgetősáv, hogy jelezze: van elrejtett tartalom */
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-
-.topbar-nav::-webkit-scrollbar { height: 4px; display: block; }
-.topbar-nav::-webkit-scrollbar-track { background: transparent; }
-.topbar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.topbar-nav::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
-
-/* fade-jelzés a szélein, ha van elrejtett tartalom (JS állítja be a class-t) */
-.topbar-nav-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-}
-.topbar-nav-wrap::before,
-.topbar-nav-wrap::after {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 28px;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 0;
-  transition: opacity .15s;
-}
-.topbar-nav-wrap::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-2, var(--bg)), transparent);
-}
-.topbar-nav-wrap::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-2, var(--bg)), transparent);
-}
-.topbar-nav-wrap.can-scroll-left::before { opacity: 1; }
-.topbar-nav-wrap.can-scroll-right::after { opacity: 1; }
-
-.tnav-item {
-  display: flex; align-items: center; gap: 7px;
-  padding: 6px 14px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  border: 1px solid transparent;
-  white-space: nowrap;
-  transition: color .2s, background .2s, border-color .2s;
-  user-select: none;
-  background: none;
-}
-
-.tnav-item:hover {
-  color: var(--text);
-  background: var(--bg-3);
-}
-
-.tnav-item.active {
-  color: var(--amber);
-  background: var(--amber-dim);
-  border-color: rgba(232,168,74,0.2);
-}
-
-.tnav-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.6;
-  flex-shrink: 0;
 }
 
 .topbar-right {
@@ -236,6 +164,83 @@ body::before {
 .sidebar::-webkit-scrollbar { width: 4px; }
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── OLDALVÁLTÓ DROPDOWN (a sidebar tetején) ──
+   A korábbi topbar-menüsor helyett: kevesebb vizuális zaj, sosem
+   zsúfolódik, és minden szélességben ugyanúgy viselkedik. */
+.page-switcher {
+  position: relative;
+  padding: 0 16px 16px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ps-trigger {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.ps-trigger:hover { border-color: var(--text-dim); }
+
+.ps-current-label { flex: 1; text-align: left; }
+
+.ps-chevron {
+  width: 15px; height: 15px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  transition: transform .15s;
+}
+.page-switcher-panel.open ~ .ps-trigger .ps-chevron,
+.ps-trigger[aria-expanded="true"] .ps-chevron { transform: rotate(180deg); }
+
+.ps-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.page-switcher-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+  padding: 6px;
+}
+.page-switcher-panel.open { display: block; }
+
+.ps-item {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 7px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: color .15s, background .15s;
+}
+.ps-item:hover { color: var(--text); background: var(--bg-3); }
+.ps-item.active { color: var(--amber); background: var(--amber-dim); }
 
 .sidebar-section-label {
   font-family: var(--mono);
@@ -1089,9 +1094,25 @@ section[id], .tech[id] {
    RESPONSIVE
    ════════════════════════════════ */
 @media (max-width: 960px) {
-  .sidebar { display: none; }
+  /* A .shell alapból flex-row (sidebar + content egymás mellett). Mivel a
+     sidebar itt teljes szélességű lesz (position:static), oszlopos
+     elrendezésre kell váltani, különben a content összenyomódna mellette. */
+  .shell { flex-direction: column; }
+
+  /* A sidebar section-navigációja (sidebar-nav) eltűnik szűk nézetben,
+     de az oldalváltó (page-switcher) látható marad — enélkül mobilon
+     nem lehetne lapot váltani. */
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+  }
+  .sidebar #sidebar-nav { display: none; }
+  .page-switcher-panel { left: 0; right: 0; }
   .content { padding: 28px 24px 60px; max-width: 100%; }
-  .topbar-nav { overflow-x: auto; }
 }
 
 @media (max-width: 640px) {

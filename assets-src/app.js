@@ -6,10 +6,17 @@
 const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama', 'aiconfig', 'security'];
 
 function showPage(id) {
-  // update topbar
-  document.querySelectorAll('.tnav-item').forEach(el => {
+  // oldalváltó gomb frissítése (dot + felirat) a kattintott elem adataiból
+  const trigger = document.getElementById('ps-trigger');
+  const matchingItem = document.querySelector(`.ps-item[data-page="${id}"]`);
+  if (trigger && matchingItem) {
+    document.getElementById('ps-current-dot').style.background = matchingItem.dataset.dot;
+    document.getElementById('ps-current-label').textContent = matchingItem.dataset.label;
+  }
+  document.querySelectorAll('.ps-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === id);
   });
+  closePageSwitcher();
 
   // map page is fullscreen fixed; other pages live in shell
   const mapPage = document.getElementById('page-map');
@@ -34,6 +41,22 @@ function showPage(id) {
   }
 
   window.location.hash = id;
+}
+
+/* ── OLDALVÁLTÓ DROPDOWN (sidebar tetején) ── */
+function togglePageSwitcher() {
+  const panel = document.getElementById('page-switcher-panel');
+  const trigger = document.getElementById('ps-trigger');
+  const isOpen = panel.classList.toggle('open');
+  trigger.setAttribute('aria-expanded', String(isOpen));
+}
+
+function closePageSwitcher() {
+  const panel = document.getElementById('page-switcher-panel');
+  const trigger = document.getElementById('ps-trigger');
+  if (!panel) return;
+  panel.classList.remove('open');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
 
 /* ── Ugrás egy adott oldal adott section-jéhez (pl. keresésből) ──
@@ -227,8 +250,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const startPage = pages.includes(hash) ? hash : 'roadmap';
   showPage(startPage);
 
-  document.querySelectorAll('.tnav-item').forEach(item => {
+  document.querySelectorAll('.ps-item').forEach(item => {
     item.addEventListener('click', () => showPage(item.dataset.page));
+  });
+
+  // panel bezárása kattintásra kívülre, vagy Escape-re
+  document.addEventListener('click', (e) => {
+    const switcher = document.getElementById('page-switcher');
+    if (switcher && !switcher.contains(e.target)) closePageSwitcher();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePageSwitcher();
   });
 });
 
@@ -239,39 +271,3 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('aihub-theme', next); } catch (e) {}
 }
-
-/* ── TOPBAR NAV — vízszintes görgetés kezelése ──
-   Ha a menüpontok nem férnek ki egy sorban, ez teszi elérhetővé
-   az összes elemet: egérgörgő -> vízszintes mozgás, és fade-jelzés
-   a szélein, ha van elrejtett tartalom. */
-(function () {
-  function initTopbarScroll() {
-    var wrap = document.getElementById('topbar-nav-wrap');
-    var nav = document.getElementById('topbar-nav');
-    if (!wrap || !nav) return;
-
-    function updateFade() {
-      var maxScroll = nav.scrollWidth - nav.clientWidth;
-      wrap.classList.toggle('can-scroll-left', nav.scrollLeft > 4);
-      wrap.classList.toggle('can-scroll-right', nav.scrollLeft < maxScroll - 4);
-    }
-
-    // függőleges egérgörgetés -> vízszintes mozgás (asztali gépen ez a gyakori eset)
-    nav.addEventListener('wheel', function (e) {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        nav.scrollLeft += e.deltaY;
-        e.preventDefault();
-      }
-    }, { passive: false });
-
-    nav.addEventListener('scroll', updateFade);
-    window.addEventListener('resize', updateFade);
-    updateFade();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTopbarScroll);
-  } else {
-    initTopbarScroll();
-  }
-})();
