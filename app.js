@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════ */
 
 /* ── PAGE NAVIGATION ── */
-const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama', 'aiconfig'];
+const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama', 'aiconfig', 'security'];
 
 function showPage(id) {
   // update topbar
@@ -111,6 +111,16 @@ function buildSidebar(id) {
         { href: '#ac-skills', text: 'Skill fájlok', num: '03' },
         { href: '#ac-persona', text: 'Persona / agent', num: '04' },
         { href: '#ac-layout', text: 'Mappaszerkezet', num: '05' },
+      ]},
+    ],
+    security: [
+      { label: 'Biztonság', links: [
+        { href: '#sec-owasp', text: 'OWASP LLM Top 10', num: '01' },
+        { href: '#sec-jailbreak', text: 'Jailbreak minták', num: '02' },
+        { href: '#sec-agentic', text: 'Agentic & MCP', num: '03' },
+        { href: '#sec-rag', text: 'RAG & vector store', num: '04' },
+        { href: '#sec-defense', text: 'Védekezési rétegek', num: '05' },
+        { href: '#sec-template', text: 'System prompt sablon', num: '06' },
       ]},
     ],
   };
