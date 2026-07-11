@@ -1,0 +1,11 @@
+{
+  "_comment": "English glossary — limited to terms whose target lives on the translated 'prompting' page, since the other pages are not yet translated.",
+
+  "context window": { "page": "prompting", "id": "p-context" },
+  "context engineering": { "page": "prompting", "id": "p-context" },
+  "chain-of-thought": { "page": "prompting", "id": "p-cot", "variants": ["chain of thought"] },
+  "few-shot": { "page": "prompting", "id": "p-few-shot" },
+  "zero-shot": { "page": "prompting", "id": "p-zero-shot" },
+  "prompt injection": { "page": "prompting", "id": "p-injection" },
+  "structured output": { "page": "prompting", "id": "p-structured", "variants": ["structured outputs"] }
+}

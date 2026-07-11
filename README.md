@@ -19,26 +19,40 @@ deploy. A JS (`app.js`, `roadmap-data.js`) nem változik, ha csak tartalmat írs
 ## Mappaszerkezet
 
 ```
-content/            A tartalom — EZT szerkeszted
-  roadmap.md
-  tools.md
-  prompting.md      ← teljesen migrált referencia-oldal (minden blokk-típus)
-  ollama.md
-  aiconfig.md
-  security.md
+content/
+  hu/               Magyar tartalom — EZT szerkeszted (elsődleges nyelv)
+    roadmap.md
+    tools.md
+    prompting.md    ← teljesen migrált referencia-oldal (minden blokk-típus)
+    ollama.md
+    aiconfig.md
+    security.md
+    glossary.json   automatikus linkelés szótára (magyar célok)
+  en/               Angol tartalom
+    prompting.md    ← teljesen lefordítva (referencia)
+    roadmap.md, tools.md, ollama.md, aiconfig.md, security.md
+                    ← rövid "még nincs lefordítva" jelzés + visszalink
+    glossary.json   automatikus linkelés szótára (angol célok)
+assets-src/         Kézzel karbantartott, nyelvfüggetlen stílus/JS — EZT szerkeszted
+  style.css         az eredeti stílus + auto-link/notice-link kiegészítések
+  theme-light.css   világos téma (CSS-változó felülírás)
+  search.css        keresés modal stílusa
+  search.js         kliens-oldali keresés logika
+  app.js            navigáció, térkép logika, témaváltás, topbar-görgetés
+  roadmap-data.js   a térkép csomópont-adatai (külön adatfájl)
 scripts/
-  build.js          fő build (MD -> index.html + sidebar-adat)
+  build.js          fő build (minden locale-t lebuildel + bemásolja az assets-src-t)
   containers.js     a ::: blokkok definíciói (section, callout, compare, tech…)
-  map-page.html     az interaktív térkép fix HTML-váza (nem MD)
+  map-page.html     az interaktív térkép fix HTML-váza (nem MD, csak magyarul)
   serve.js          fejlesztői statikus szerver
-public/             GENERÁLT — ezt szolgálja ki Caddy, ne szerkeszd kézzel
-  index.html
-  assets/
-    style.css       az eredeti stílus (érintetlen)
-    highlight.css   syntax-highlight paletta (build generálja)
-    app.js          navigáció + térkép logika
-    roadmap-data.js a térkép csomópont-adatai (külön adatfájl)
+public/             TELJESEN GENERÁLT — .gitignore-olva, ne szerkeszd kézzel,
+                    bármikor törölhető, az `npm run build` újra előállítja
+  index.html        magyar (alapértelmezett, gyökér)
+  en/index.html     angol
+  assets/           a build másolja ide az assets-src/ tartalmát + a highlight.css-t
 ```
+
+**Miért nem `public/`-ban szerkesztesz stílust/JS-t?** Mert a `public/` mappa a build kimenete — ha bárki törli és újrafuttatja a buildet (pl. egy friss `git clone` után), mindennek onnan kell újra elő tudnia állnia. Az `assets-src/` a forrás, ezt commitolod; a `public/` a `.gitignore`-ban van, a GitHub Actions minden buildnél frissen állítja elő.
 
 ## Egy MD-oldal felépítése
 
@@ -146,3 +160,42 @@ aihub.pelda.hu {
 ```
 
 A build futhat a gépeden vagy CI-ben; a deploy a `public/` tartalmának feltöltése.
+
+## Új funkciók
+
+### Sötét / világos mód
+
+A topbar jobb oldalán lévő nap/hold gomb vált. A választás `localStorage`-ba mentődik, alapból a böngésző/rendszer beállítását követi. A világos paletta a `public/assets/theme-light.css`-ben él — ha egy elem nem a `style.css` CSS-változóit használja (konkrét hex-szín), azt itt kell felülírni `[data-theme="light"]` alatt.
+
+### Keresés (Ctrl+K)
+
+A build minden section szövegét kigyűjti egy kereshető indexbe (`window.__SEARCH__`, inline a HTML-ben), amit a `public/assets/search.js` kliens-oldalon pontoz és jelenít meg. Nincs külön build lépés hozzá — automatikusan frissül minden `npm run build`-nél, a raw-blokkos oldalak tartalma is bekerül.
+
+### Automatikus fogalom-linkelés
+
+A `content/<locale>/glossary.json` fájlban definiált fogalmak (pl. "RAG", "OWASP") **első előfordulása** az egész oldalon (nem csak egy lapon belül) automatikusan linkké válik a megadott célra. Egy fogalom csak egyszer, sitewide linkelődik; a saját célszekciójában lévő említés nem linkelődik önmagára.
+
+Új fogalom hozzáadása:
+```json
+"ChromaDB": { "page": "security", "id": "sec-rag" }
+```
+Ha a kifejezésnek több írásmódja is van, add meg `variants` tömbként:
+```json
+"prompt injection": { "page": "security", "id": "sec-jailbreak", "variants": ["prompt injectiont"] }
+```
+
+### Nyelvesítés (HU / EN)
+
+A tartalom `content/hu/` és `content/en/` almappákban él. A build **mindkét nyelvet lebuildeli**: a magyar a `public/index.html`-be (gyökér), az angol a `public/en/index.html`-be. Az `assets/` (CSS, JS) közös, nem duplikálódik.
+
+A topbarban lévő HU/EN gomb átvált a másik nyelvre, **megőrizve az aktuális oldal/section hash-t**.
+
+Jelenleg csak a `prompting` oldal van teljesen lefordítva angolra — ez a referencia. A többi oldal angol verziója egy rövid, professzionális „még nincs lefordítva" jelzés a `content/en/<oldal>.md`-ben, ami visszalinkel a magyar verzióra. Egy oldal lefordításához:
+
+1. Írd meg a `content/en/<oldal>.md`-t (ugyanazokkal a section-id-kkal, mint a magyar verzióban — ez teszi lehetővé, hogy a keresés és a linkek konzisztensek maradjanak).
+2. Ha a fogalom-szótárban a lefordított oldalra mutató új angol kifejezéseket akarsz, vedd fel a `content/en/glossary.json`-be.
+3. `npm run build` — mindkét nyelv újragenerálódik.
+
+A `PAGE_ORDER` tömb (`scripts/build.js`) minden oldalhoz tartalmaz `label` (magyar) és `labelEn` (angol) topbar-feliratot — új oldalnál mindkettőt add meg.
+
+**Korlátozás:** az interaktív térkép (`scripts/map-page.html`) fix HTML-váza jelenleg csak magyarul létezik, mindkét nyelvi verzióban ugyanaz jelenik meg.

@@ -1,0 +1,24 @@
+{
+  "_comment": "Kulcsszó -> célpont. A build minden section szövegében az ELSŐ előfordulást linkeli, kódblokkot és meglévő linket kihagyva. A kulcs kis-nagybetű érzéketlen, a 'variants' extra írásmódokat ad ugyanahhoz a célhoz.",
+
+  "ChromaDB": { "page": "security", "id": "sec-rag" },
+  "RAG": { "page": "security", "id": "sec-rag" },
+  "OWASP": { "page": "security", "id": "sec-owasp" },
+  "prompt injection": { "page": "security", "id": "sec-jailbreak", "variants": ["prompt injectiont", "prompt injectionnel"] },
+  "jailbreak": { "page": "security", "id": "sec-jailbreak" },
+  "MCP": { "page": "security", "id": "sec-agentic" },
+  "excessive agency": { "page": "security", "id": "sec-agentic" },
+  "chain-of-thought": { "page": "prompting", "id": "p-cot", "variants": ["chain of thought"] },
+  "few-shot": { "page": "prompting", "id": "p-few-shot" },
+  "zero-shot": { "page": "prompting", "id": "p-zero-shot" },
+  "context window": { "page": "prompting", "id": "p-context" },
+  "context engineering": { "page": "prompting", "id": "p-context" },
+  "system prompt": { "page": "security", "id": "sec-template" },
+  "AGENTS.md": { "page": "aiconfig", "id": "ac-agents" },
+  "SKILL.md": { "page": "aiconfig", "id": "ac-skills" },
+  "persona": { "page": "aiconfig", "id": "ac-persona" },
+  "Ollama": { "page": "ollama", "id": "ollama-overview" },
+  "least privilege": { "page": "security", "id": "sec-agentic" },
+  "red teaming": { "page": "security", "id": "sec-defense" },
+  "embedding": { "page": "security", "id": "sec-rag" }
+}

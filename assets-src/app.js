@@ -36,6 +36,16 @@ function showPage(id) {
   window.location.hash = id;
 }
 
+/* ── Ugrás egy adott oldal adott section-jéhez (pl. keresésből) ──
+   Lapváltás + görgetés a section-höz, akkor is, ha az más oldalon van. */
+function goToSection(page, id) {
+  showPage(page);
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 60);
+}
+
 
 /* ── SIDEBAR — a build által generált adatból (window.__SIDEBAR__) ── */
 function buildSidebar(id) {
@@ -221,3 +231,47 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('click', () => showPage(item.dataset.page));
   });
 });
+
+/* ── TÉMA-VÁLTÁS (világos / sötét) ── */
+function toggleTheme() {
+  var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('aihub-theme', next); } catch (e) {}
+}
+
+/* ── TOPBAR NAV — vízszintes görgetés kezelése ──
+   Ha a menüpontok nem férnek ki egy sorban, ez teszi elérhetővé
+   az összes elemet: egérgörgő -> vízszintes mozgás, és fade-jelzés
+   a szélein, ha van elrejtett tartalom. */
+(function () {
+  function initTopbarScroll() {
+    var wrap = document.getElementById('topbar-nav-wrap');
+    var nav = document.getElementById('topbar-nav');
+    if (!wrap || !nav) return;
+
+    function updateFade() {
+      var maxScroll = nav.scrollWidth - nav.clientWidth;
+      wrap.classList.toggle('can-scroll-left', nav.scrollLeft > 4);
+      wrap.classList.toggle('can-scroll-right', nav.scrollLeft < maxScroll - 4);
+    }
+
+    // függőleges egérgörgetés -> vízszintes mozgás (asztali gépen ez a gyakori eset)
+    nav.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        nav.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    nav.addEventListener('scroll', updateFade);
+    window.addEventListener('resize', updateFade);
+    updateFade();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTopbarScroll);
+  } else {
+    initTopbarScroll();
+  }
+})();

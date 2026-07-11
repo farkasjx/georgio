@@ -1,0 +1,88 @@
+/* ═══════════════════════════════════════════════
+   theme-light.css — világos mód
+   A sötét a :root alapértelmezés (style.css). Ez csak
+   felülírja a szükséges változókat [data-theme="light"] alatt.
+   ═══════════════════════════════════════════════ */
+
+[data-theme="light"] {
+  --bg:           #faf9f7;
+  --bg-2:         #ffffff;
+  --bg-3:         #f4f2ee;
+  --bg-4:         #eceae4;
+  --border:       #ddd8cf;
+  --border-soft:  rgba(0,0,0,0.07);
+
+  --text:         #26282e;
+  --text-muted:   #5c6472;
+  --text-dim:     #9aa1ae;
+
+  /* Akcentszínek sötétebbre hangolva, hogy világos háttéren is olvashatók */
+  --amber:        #b9791f;
+  --amber-dim:    rgba(185,121,31,0.12);
+  --amber-glow:   rgba(185,121,31,0.06);
+  --blue:         #2f6db0;
+  --violet:       #6f42c1;
+  --green:        #1f9d63;
+  --red:          #c23b45;
+  --cyan:         #1f8f8f;
+
+  --t1: #6d28d9;
+  --t2: #0369a1;
+  --t3: #047857;
+  --t4: #b45309;
+  --t5: #be123c;
+}
+
+/* highlight.js paletta világos módhoz */
+[data-theme="light"] .hljs { color: #2b2f36; }
+[data-theme="light"] .hljs-comment,
+[data-theme="light"] .hljs-quote { color: #8a8f99; }
+[data-theme="light"] .hljs-keyword,
+[data-theme="light"] .hljs-selector-tag,
+[data-theme="light"] .hljs-literal,
+[data-theme="light"] .hljs-type { color: #7c3aed; }
+[data-theme="light"] .hljs-string,
+[data-theme="light"] .hljs-attr { color: #0f7a4d; }
+[data-theme="light"] .hljs-number,
+[data-theme="light"] .hljs-symbol,
+[data-theme="light"] .hljs-bullet { color: #b9791f; }
+[data-theme="light"] .hljs-function,
+[data-theme="light"] .hljs-title,
+[data-theme="light"] .hljs-section { color: #2f6db0; }
+[data-theme="light"] .hljs-variable,
+[data-theme="light"] .hljs-name,
+[data-theme="light"] .hljs-tag { color: #c23b45; }
+[data-theme="light"] .hljs-built_in { color: #1f8f8f; }
+[data-theme="light"] .hljs-meta { color: #6b7280; }
+
+/* Téma-váltó gomb */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-3);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color .15s, background .15s, border-color .15s;
+  margin-right: 12px;
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+.theme-toggle svg { width: 17px; height: 17px; }
+/* a nap/hold ikon váltása téma szerint */
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* Hardcode-olt sötét hátterek felülírása világos módban
+   (a style.css ezeknél konkrét rgba-t használ, nem a --bg változót) */
+[data-theme="light"] .topbar    { background: rgba(255,255,255,0.92); }
+[data-theme="light"] .map-btn   { background: rgba(255,255,255,0.9); }
+[data-theme="light"] .map-panel { background: rgba(250,249,247,0.97); }

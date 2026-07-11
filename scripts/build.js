@@ -1,9 +1,9 @@
 /* ═══════════════════════════════════════════════
-   build.js — AI Hub statikus build
-   content/*.md  ->  public/index.html  (+ public/assets/*)
+   build.js — AI Hub statikus build (többnyelvű)
+   content/<locale>/*.md  ->  public/[<locale>/]index.html
 
    Használat:
-     npm run build          egyszeri build
+     npm run build              egyszeri build (minden locale)
      npm run build -- --watch   figyeli a content/ változásait
    ═══════════════════════════════════════════════ */
 
@@ -24,16 +24,50 @@ const PUBLIC = path.join(ROOT, 'public');
 
 /* ── OLDALSORREND ──
    A topbar és a lapváltás sorrendje. A `key` = MD-fájl neve kiterjesztés nélkül,
-   a `dot` = a navigációs pötty színe, a `label` = topbar felirat. */
+   a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként. */
 const PAGE_ORDER = [
-  { key: 'map',       label: 'Interaktív térkép',   dot: '#7dd3fc', special: 'map' },
-  { key: 'roadmap',   label: 'Roadmap',             dot: '#7c3aed' },
-  { key: 'tools',     label: 'AI Eszközök',         dot: '#4ecb8d' },
-  { key: 'prompting', label: 'Prompt Engineering',  dot: '#e8a84a' },
-  { key: 'ollama',    label: 'Lokális LLM',         dot: '#4ec9c9' },
-  { key: 'aiconfig',  label: 'AI Config fájlok',    dot: '#f472b6' },
-  { key: 'security',  label: 'Biztonság & OWASP',   dot: '#e06c75' },
-  { key: 'memory',    label: 'Memory',              dot: '#e6875e' },
+  { key: 'map',       label: 'Interaktív térkép',   labelEn: 'Interactive Map', dot: '#7dd3fc', special: 'map' },
+  { key: 'roadmap',   label: 'Roadmap',             labelEn: 'Roadmap',         dot: '#7c3aed' },
+  { key: 'tools',     label: 'AI Eszközök',         labelEn: 'AI Tools',        dot: '#4ecb8d' },
+  { key: 'prompting', label: 'Prompt Engineering',  labelEn: 'Prompt Engineering', dot: '#e8a84a' },
+  { key: 'ollama',    label: 'Lokális LLM',         labelEn: 'Local LLM',       dot: '#4ec9c9' },
+  { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
+  { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
+];
+
+/* ── NYELVEK ──
+   A `dir` a content/<dir> almappa. Az `assetPrefix` a public/ gyökeréhez
+   viszonyított relatív útvonal az assets/ eléréséhez (hu a gyökérben van,
+   en egy almappában, ezért ../). */
+const LOCALES = [
+  {
+    code: 'hu', htmlLang: 'hu', dir: 'hu', outDir: PUBLIC, assetPrefix: 'assets/',
+    otherHref: 'en/index.html',
+    ui: {
+      title: 'AI Hub — Roadmap, Eszközök, Prompt Engineering',
+      tag: '2026 · Magyar',
+      searchLabel: 'Keresés',
+      searchPlaceholder: 'Keress a teljes tartalomban…',
+      searchHint: 'Kezdj el gépelni a kereséshez…',
+      searchNoResults: 'Nincs találat.',
+      themeTitle: 'Világos / sötét mód',
+      searchTitle: 'Keresés (Ctrl+K)',
+    },
+  },
+  {
+    code: 'en', htmlLang: 'en', dir: 'en', outDir: path.join(PUBLIC, 'en'), assetPrefix: '../assets/',
+    otherHref: '../index.html',
+    ui: {
+      title: 'AI Hub — Roadmap, Tools, Prompt Engineering',
+      tag: '2026 · English',
+      searchLabel: 'Search',
+      searchPlaceholder: 'Search all content…',
+      searchHint: 'Start typing to search…',
+      searchNoResults: 'No results.',
+      themeTitle: 'Light / dark mode',
+      searchTitle: 'Search (Ctrl+K)',
+    },
+  },
 ];
 
 /* ─────────────────────────────────────────────
@@ -42,11 +76,11 @@ const PAGE_ORDER = [
 ───────────────────────────────────────────── */
 function makeMd(collector) {
   const md = new MarkdownIt({
-    html: true,          // engedjük az inline HTML-t (pl. <em>, <strong> a szövegben)
+    html: true,
     linkify: false,
     typographer: false,
     highlight(code, lang) {
-      const language = (lang || '').split(/\s+/)[0]; // "python foo" -> "python"
+      const language = (lang || '').split(/\s+/)[0];
       if (language && hljs.getLanguage(language)) {
         try {
           const out = hljs.highlight(code, { language, ignoreIllegals: true }).value;
@@ -65,13 +99,12 @@ function makeMd(collector) {
 }
 
 /* ─────────────────────────────────────────────
-   Egy oldal (MD-fájl) renderelése
-   Visszaad: { html, frontmatter, sidebar }
+   Egy oldal (MD-fájl) renderelése egy adott locale content-mappájából
 ───────────────────────────────────────────── */
-function renderPage(key) {
-  const file = path.join(CONTENT, `${key}.md`);
+function renderPage(key, contentDir, missingMsg) {
+  const file = path.join(contentDir, `${key}.md`);
   if (!fs.existsSync(file)) {
-    return { html: `<div class="page" id="page-${key}"><p style="padding:40px">Hiányzó tartalom: content/${key}.md</p></div>`, frontmatter: {}, sidebar: [] };
+    return { html: `<div class="page" id="page-${key}"><p style="padding:40px">${missingMsg}: ${key}.md</p></div>`, frontmatter: {}, sidebar: [] };
   }
 
   const raw = fs.readFileSync(file, 'utf8');
@@ -80,7 +113,6 @@ function renderPage(key) {
   const collector = { sections: [] };
   const md = makeMd(collector);
 
-  // ::: raw blokkok kiemelése render előtt, placeholderrel, majd visszaillesztés
   const rawBlocks = [];
   const guarded = content.replace(
     /^:::\s*raw[^\n]*\n([\s\S]*?)^:::\s*$/gm,
@@ -94,8 +126,6 @@ function renderPage(key) {
   let body = md.render(guarded);
   body = body.replace(/<!--RAWBLOCK_(\d+)-->/g, (_, i) => rawBlocks[Number(i)]);
 
-  // sidebar: elsődlegesen a frontmatter `sidebar` (raw-oldalakhoz),
-  // különben a section-ökből gyűjtött nav-adat
   const sidebar = Array.isArray(fm.sidebar) && fm.sidebar.length
     ? fm.sidebar
     : groupSidebar(collector.sections, fm.sidebar_groups);
@@ -110,7 +140,6 @@ function renderPage(key) {
   return { html, frontmatter: fm, sidebar };
 }
 
-/* ── HERO blokk a frontmatterből ── */
 function renderHero(hero, key) {
   const stats = (hero.stats || [])
     .map(s => `<div class="hero-stat"><span class="val">${s.val}</span><span class="lbl">${s.lbl}</span></div>`)
@@ -129,9 +158,6 @@ function renderFooter(footer) {
   return `<div class="page-footer"><span>${left}</span><span>${right}</span></div>\n`;
 }
 
-/* ── sidebar section-ök csoportokba rendezése ──
-   A `group` attribútum értéke a csoport-címke. Ha nincs, a
-   `sidebar_groups[0]` (frontmatter) vagy "Tartalom" a fallback. */
 function groupSidebar(sections, groupOrder) {
   if (!sections.length) return [];
   const defaultLabel = (groupOrder && groupOrder[0]) || 'Tartalom';
@@ -141,35 +167,180 @@ function groupSidebar(sections, groupOrder) {
     if (!map.has(label)) map.set(label, []);
     map.get(label).push({ href: s.href, text: s.text, num: s.num, sub: s.sub });
   }
-  // ha van megadott sorrend, azt tartjuk
   const labels = groupOrder && groupOrder.length
     ? groupOrder.filter(l => map.has(l))
     : [...map.keys()];
-  // a listában maradt, de sorrendben nem szereplő csoportok a végére
   for (const l of map.keys()) if (!labels.includes(l)) labels.push(l);
   return labels.map(label => ({ label, links: map.get(label) }));
 }
 
 /* ─────────────────────────────────────────────
-   index.html sablon összeállítása
+   Automatikus linkelés — a content/<locale>/glossary.json alapján
 ───────────────────────────────────────────── */
-function buildIndex(pages) {
-  const nav = PAGE_ORDER.filter(p => p.key !== 'map' ? true : true); // mind
+const WORD_CHAR = "A-Za-zÀ-ÖØ-öø-ÿŐőŰű0-9_";
 
+function loadGlossary(contentDir) {
+  const file = path.join(contentDir, 'glossary.json');
+  if (!fs.existsSync(file)) return [];
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const terms = [];
+  for (const [term, def] of Object.entries(raw)) {
+    if (term === '_comment') continue;
+    const variants = [term, ...(def.variants || [])];
+    terms.push({ term, page: def.page, id: def.id, variants });
+  }
+  terms.sort((a, b) => b.term.length - a.term.length);
+  return terms;
+}
+
+function tokenizeHtml(html) {
+  return html.match(/<[^>]+>|[^<]+/g) || [];
+}
+
+function tagName(token) {
+  const m = token.match(/^<\/?([a-zA-Z0-9-]+)/);
+  return m ? m[1].toLowerCase() : null;
+}
+
+const SKIP_TAGS = new Set(['pre', 'code', 'a', 'h2', 'h3']);
+
+function tryLinkInSection(sectionHtml, entry, currentSectionId) {
+  if (entry.page && entry.id === currentSectionId) return { html: sectionHtml, linked: false };
+
+  const tokens = tokenizeHtml(sectionHtml);
+  const skipStack = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i];
+    if (tok[0] === '<') {
+      const name = tagName(tok);
+      const isClose = tok.startsWith('</');
+      const isSelfClose = /\/>$/.test(tok);
+      if (name && SKIP_TAGS.has(name) && !isSelfClose) {
+        if (isClose) { if (skipStack[skipStack.length - 1] === name) skipStack.pop(); }
+        else skipStack.push(name);
+      }
+      continue;
+    }
+    if (skipStack.length > 0) continue;
+
+    for (const variant of entry.variants) {
+      const esc = variant.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`(?<![${WORD_CHAR}])(${esc})(?![${WORD_CHAR}])`, 'i');
+      const m = tok.match(re);
+      if (m) {
+        const before = tok.slice(0, m.index);
+        const matched = m[1];
+        const after = tok.slice(m.index + matched.length);
+        const linkHtml = `<a href="#${entry.id}" onclick="goToSection('${entry.page}','${entry.id}');return false;" class="auto-link">${matched}</a>`;
+        tokens[i] = before + linkHtml + after;
+        return { html: tokens.join(''), linked: true };
+      }
+    }
+  }
+  return { html: sectionHtml, linked: false };
+}
+
+function applyAutoLinks(pages, contentDir) {
+  const glossary = loadGlossary(contentDir);
+  if (!glossary.length) return;
+  const linked = new Set();
+
+  for (const p of PAGE_ORDER) {
+    if (p.key === 'map') continue;
+    let html = pages[p.key].html;
+
+    let result = '';
+    let lastIndex = 0;
+    const sectionRe = /<section\b[^>]*>[\s\S]*?<\/section>/g;
+    let m;
+    while ((m = sectionRe.exec(html))) {
+      result += html.slice(lastIndex, m.index);
+      let sectionHtml = m[0];
+      const idMatch = sectionHtml.match(/id="([^"]*)"/);
+      const sectionId = idMatch ? idMatch[1] : null;
+
+      for (const entry of glossary) {
+        if (linked.has(entry.term)) continue;
+        const { html: newHtml, linked: didLink } = tryLinkInSection(sectionHtml, entry, sectionId);
+        if (didLink) {
+          sectionHtml = newHtml;
+          linked.add(entry.term);
+        }
+      }
+      result += sectionHtml;
+      lastIndex = sectionRe.lastIndex;
+    }
+    result += html.slice(lastIndex);
+    pages[p.key].html = result;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Keresési index
+───────────────────────────────────────────── */
+function decodeEntities(s) {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+function stripTags(s) {
+  return decodeEntities(s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+}
+
+function buildSearchIndex(pages) {
+  const index = [];
+  for (const p of PAGE_ORDER) {
+    if (p.key === 'map') continue;
+    const html = pages[p.key].html;
+    const pageTitle = pages[p.key].frontmatter.title || p.label;
+
+    const sectionRe = /<section\b([^>]*)>([\s\S]*?)<\/section>/g;
+    let m;
+    while ((m = sectionRe.exec(html))) {
+      const attrs = m[1];
+      const inner = m[2];
+      const idMatch = attrs.match(/id="([^"]*)"/);
+      if (!idMatch) continue;
+      const id = idMatch[1];
+
+      let heading = null;
+      const shMatch = inner.match(/<div class="section-heading">([\s\S]*?)<\/div>/);
+      const h2Match = inner.match(/<h2>([\s\S]*?)<\/h2>/);
+      if (shMatch) heading = stripTags(shMatch[1]);
+      else if (h2Match) heading = stripTags(h2Match[1]);
+      else heading = pageTitle;
+
+      const text = stripTags(inner).slice(0, 1500);
+      if (!text) continue;
+
+      index.push({ page: p.key, pageTitle, id, heading, text });
+    }
+  }
+  return index;
+}
+
+/* ─────────────────────────────────────────────
+   index.html sablon összeállítása egy adott locale-hoz
+───────────────────────────────────────────── */
+function buildHtml(pages, locale) {
   const topbarNav = PAGE_ORDER.map(p => {
     const isDefault = p.key === 'roadmap';
+    const label = locale.code === 'hu' ? p.label : p.labelEn;
     return `    <button class="tnav-item${isDefault ? ' active' : ''}" data-page="${p.key}">
-      <span class="tnav-dot" style="background:${p.dot}"></span>${p.label}
+      <span class="tnav-dot" style="background:${p.dot}"></span>${label}
     </button>`;
   }).join('\n');
 
-  // csak a nem-térkép oldalak HTML-je kerül a shellbe
   const pagesHtml = PAGE_ORDER
     .filter(p => p.key !== 'map')
     .map(p => pages[p.key].html)
     .join('\n\n');
 
-  // sidebar-adat JSON-ként az app.js-nek
   const sidebarData = {};
   for (const p of PAGE_ORDER) {
     if (p.key === 'map') continue;
@@ -177,17 +348,32 @@ function buildIndex(pages) {
   }
 
   const mapPage = fs.readFileSync(path.join(__dirname, 'map-page.html'), 'utf8');
+  const searchIndex = buildSearchIndex(pages);
+  const ui = locale.ui;
+  const AP = locale.assetPrefix;
+  const otherLangLabel = locale.code === 'hu' ? 'EN' : 'HU';
 
   return `<!DOCTYPE html>
-<html lang="hu">
+<html lang="${locale.htmlLang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Hub — Roadmap, Eszközök, Prompt Engineering</title>
+  <title>${ui.title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/highlight.css" />
-  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="${AP}highlight.css" />
+  <link rel="stylesheet" href="${AP}style.css" />
+  <link rel="stylesheet" href="${AP}theme-light.css" />
+  <link rel="stylesheet" href="${AP}search.css" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('aihub-theme');
+        var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
@@ -197,13 +383,37 @@ function buildIndex(pages) {
     <div class="brand-icon">⬡</div>
     <span class="brand-name">AI Hub<span class="brand-version">v2.0</span></span>
   </a>
-  <div class="topbar-nav">
+  <div class="topbar-nav-wrap" id="topbar-nav-wrap">
+    <div class="topbar-nav" id="topbar-nav">
 ${topbarNav}
+    </div>
   </div>
   <div class="topbar-right">
-    <span class="topbar-tag">2026 · Magyar</span>
+    <a class="lang-switch" href="${locale.otherHref}" onclick="event.preventDefault(); location.href='${locale.otherHref}'+location.hash;" title="${otherLangLabel === 'EN' ? 'Switch to English' : 'Váltás magyarra'}">${otherLangLabel}</a>
+    <button class="search-trigger" onclick="openSearch()" aria-label="${ui.searchLabel}" title="${ui.searchTitle}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span class="search-trigger-label">${ui.searchLabel}</span>
+      <span class="search-trigger-kbd">Ctrl K</span>
+    </button>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="${ui.themeTitle}" title="${ui.themeTitle}">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+    </button>
+    <span class="topbar-tag">${ui.tag}</span>
   </div>
 </nav>
+
+<!-- ════════ KERESÉS MODAL ════════ -->
+<div class="search-overlay" id="search-overlay" onclick="if(event.target===this) closeSearch()">
+  <div class="search-modal">
+    <div class="search-input-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="${ui.searchPlaceholder}" autocomplete="off" />
+      <kbd>Esc</kbd>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
 
 ${mapPage}
 
@@ -217,46 +427,60 @@ ${pagesHtml}
   </main>
 </div><!-- /shell -->
 
-<!-- Generált adat: sidebar-navigáció (MD frontmatterből és section-ökből) -->
+<!-- Generált adat: sidebar-navigáció, keresés, i18n UI-szövegek -->
 <script>
 window.__SIDEBAR__ = ${JSON.stringify(sidebarData, null, 2)};
+window.__SEARCH__ = ${JSON.stringify(searchIndex)};
+window.__I18N__ = ${JSON.stringify(ui)};
 </script>
-<script src="assets/roadmap-data.js"></script>
-<script src="assets/app.js"></script>
+<script src="${AP}roadmap-data.js"></script>
+<script src="${AP}app.js"></script>
+<script src="${AP}search.js"></script>
 </body>
 </html>
 `;
 }
 
 /* ─────────────────────────────────────────────
-   Fő futás
+   Fő futás — minden locale-t lebuildel
 ───────────────────────────────────────────── */
-function build() {
-  const t0 = Date.now();
+function buildLocale(locale) {
+  const contentDir = path.join(CONTENT, locale.dir);
+  const missingMsg = locale.code === 'hu' ? 'Hiányzó tartalom' : 'Missing content';
   const pages = {};
   for (const p of PAGE_ORDER) {
     if (p.key === 'map') continue;
-    pages[p.key] = renderPage(p.key);
+    pages[p.key] = renderPage(p.key, contentDir, missingMsg);
   }
-  const html = buildIndex(pages);
+  applyAutoLinks(pages, contentDir);
+  const html = buildHtml(pages, locale);
 
-  fs.mkdirSync(PUBLIC, { recursive: true });
-  fs.writeFileSync(path.join(PUBLIC, 'index.html'), html, 'utf8');
-
-  // highlight.js CSS kiírása (egyszer, ha még nincs)
-  const hlCss = path.join(PUBLIC, 'assets', 'highlight.css');
-  if (!fs.existsSync(hlCss)) {
-    // minimál, a style.css sötét témájához illő highlight
-    fs.writeFileSync(hlCss, HLJS_CSS, 'utf8');
-  }
-
-  const ms = Date.now() - t0;
-  const count = Object.keys(pages).length;
-  console.log(`✓ Build kész — ${count} oldal, ${ms} ms → public/index.html`);
+  fs.mkdirSync(locale.outDir, { recursive: true });
+  fs.writeFileSync(path.join(locale.outDir, 'index.html'), html, 'utf8');
+  return Object.keys(pages).length;
 }
 
-/* Sötét témához hangolt, minimál highlight.js paletta,
-   ami a style.css --bg / --text változóival harmonizál. */
+function build() {
+  const t0 = Date.now();
+
+  fs.mkdirSync(PUBLIC, { recursive: true });
+  fs.mkdirSync(path.join(PUBLIC, 'assets'), { recursive: true });
+
+  // közös, kézzel karbantartott assetek bemásolása a forrásból —
+  // így a public/ TELJESEN generált, bármikor törölhető és újraépíthető
+  const ASSETS_SRC = path.join(ROOT, 'assets-src');
+  for (const file of fs.readdirSync(ASSETS_SRC)) {
+    fs.copyFileSync(path.join(ASSETS_SRC, file), path.join(PUBLIC, 'assets', file));
+  }
+
+  // highlight.js CSS mindig újragenerálva (a forrás a build.js-ben él)
+  fs.writeFileSync(path.join(PUBLIC, 'assets', 'highlight.css'), HLJS_CSS, 'utf8');
+
+  const results = LOCALES.map(locale => `${locale.code}:${buildLocale(locale)}`);
+  const ms = Date.now() - t0;
+  console.log(`✓ Build kész — ${results.join(', ')} oldal, ${ms} ms`);
+}
+
 const HLJS_CSS = `/* highlight.js — AI Hub sötét téma */
 .hljs { color: #d7dce5; background: transparent; }
 .hljs-comment, .hljs-quote { color: #6b7280; font-style: italic; }
@@ -271,7 +495,6 @@ const HLJS_CSS = `/* highlight.js — AI Hub sötét téma */
 .hljs-strong { font-weight: 700; }
 `;
 
-/* ── watch mód ── */
 if (process.argv.includes('--watch')) {
   build();
   console.log('👀 Figyelem a content/ mappát… (Ctrl+C a leállításhoz)');

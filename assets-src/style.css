@@ -117,9 +117,45 @@ body::before {
   padding: 0 16px;
   flex: 1;
   overflow-x: auto;
+  scroll-behavior: smooth;
+  /* látható, de diszkrét görgetősáv, hogy jelezze: van elrejtett tartalom */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
-.topbar-nav::-webkit-scrollbar { display: none; }
+.topbar-nav::-webkit-scrollbar { height: 4px; display: block; }
+.topbar-nav::-webkit-scrollbar-track { background: transparent; }
+.topbar-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.topbar-nav::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* fade-jelzés a szélein, ha van elrejtett tartalom (JS állítja be a class-t) */
+.topbar-nav-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.topbar-nav-wrap::before,
+.topbar-nav-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 28px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity .15s;
+}
+.topbar-nav-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-2, var(--bg)), transparent);
+}
+.topbar-nav-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-2, var(--bg)), transparent);
+}
+.topbar-nav-wrap.can-scroll-left::before { opacity: 1; }
+.topbar-nav-wrap.can-scroll-right::after { opacity: 1; }
 
 .tnav-item {
   display: flex; align-items: center; gap: 7px;
@@ -1066,3 +1102,29 @@ section[id], .tech[id] {
   .content { padding: 20px 16px 48px; }
   .topbar-right { display: none; }
 }
+
+/* ── Automatikus fogalom-linkek (glossary.json alapján) ── */
+.auto-link {
+  color: var(--cyan);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--cyan);
+  cursor: pointer;
+}
+.auto-link:hover {
+  border-bottom-style: solid;
+}
+
+/* ── Nyelvi placeholder-link (nem fordított oldalak) ── */
+.notice-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--amber);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
+.notice-link:hover { border-color: var(--amber); }
