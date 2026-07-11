@@ -1,0 +1,18 @@
+{
+  "name": "aihub",
+  "version": "2.0.0",
+  "description": "AI Hub — statikus oldal, tartalom Markdownban",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "watch": "node scripts/build.js --watch",
+    "serve": "node scripts/serve.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.9.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-attrs": "^4.1.6",
+    "markdown-it-container": "^4.0.0"
+  }
+}

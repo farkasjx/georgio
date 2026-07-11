@@ -1,0 +1,56 @@
+name: Build és deploy (GitHub Pages)
+
+# Fut minden push-ra a main branchre, plusz kézzel is indítható
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A GITHUB_TOKEN jogosultságai a Pages-deployhoz
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Egyszerre egy deploy fusson; a futó deployt nem szakítjuk meg
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kód letöltése
+        uses: actions/checkout@v4
+
+      - name: Node.js beállítása
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Függőségek telepítése
+        run: npm ci
+
+      - name: Build (content/*.md -> public/)
+        run: npm run build
+
+      - name: Pages konfiguráció
+        uses: actions/configure-pages@v5
+
+      - name: A public/ mappa feltöltése artifactként
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy a GitHub Pages-re
+        id: deployment
+        uses: actions/deploy-pages@v4

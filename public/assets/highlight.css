@@ -1,0 +1,12 @@
+/* highlight.js — AI Hub sötét téma */
+.hljs { color: #d7dce5; background: transparent; }
+.hljs-comment, .hljs-quote { color: #6b7280; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-type { color: #c4a0ff; }
+.hljs-string, .hljs-attr, .hljs-template-tag { color: #6ee7b7; }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: #e8a84a; }
+.hljs-function, .hljs-title, .hljs-section { color: #7dd3fc; }
+.hljs-variable, .hljs-name, .hljs-tag { color: #e06c75; }
+.hljs-built_in, .hljs-class .hljs-title { color: #4ec9c9; }
+.hljs-meta { color: #9aa4b2; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 700; }
