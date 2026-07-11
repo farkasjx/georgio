@@ -33,6 +33,7 @@ const PAGE_ORDER = [
   { key: 'ollama',    label: 'Lokális LLM',         dot: '#4ec9c9' },
   { key: 'aiconfig',  label: 'AI Config fájlok',    dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   dot: '#e06c75' },
+  { key: 'memory',    label: 'Memory',              dot: '#e6875e' },
 ];
 
 /* ─────────────────────────────────────────────
