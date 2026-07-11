@@ -10,7 +10,7 @@ sidebar_groups:
 hero:
   eyebrow: "Memory · Fejlesztői Tanulási Terv"
   title: "LLM & Agent <em>Memory</em>"
-  lead: "Hogyan adjunk emlékezetet stateless nyelvi modelleknek és agenteknek. Elmélet, architektúrák, feladatok és példakódok — Python és Node, ChromaDB-vel. Ne csak „beszélgess" a modellel, hanem <em>értsd, mi tartja fenn a kontextust.</em>"
+  lead: "Hogyan adjunk emlékezetet stateless nyelvi modelleknek és agenteknek. Elmélet, architektúrák, feladatok és példakódok — Python és Node, ChromaDB-vel. Ne csak „beszélgess” a modellel, hanem <em>értsd, mi tartja fenn a kontextust.</em>"
   stats:
     - { val: "11", lbl: "Szakasz" }
     - { val: "6", lbl: "Feladat" }
