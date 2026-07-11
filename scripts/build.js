@@ -35,6 +35,7 @@ const PAGE_ORDER = [
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
   { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
   { key: 'vectordb',  label: 'Vector adatbázisok',  labelEn: 'Vector databases', dot: '#17cb11' },
+  { key: 'dense-moe',  label: 'Dense vs MoE modellek',  labelEn: 'Dense vs Moe modells', dot: '#6160a3' },
 ];
 
 /* ── NYELVEK ──
