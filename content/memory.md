@@ -1,88 +1,116 @@
-# LLM és Agent Memory — gyakorlati tutorial
-
-> Hogyan adjunk emlékezetet stateless nyelvi modelleknek és agenteknek.
-> Elmélet, architektúrák, feladatok, példakódok (Python + Node), ChromaDB-vel.
-
+---
+page: memory
+title: LLM & Agent Memory
+sidebar_groups:
+  - Elmélet
+  - Architektúra
+  - Gyakorlat
+  - Éles használat
+  - Referencia
+hero:
+  eyebrow: "Memory · Fejlesztői Tanulási Terv"
+  title: "LLM & Agent <em>Memory</em>"
+  lead: "Hogyan adjunk emlékezetet stateless nyelvi modelleknek és agenteknek. Elmélet, architektúrák, feladatok és példakódok — Python és Node, ChromaDB-vel. Ne csak „beszélgess" a modellel, hanem <em>értsd, mi tartja fenn a kontextust.</em>"
+  stats:
+    - { val: "11", lbl: "Szakasz" }
+    - { val: "6", lbl: "Feladat" }
+    - { val: "Chroma", lbl: "Vektor-DB" }
+    - { val: "Py+Node", lbl: "Stack" }
+footer:
+  left: "AI Hub · LLM & Agent Memory"
+  right: "Memory · Összeállítva 2026 júliusában"
 ---
 
-## 1. Miért kell memory? — az elméleti alap
+:::::: raw
+<div class="toc-grid" style="margin-top:24px">
+  <a class="toc-card" href="#mem-0"><div class="tc-num">0. rész</div><div class="tc-name">Miért kell memory?</div><div class="tc-desc">A stateless probléma, context vs. persistent, memory-típusok.</div></a>
+  <a class="toc-card" href="#mem-1"><div class="tc-num">1. rész</div><div class="tc-name">Architektúrák</div><div class="tc-desc">Buffer, sliding window, summary, vektor, hybrid.</div></a>
+  <a class="toc-card" href="#mem-2"><div class="tc-num">2. rész</div><div class="tc-name">Előkészület</div><div class="tc-desc">Python + Node setup, lokális embedding.</div></a>
+  <a class="toc-card" href="#mem-3"><div class="tc-num">Feladat 1</div><div class="tc-name">Buffer memory</div><div class="tc-desc">A history újraküldése — kézzel.</div></a>
+  <a class="toc-card" href="#mem-4"><div class="tc-num">Feladat 2</div><div class="tc-name">Sliding window</div><div class="tc-desc">Fix token-plafon, token-számlálás.</div></a>
+  <a class="toc-card" href="#mem-5"><div class="tc-num">Feladat 3</div><div class="tc-name">Summary memory</div><div class="tc-desc">Auto-összegzés threshold felett.</div></a>
+  <a class="toc-card" href="#mem-6"><div class="tc-num">Feladat 4</div><div class="tc-name">Vektor memory</div><div class="tc-desc">ChromaDB, szemantikus long-term.</div></a>
+  <a class="toc-card" href="#mem-7"><div class="tc-num">7. rész</div><div class="tc-name">Security</div><div class="tc-desc">Memory poisoning, PII, OWASP LLM.</div></a>
+  <a class="toc-card" href="#mem-8"><div class="tc-num">8. rész</div><div class="tc-name">Frameworkök</div><div class="tc-desc">LangGraph, Mem0, Anthropic, saját.</div></a>
+  <a class="toc-card" href="#mem-9"><div class="tc-num">9. rész</div><div class="tc-name">Best practices</div><div class="tc-desc">Eviction, pgvector, tesztelés.</div></a>
+  <a class="toc-card" href="#mem-10"><div class="tc-num">10. rész</div><div class="tc-name">Hybrid agent</div><div class="tc-desc">Mindent összekötő CLI agent.</div></a>
+</div>
+::::::
+
+:::::: section id=mem-0 heading="0. rész — Miért kell memory? Az elméleti alap" nav="0. rész" group="Elmélet"
+
+<p class="topic-tagline">Cél: értsd, hogy a memory nem a modell képessége, hanem egy réteg, amit köréépítesz.</p>
 
 ### A stateless probléma
 
-Egy LLM **állapotmentes (stateless)**. Minden API-hívás nulláról indul: a modell semmit nem tud arról, mi hangzott el az előző hívásban. Amit "beszélgetésnek" látsz egy chat felületen, az egy illúzió — a háttérben **minden fordulóban a teljes eddigi történetet újraküldik** a modellnek.
+Egy LLM **állapotmentes (stateless)**. Minden API-hívás nulláról indul: a modell semmit nem tud arról, mi hangzott el az előző hívásban. Amit „beszélgetésnek" látsz egy chat felületen, az egy illúzió — a háttérben **minden fordulóban a teljes eddigi történetet újraküldik** a modellnek.
 
-```
-Hívás 1:  [user: "A nevem FJ"]                          → "Örvendek, FJ!"
+```text
+Hívás 1:  [user: "A nevem FJ"]                  → "Örvendek, FJ!"
 Hívás 2:  [user: "A nevem FJ"]
           [assistant: "Örvendek, FJ!"]
-          [user: "Mi a nevem?"]                          → "FJ"
+          [user: "Mi a nevem?"]                 → "FJ"
 ```
 
-A "memory" tehát nem a modell képessége, hanem **egy réteg, amit köréépítesz**: eldönti, mit tegyél vissza a kontextusba, mit dobj el, és honnan hívd elő a régi információt.
+A memory tehát nem a modell képessége, hanem **egy réteg, amit köréépítesz**: eldönti, mit tegyél vissza a kontextusba, mit dobj el, és honnan hívd elő a régi információt.
 
 ### Context window ≠ memory
 
-| Fogalom | Mi ez | Korlát |
-|---|---|---|
-| **Context window** | A tokenek, amit egyetlen híváskor a modell "lát" | Fix méret (pl. 200k token), drága, felejtő |
-| **Persistent memory** | Külső tár (DB, fájl, vektor-index), ami túléli a hívást | Gyakorlatilag korlátlan, de elő kell hívni |
-
 A context window egy **munkaasztal** — véges. A persistent memory egy **iratszekrény** — nagy, de csak akkor hasznos, ha a megfelelő aktát kiveszed és az asztalra teszed.
 
-### Memory-típusok (kognitív analógia)
+| Fogalom | Mi ez | Korlát |
+|---|---|---|
+| **Context window** | A tokenek, amit egyetlen híváskor a modell „lát" | Fix méret (pl. 200k token), drága, felejtő |
+| **Persistent memory** | Külső tár (DB, fájl, vektor-index), ami túléli a hívást | Gyakorlatilag korlátlan, de elő kell hívni |
 
-- **Short-term / working memory** — az aktuális session üzenetei. Illékony.
-- **Long-term memory** — session-ökön átívelő perzisztens tudás.
-  - **Episodic** — *mi történt* ("tegnap a felhasználó a Yaris finanszírozásról kérdezett").
-  - **Semantic** — *tények* ("a felhasználó neve FJ, macskája van, IQOS-t használ").
-  - **Procedural** — *hogyan* ("ez a user tömör, lényegre törő válaszokat szeret").
+### Memory-típusok
 
-### Mikor NE használj memory-t
+::::: stack-grid
+:::: card label="Short-term / working"
+**Az aktuális session üzenetei.** Illékony — a beszélgetés végén elveszik, ha nem perzisztálod.
+::::
+:::: card label="Long-term"
+**Session-ökön átívelő tudás.** Perzisztens tárban él, és a releváns részét hívod elő.
+::::
+:::: card label="Episodic"
+**Mi történt.** „Tegnap a felhasználó a Yaris finanszírozásról kérdezett." Eseményszerű emlék.
+::::
+:::: card label="Semantic"
+**Tények.** „A felhasználó neve FJ, macskája van, IQOS-t használ." Kontextus-független állítások.
+::::
+:::: card label="Procedural"
+**Hogyan.** „Ez a user tömör, lényegre törő válaszokat szeret." Viselkedési preferenciák.
+::::
+:::::
 
-Ne overengineer-elj. Kerüld, ha:
-- egyszeri, kontextusmentes Q&A (fordítás, összegzés, egy kódrészlet magyarázata),
-- a teljes beszélgetés simán belefér a context window-ba és olcsó,
-- nincs több session — egyszer használatos hívás.
+::::: callout warning label="Mikor NE használj memory-t"
+Ne overengineer-elj. Kerüld, ha: egyszeri, kontextusmentes Q&A (fordítás, összegzés) · a teljes beszélgetés simán belefér a context window-ba és olcsó · nincs több session. A memory komplexitást, latency-t és **biztonsági felületet** hoz be — csak akkor vezesd be, ha a stateless viselkedés tényleg fáj.
+:::::
+::::::
 
-A memory komplexitást, latency-t és **biztonsági felületet** (lásd 8. szakasz) hoz be. Csak akkor vezesd be, ha a stateless viselkedés tényleg fáj.
+:::::: section id=mem-1 heading="1. rész — Memory architektúrák" nav="1. rész" group="Architektúra"
 
----
+<p class="topic-tagline">Cél: ismerd a lehetőségeket és a köztük lévő kompromisszumokat.</p>
 
-## 2. Memory architektúrák
+### Az öt alapminta
 
-### 2.1 Buffer memory (teljes history)
-
-Minden üzenetet eltárolsz és visszaküldesz. Egyszerű, pontos — de a token-költség és a latency **lineárisan nő**, és előbb-utóbb túlfut a context window-on.
-
-**Jó:** rövid beszélgetések, prototípus.
-**Rossz:** hosszú session, sok user, költségérzékeny éles rendszer.
-
-### 2.2 Sliding window (utolsó N üzenet)
-
-Csak az utolsó N fordulót tartod meg. Fix token-plafon.
-
-**Jó:** chat, ahol csak a közelmúlt számít.
-**Rossz:** ha a fontos infó "kicsúszik" az ablakból (pl. a user neve az 1. üzenetben volt).
-
-### 2.3 Summary memory
-
-Egy threshold felett a régi üzeneteket **összegzed** (magával az LLM-mel), és az összefoglalót tartod meg a nyers szöveg helyett. Token-takarékos, megőrzi a lényeget.
-
-**Jó:** hosszú beszélgetések, ahol a "story" fontos, a szó szerinti szöveg nem.
-**Rossz:** ha pontos részletek (számok, ID-k) elveszhetnek az összegzésben.
-
-### 2.4 Vector / RAG-alapú memory
-
-Az üzeneteket/tényeket **embeddingként** tárolod egy vektor-DB-ben (ChromaDB). Új kérdésnél a szemantikailag legrelevánsabb emlékeket **visszakeresed**, és csak azokat teszed a kontextusba.
-
-**Jó:** nagy, hosszú távú tudás; "emlékezz mire kértelek 3 hete".
-**Rossz:** felépítés-komplexitás; a retrieval minősége meghatározó (rossz találat = rossz válasz).
-
-### 2.5 Hybrid (a való életben ez a nyerő)
-
-- **Sliding window** az aktuális fordulókra (rövid táv),
-- **Summary** a session lényegére (közép táv),
-- **Vector store** a perzisztens tényekre (hosszú táv).
+::::: stack-grid
+:::: card label="Buffer"
+**Teljes history.** Minden üzenetet visszaküldesz. Egyszerű, pontos — de a token-költség lineárisan nő, és túlfut a context window-on.
+::::
+:::: card label="Sliding window"
+**Utolsó N üzenet.** Fix token-plafon. Kockázat: a fontos infó „kicsúszik", ha az elején hangzott el.
+::::
+:::: card label="Summary"
+**Összegzés.** Threshold felett a régit összegzed az LLM-mel, és az összefoglalót tartod meg. Token-takarékos, de lossy.
+::::
+:::: card label="Vektor / RAG"
+**Embedding + retrieval.** A tényeket vektor-DB-ben tárolod, és a szemantikailag legrelevánsabbat hívod elő. Skálázható, de retrieval-függő.
+::::
+:::: card label="Hybrid"
+**A kombináció.** Window a közelmúltra + summary a session lényegére + vektor a perzisztens tényekre. A való életben ez a nyerő.
+::::
+:::::
 
 ### Trade-off tábla
 
@@ -91,12 +119,13 @@ Az üzeneteket/tényeket **embeddingként** tárolod egy vektor-DB-ben (ChromaDB
 | Buffer | Magas ⬆ | Nagyon jó | Nagyon alacsony | Rossz |
 | Sliding window | Alacsony | Közepes | Alacsony | Jó |
 | Summary | Alacsony | Jó (lossy) | Közepes | Jó |
-| Vector/RAG | Alacsony/közepes | Jó (retrieval-függő) | Magas | Nagyon jó |
+| Vektor / RAG | Alacsony–közepes | Jó (retrieval-függő) | Magas | Nagyon jó |
 | Hybrid | Optimalizált | Nagyon jó | Magas | Nagyon jó |
+::::::
 
----
+:::::: section id=mem-2 heading="2. rész — Előkészület" nav="2. rész" group="Gyakorlat"
 
-## 3. Előkészület
+<p class="topic-tagline">Cél: legyen működő Python és Node környezeted a feladatokhoz.</p>
 
 ### Python
 
@@ -115,7 +144,7 @@ npm install @anthropic-ai/sdk chromadb
 export ANTHROPIC_API_KEY="sk-ant-..."
 ```
 
-### Lokális embedding (opcionális, a te stackedhez — Ollama/Hermes)
+### Lokális embedding (opcionális — Ollama/Hermes)
 
 A ChromaDB alapból saját (ONNX) embedding-függvénnyel jön, de a vektorozást lokális modellel is elvégeztetheted Ollamán keresztül:
 
@@ -123,12 +152,11 @@ A ChromaDB alapból saját (ONNX) embedding-függvénnyel jön, de a vektorozás
 ollama pull nomic-embed-text
 # az embedding endpoint: http://localhost:11434/api/embeddings
 ```
+::::::
 
----
+:::::: section id=mem-3 heading="Feladat 1 — Buffer memory kézzel" nav="Feladat 1" group="Gyakorlat"
 
-## 4. Feladat 1 — Buffer memory kézzel
-
-**Cél:** értsd meg, hogy a "beszélgetés" = a teljes history újraküldése.
+<p class="topic-tagline">Cél: értsd meg, hogy a „beszélgetés" = a teljes history újraküldése.</p>
 
 ### Python
 
@@ -195,13 +223,14 @@ console.log(await chat("A nevem FJ, és van egy cicám."));
 console.log(await chat("Mi a nevem és mi az állatom?"));
 ```
 
-> **Feladat:** kommentezd ki a `memory.add("assistant", reply)` sort. Figyeld meg, hogy a modell így "elfelejti" a saját válaszait — bizonyíték arra, hogy a memory a te felelősséged, nem a modellé.
+::::: callout label="Gyakorlat"
+Kommentezd ki a `memory.add("assistant", reply)` sort. Figyeld meg, hogy a modell így „elfelejti" a saját válaszait — bizonyíték arra, hogy a memory a te felelősséged, nem a modellé.
+:::::
+::::::
 
----
+:::::: section id=mem-4 heading="Feladat 2 — Sliding window és token-számlálás" nav="Feladat 2" group="Gyakorlat"
 
-## 5. Feladat 2 — Sliding window + token-számlálás
-
-**Cél:** fix token-plafon, és lásd, mikor "csúszik ki" a fontos infó.
+<p class="topic-tagline">Cél: fix token-plafon, és lásd, mikor „csúszik ki" a fontos infó.</p>
 
 ### Python
 
@@ -247,9 +276,7 @@ chat("Dockert használok.")
 print(chat("Mi a nevem?"))   # ...már kicsúszott az ablakból → nem tudja
 ```
 
-> **Feladat:** növeld a `max_turns` értékét, amíg a "Mi a nevem?" újra helyes választ ad. Ez a sliding window alapvető kompromisszuma: **memória vs. token-költség**.
-
-### Node (a window-logika)
+### Node — a window-logika
 
 ```javascript
 class SlidingWindowMemory {
@@ -263,11 +290,14 @@ class SlidingWindowMemory {
 }
 ```
 
----
+::::: callout label="Gyakorlat"
+Növeld a `max_turns` értékét, amíg a „Mi a nevem?" újra helyes választ ad. Ez a sliding window alapvető kompromisszuma: **memória vs. token-költség**.
+:::::
+::::::
 
-## 6. Feladat 3 — Summary memory (auto-összegzés)
+:::::: section id=mem-5 heading="Feladat 3 — Summary memory (auto-összegzés)" nav="Feladat 3" group="Gyakorlat"
 
-**Cél:** ha a history túlnő egy küszöböt, összegezd a régi részt az LLM-mel, és az összefoglalót tartsd meg.
+<p class="topic-tagline">Cél: ha a history túlnő egy küszöböt, összegezd a régi részt az LLM-mel.</p>
 
 ### Python
 
@@ -324,15 +354,16 @@ def chat(user_input):
     return reply
 ```
 
-> **Feladat:** logold ki minden fordulónál a `memory.summary` értékét. Nézd meg, mi marad meg és mi vész el az összegzés során — ez a **lossy** természet, amit a QA-tesztjeidnél figyelembe kell venned.
+::::: callout label="Gyakorlat"
+Logold ki minden fordulónál a `memory.summary` értékét. Nézd meg, mi marad meg és mi vész el az összegzés során — ez a **lossy** természet, amit a QA-tesztjeidnél figyelembe kell venned.
+:::::
+::::::
 
----
+:::::: section id=mem-6 heading="Feladat 4 — Vektor memory ChromaDB-vel" nav="Feladat 4" group="Gyakorlat"
 
-## 7. Feladat 4 — Vector memory ChromaDB-vel
+<p class="topic-tagline">Cél: perzisztens, szemantikus long-term memory — nem a közelmúltat tartod meg, hanem a releváns emléket hívod elő.</p>
 
-**Cél:** perzisztens, szemantikus hosszú távú memory. Nem a *közelmúltat* tartod meg, hanem a *releváns* emléket hívod elő — akárhány session-nel korábbról.
-
-### 7.1 Alap (Python, beépített embedding)
+### Alap (Python, beépített embedding)
 
 ```python
 import chromadb
@@ -360,7 +391,7 @@ print(results["documents"])
 # → [['FJ Toyota Yaris vásárlását tervezi.', ...]]
 ```
 
-### 7.2 Teljes ciklus: retrieve → prompt → store
+### Teljes ciklus: retrieve → prompt → store
 
 ```python
 import anthropic, chromadb, uuid
@@ -388,17 +419,16 @@ def chat(user_input):
         messages=[{"role": "user", "content": user_input}],
     )
     reply = resp.content[0].text
-    # (opcionális) mentsd el a fontos új tényt hosszú távú memóriába
-    remember(f"User kérdezte: {user_input}")
+    remember(f"User kérdezte: {user_input}")  # opcionális: új tény mentése
     return reply
 
 remember("A felhasználó neve FJ, macskája van.")
 print(chat("Emlékszel a nevemre?"))
 ```
 
-### 7.3 Lokális embedding Ollamával (nomic-embed-text)
+### Lokális embedding Ollamával (nomic-embed-text)
 
-Ha nem akarod a ChromaDB alap-embeddingjét, hanem lokális modellt (adatvédelem, offline homelab):
+Ha nem a ChromaDB alap-embeddingjét akarod, hanem lokális modellt (adatvédelem, offline homelab):
 
 ```python
 import chromadb
@@ -414,7 +444,7 @@ mem = db.get_or_create_collection("user_memories", embedding_function=ollama_ef)
 # innentől ugyanúgy: mem.add(...) / mem.query(...)
 ```
 
-### 7.4 Node változat
+### Node változat
 
 ```javascript
 import { ChromaClient } from "chromadb";
@@ -450,42 +480,57 @@ async function chat(userInput) {
 }
 ```
 
-> **Node megjegyzés:** a Chroma JS-kliens egy futó Chroma szerverhez csatlakozik (`chroma run --path ./memory_db`), nem embedded. Pythonban van beágyazott `PersistentClient` is.
+::::: callout warning label="Node megjegyzés"
+A Chroma JS-kliens egy **futó Chroma szerverhez** csatlakozik (`chroma run --path ./memory_db`), nem embedded. Pythonban van beágyazott `PersistentClient` is — ez a leggyorsabb út a prototípushoz.
+:::::
 
-> **Feladat:** tölts be 10-15 vegyes emléket, majd kérdezz rá olyanra, ami *szemantikailag* rokon, de nem szó szerinti egyezés (pl. tárolt: "Dockert használ", kérdés: "Konténerizációval dolgozik?"). Ez mutatja meg a vektor-keresés erejét a kulcsszó-kereséssel szemben.
+::::: callout label="Gyakorlat"
+Tölts be 10-15 vegyes emléket, majd kérdezz rá olyanra, ami *szemantikailag* rokon, de nem szó szerinti egyezés (tárolt: „Dockert használ", kérdés: „Konténerizációval dolgozik?"). Ez mutatja meg a vektor-keresés erejét a kulcsszó-kereséssel szemben.
+:::::
+::::::
 
----
+:::::: section id=mem-7 heading="7. rész — Security: a memory mint támadási felület" nav="7. rész" group="Éles használat"
 
-## 8. Biztonság — memory mint támadási felület (OWASP LLM)
+<p class="topic-tagline">Cél: a memory nem csak feature, hanem kockázat — amit tárolsz és visszateszel, az bizalmi határt lép át.</p>
 
-A memory nem csak feature, hanem **kockázat**. Amit tárolsz és visszateszel a kontextusba, az bizalmi határt lép át.
+### A három fő kockázat
 
-- **Memory poisoning / indirect prompt injection** — ha a userinput (vagy egy külső dokumentum) szövegét szó szerint eltárolod, egy támadó utasítást csempészhet a memóriába, ami egy **későbbi** session-ben aktiválódik. *Kapcsolódik: OWASP LLM01 (Prompt Injection).*
-- **Szenzitív adat perzisztálása** — a vektor-DB könnyen válik PII-tárrá (nevek, e-mailek, kártyaadat). *OWASP LLM02 (Sensitive Information Disclosure).* Sose ments el titkot, tokent, jelszót, kártyaszámot.
-- **Retrieval-alapú szivárgás** — multi-user rendszerben a rossz collection-particionálás miatt A user emléke B usernek visszaköszönhet.
+::::: stack-grid
+:::: card label="Memory poisoning"
+**Indirect prompt injection.** Ha a user-inputot szó szerint tárolod, egy támadó utasítást csempészhet a memóriába, ami egy *későbbi* session-ben aktiválódik. → OWASP LLM01.
+::::
+:::: card label="Sensitive data"
+**PII-tár.** A vektor-DB könnyen válik nevek, e-mailek, kártyaadat tárolójává. → OWASP LLM02. Sose ments titkot, tokent, jelszót, kártyaszámot.
+::::
+:::: card label="Retrieval-szivárgás"
+**Multi-user keveredés.** Rossz collection-particionálás miatt A user emléke B usernek visszaköszönhet.
+::::
+:::::
 
-**Védekezés:**
-- Ne nyers üzenetet ments, hanem **strukturált, kivont tényt** ("user preferences: tömör válasz"), lehetőleg egy külön LLM-lépéssel szűrve.
-- **User-onként külön collection** vagy szigorú `metadata`-filter minden query-nél.
-- PII-detektálás/redaktálás a tárolás előtt.
-- A visszahívott memóriát kezeld **adatként, ne utasításként** — a system promptban tedd egyértelművé, hogy az csak háttér-információ.
+### Védekezés
 
----
+::::: callout danger label="Security checklist"
+**✓** Ne nyers üzenetet ments, hanem **strukturált, kivont tényt** (külön LLM-lépéssel szűrve) · **✓** User-önként külön collection vagy szigorú `metadata`-filter minden query-nél · **✓** PII-detektálás/redaktálás a tárolás előtt · **✓** A visszahívott memóriát kezeld **adatként, ne utasításként** — a system promptban tedd egyértelművé, hogy az csak háttér-információ.
+:::::
+::::::
 
-## 9. Framework-áttekintés
+:::::: section id=mem-8 heading="8. rész — Framework-áttekintés" nav="8. rész" group="Éles használat"
+
+<p class="topic-tagline">Cél: tudd, mikor írj saját memory-logikát, és mikor nyúlj kész eszközhöz.</p>
+
+### Mikor melyik
 
 | Eszköz | Nyelv | Mit ad | Mikor |
 |---|---|---|---|
-| **LangGraph** (checkpointer + store) | Py/JS | Beépített state-perzisztencia agenteknek, thread-alapú | Ha már LangGraph-ot használsz agent-orchesztrációra |
-| **Mem0** | Py/JS | Dedikált memory-réteg auto-extraction-nel, hosszú távú | Ha nem akarsz saját retrieve/store logikát írni |
-| **Anthropic context management** | API | Prompt caching, hosszú kontextus kezelése natívan | Ha a Claude API-ra építesz és a context-cost a fő gond |
+| **LangGraph** (checkpointer + store) | Py/JS | Beépített state-perzisztencia agenteknek, thread-alapú | Ha már LangGraph-ot használsz orchesztrációra |
+| **Mem0** | Py/JS | Dedikált memory-réteg auto-extraction-nel | Ha nem akarsz saját retrieve/store logikát írni |
+| **Anthropic context management** | API | Prompt caching, hosszú kontextus natívan | Ha a Claude API-ra építesz, és a context-cost a fő gond |
 | **Saját (Chroma + kód)** | Py/JS | Teljes kontroll, nulla vendor-lock | Tanuláshoz, egyedi igényhez, homelabhez |
 
-### LangGraph rövid példa (Python)
+### LangGraph — rövid példa
 
 ```python
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import StateGraph
 
 # a checkpointer minden lépés után menti a gráf állapotát,
 # thread_id alapján előhívja → session-memory ingyen
@@ -494,7 +539,7 @@ checkpointer = MemorySaver()
 # graph.invoke(input, config={"configurable": {"thread_id": "user-fj"}})
 ```
 
-### Mem0 rövid példa (Python)
+### Mem0 — rövid példa
 
 ```python
 from mem0 import Memory
@@ -503,27 +548,45 @@ m = Memory()
 m.add("A felhasználó neve FJ, Yaris-t akar venni.", user_id="fj")
 relevant = m.search("autó", user_id="fj")  # auto-extract + retrieve
 ```
+::::::
 
----
+:::::: section id=mem-9 heading="9. rész — Éles használat és best practices" nav="9. rész" group="Éles használat"
 
-## 10. Éles használat — best practices
+<p class="topic-tagline">Cél: production-közeli memory — takarítás, perzisztencia, tesztelés.</p>
 
-- **Eviction (mit dobj el):** idő-alapú (régi emlék öregszik), fontosság-alapú (score), vagy méret-alapú (LRU). A vektor-memóriát időnként takarítsd (duplikátumok, elavult tények).
-- **Perzisztencia:** prototípusban embedded Chroma; élesben **PostgreSQL + pgvector** (a te stackedhez illik — egy DB a relációs adatnak és a vektoroknak is).
-- **Fact extraction:** ne nyers üzenetet ments. Egy köztes LLM-lépés vonja ki a tartós tényt ("Elköltöztem Budapestre" → `user.location = Budapest`).
-- **Frissítés vs. hozzáadás:** ha "FJ Yaris-t akar" később "FJ megvette a Yaris-t" lesz, **frissítsd/érvénytelenítsd** a régit, ne halmozz ellentmondó emlékeket.
-- **Tesztelés (QA-szemmel):**
-  - *Recall-teszt:* tárolt tény → kérdés → visszajön-e?
-  - *Negatív teszt:* nem tárolt tényre nem hallucinál-e emléket?
-  - *Izolációs teszt:* A user emléke nem szivárog-e B userhez?
-  - *Poisoning-teszt:* injektált utasítás a memóriában nem befolyásolja-e a viselkedést?
-  - *Regresszió:* summary-összegzés után megmaradnak-e a kulcs-tények (nevek, ID-k, számok)?
+### Kulcsdöntések
 
----
+::::: stack-grid
+:::: card label="Eviction"
+**Mit dobj el?** Idő-alapú (öregszik), fontosság-alapú (score), vagy méret-alapú (LRU). A vektor-memóriát időnként takarítsd: duplikátumok, elavult tények.
+::::
+:::: card label="Perzisztencia"
+Prototípusban embedded Chroma; élesben **PostgreSQL + pgvector** — egy DB a relációs adatnak és a vektoroknak is.
+::::
+:::: card label="Fact extraction"
+Ne nyers üzenetet ments. Egy köztes LLM-lépés vonja ki a tartós tényt: „Elköltöztem Budapestre" → `user.location = Budapest`.
+::::
+:::: card label="Update vs. add"
+Ha „FJ Yaris-t akar" később „FJ megvette a Yaris-t" lesz, **frissítsd/érvénytelenítsd** a régit — ne halmozz ellentmondó emlékeket.
+::::
+:::::
 
-## 11. Összefoglaló példa — hybrid CLI agent
+### Tesztelés — QA-szemmel
 
-Egy kis agent, ami mindent összeköt: **sliding window** (rövid táv) + **summary** (közép táv) + **Chroma vektor-memory** (hosszú táv).
+| Teszt | Mit ellenőriz |
+|---|---|
+| **Recall** | Tárolt tény → kérdés → visszajön-e? |
+| **Negatív** | Nem tárolt tényre nem hallucinál-e emléket? |
+| **Izoláció** | A user emléke nem szivárog-e B userhez? |
+| **Poisoning** | Injektált utasítás a memóriában nem befolyásolja-e a viselkedést? |
+| **Regresszió** | Summary-összegzés után megmaradnak-e a kulcs-tények (nevek, ID-k, számok)? |
+::::::
+
+:::::: section id=mem-10 heading="10. rész — Összefoglaló projekt: hybrid CLI agent" nav="10. rész" group="Gyakorlat"
+
+<p class="topic-tagline">Cél: mindent összekötni — sliding window (rövid táv) + summary (közép táv) + Chroma vektor (hosszú táv).</p>
+
+### Teljes implementáció
 
 ```python
 import anthropic, chromadb, uuid
@@ -592,10 +655,34 @@ print(agent.chat("Szia! Emlékszel, mivel foglalkozom?"))
 print(agent.chat("Segíts egy teszt-tervben a fizetési integrációhoz."))
 ```
 
-> **Záró feladat:** bővítsd az agentet úgy, hogy minden forduló után egy külön LLM-hívás **eldönti, van-e a user üzenetében megjegyzendő tartós tény**, és ha igen, `remember()`-rel elmenti (fact extraction). Így az agent magától épít hosszú távú memóriát — de figyelj a 8. szakasz biztonsági pontjaira: a tényt kivont, strukturált formában tárold, ne nyers user-szöveget.
+::::: callout label="Záró feladat"
+Bővítsd az agentet úgy, hogy minden forduló után egy külön LLM-hívás **eldönti, van-e a user üzenetében megjegyzendő tartós tény**, és ha igen, `remember()`-rel elmenti (fact extraction). Így az agent magától épít hosszú távú memóriát — de figyelj a 7. rész biztonsági pontjaira: a tényt kivont, strukturált formában tárold, ne nyers user-szöveget.
+:::::
+::::::
 
----
+:::::: section id=mem-summary num=SUMMARY nav="Összefoglalás" sub=true group="Referencia"
+## A tutorial végére <em>ezt tudod</em>
 
-## Következő lépés
+::::: stack-grid
+:::: card label="0–1. rész"
+Stateless mental model · Memory-típusok · Architektúrák és trade-offok
+::::
+:::: card label="Feladat 1–2"
+Buffer memory · Sliding window · Token-számlálás
+::::
+:::: card label="Feladat 3–4"
+Summary auto-összegzés · ChromaDB vektor-memory · Lokális embedding
+::::
+:::: card label="7. rész"
+Memory poisoning · PII · OWASP LLM védekezés
+::::
+:::: card label="8–9. rész"
+LangGraph · Mem0 · pgvector · QA-tesztelés
+::::
+:::: card label="10. rész"
+Hybrid CLI agent · Mindhárom réteg összekötve
+::::
+:::::
 
-A vektor-memória csak megkapargatta a felszínt — a **vektor-adatbázisok** (indexelési stratégiák, HNSW, metaadat-szűrés, pgvector vs. dedikált store, chunkolás, hybrid search) külön tutorialt érdemelnek. Ez lesz a folytatás.
+<p class="topic-tagline">Következő: a <em>vektor-adatbázisok</em> külön tutorial — indexelés (HNSW), metaadat-szűrés, chunkolás, hybrid search, pgvector vs. dedikált store.</p>
+::::::
