@@ -36,6 +36,7 @@ const PAGE_ORDER = [
   { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
   { key: 'vectordb',  label: 'Vector adatbázisok',  labelEn: 'Vector databases', dot: '#17cb11' },
   { key: 'dense-moe',  label: 'Dense vs MoE modellek',  labelEn: 'Dense vs Moe modells', dot: '#6160a3' },
+  { key: 'rag',       label: 'RAG',                 labelEn: 'RAG',             dot: '#1613d4' },
 ];
 
 /* ── NYELVEK ──
