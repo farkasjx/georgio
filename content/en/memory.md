@@ -6,7 +6,7 @@ sidebar_groups:
 ---
 
 :::::: section id=memory-notice num=00 nav="Overview" group="Overview"
-## AI Tools
+## Memory
 
 <p class="topic-tagline">This section hasn't been translated into English yet.</p>
 

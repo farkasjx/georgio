@@ -38,6 +38,7 @@ const PAGE_ORDER = [
   { key: 'dense-moe',  label: 'Dense vs MoE modellek',  labelEn: 'Dense vs Moe modells', dot: '#6160a3' },
   { key: 'rag',       label: 'RAG',                 labelEn: 'RAG',             dot: '#1613d4' },
   { key: 'kv-cache',       label: 'KV cache',                 labelEn: 'KV cache',             dot: '#432604' },
+  { key: 'hardware',       label: 'Hardware',                 labelEn: 'Hardware',             dot: '#f0edeb' },
 ];
 
 /* ── NYELVEK ──

@@ -1,12 +1,12 @@
 ---
-page: rag
-title: RAG
+page: hardware
+title: Hardware
 sidebar_groups:
   - Overview
 ---
 
-:::::: section id=rag-notice num=00 nav="Overview" group="Overview"
-## RAG
+:::::: section id=hardware-notice num=00 nav="Overview" group="Overview"
+## Hardware
 
 <p class="topic-tagline">This section hasn't been translated into English yet.</p>
 
@@ -16,5 +16,5 @@ is being translated progressively.
 
 If you'd like to read this page now, switch to the Hungarian version:
 
-<p><a href="../index.html#rag" class="notice-link">→ Open "RAG" in Hungarian</a></p>
+<p><a href="../index.html#hardware" class="notice-link">→ Open "Hardware" in Hungarian</a></p>
 ::::::

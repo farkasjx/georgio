@@ -6,8 +6,7 @@ sidebar_groups:
 ---
 
 :::::: section id=kv-cache-notice num=00 nav="Overview" group="Overview"
-## Security & OWASP
-
+## KV chache
 <p class="topic-tagline">This section hasn't been translated into English yet.</p>
 
 This page is currently only available in Hungarian. The English version of the AI Hub

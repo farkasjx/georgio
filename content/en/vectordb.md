@@ -6,7 +6,7 @@ sidebar_groups:
 ---
 
 :::::: section id=vectordb-notice num=00 nav="Overview" group="Overview"
-## AI Tools
+## Vector database
 
 <p class="topic-tagline">This section hasn't been translated into English yet.</p>
 
