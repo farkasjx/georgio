@@ -283,7 +283,7 @@ NVIDIA saját, 15+ éves compute-platformja. Minden nagyobb LLM-eszköz (vLLM, T
 AMD nyílt compute-platformja. 2026-ra érdemben beérett: a PyTorch, a vLLM és az SGLang hivatalosan támogatja, az Ollama natívan működik RDNA3/RDNA4 kártyákon. A hátrány: a legújabb, CUDA-specifikus optimalizációk (pl. FlashAttention 3, TensorRT-LLM) gyakran késve vagy egyáltalán nem érkeznek meg ROCm-ra.
 ::::
 :::: card label="Metal / MLX (Apple)"
-Az Apple Silicon saját GPU-computing rétege. A **unified memory** miatt más a játék: nincs külön VRAM-korlát, a teljes rendszermemória elérhető. Az Ollama MLX motorja (2026 eleji preview, azóta érett) kifejezetten jó eredményt ad Apple Silicon-on — ez közvetlenül releváns a te M4 Pro Mac-ednek.
+Az Apple Silicon saját GPU-computing rétege. A **unified memory** miatt más a játék: nincs külön VRAM-korlát, a teljes rendszermemória elérhető. Az Ollama MLX motorja (2026 eleji preview, azóta érett) kifejezetten jó eredményt ad Apple Silicon-on.
 ::::
 :::::
 
@@ -330,10 +330,6 @@ Ha **nagy modellt** (70B+) akarsz egyetlen gépen futtatni, alacsony zajjal és 
 :::: card label="Ne fizess feleslegért"
 A PCIe-sávszélesség szinte sosem szűk keresztmetszet inferenciánál (a modell egyszer töltődik be, utána a GPU belső memóriáján dolgozik) — ne emiatt válassz drágább alaplapot.
 ::::
-:::::
-
-::::: callout label="A te helyzeted"
-Az M4 Pro Mac-ed unified memóriájával gyakorlatilag "VRAM-korlát nélkül" dolgozol a rendszer-RAM méretéig — ez pont azért kényelmes helyi fejlesztéshez és kísérletezéshez (Ollama, a saját tutorialjaid tesztelése), mert nem kell a klasszikus "fér-e a kártyára" korlátozással bajlódnod, amíg a modell a RAM-odba fér.
 :::::
 ::::::
 
