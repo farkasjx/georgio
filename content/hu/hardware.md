@@ -111,7 +111,7 @@ rocm-smi --showmeminfo vram
 
 ### Apple Silicon (unified memory)
 
-Az Apple Silicon-nál nincs külön VRAM — a CPU és GPU **osztozik** a teljes rendszermemórián (unified memory). A te M4 Pro Mac-eden ez azt jelenti, hogy a "VRAM" gyakorlatilag a teljes RAM-od, amennyit az OS enged a GPU-nak foglalni:
+Az Apple Silicon-nál nincs külön VRAM — a CPU és GPU **osztozik** a teljes rendszermemórián (unified memory). Mac-en ez azt jelenti, hogy a "VRAM" gyakorlatilag a teljes RAM, amennyit az OS enged a GPU-nak foglalni:
 
 ```bash
 # macOS: a GPU-memória használat megtekintése
