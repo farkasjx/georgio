@@ -331,6 +331,10 @@ Ha **nagy modellt** (70B+) akarsz egyetlen gépen futtatni, alacsony zajjal és 
 A PCIe-sávszélesség szinte sosem szűk keresztmetszet inferenciánál (a modell egyszer töltődik be, utána a GPU belső memóriáján dolgozik) — ne emiatt válassz drágább alaplapot.
 ::::
 :::::
+
+::::: callout label="Mac"
+A Mac unified memóriájával gyakorlatilag "VRAM-korlát nélkül" dolgozol a rendszer-RAM méretéig — ez pont azért kényelmes helyi fejlesztéshez és kísérletezéshez (Ollama, a saját tutorialjaid tesztelése), mert nem kell a klasszikus "fér-e a kártyára" korlátozással bajlódnod, amíg a modell a RAM-odba fér.
+:::::
 ::::::
 
 :::::: section id=hw-9 heading="7. rész — Ha nem fér egy kártyára: multi-GPU és offloading" nav="7. rész" group="Gyakorlat"
