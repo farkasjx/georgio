@@ -43,19 +43,23 @@ function showPage(id) {
   window.location.hash = id;
 }
 
-/* ── OLDALVÁLTÓ DROPDOWN (sidebar tetején) ── */
+/* ── OLDALVÁLTÓ DROPDOWN (sidebar tetején, mobilon bottom-sheet) ── */
 function togglePageSwitcher() {
   const panel = document.getElementById('page-switcher-panel');
+  const backdrop = document.getElementById('ps-backdrop');
   const trigger = document.getElementById('ps-trigger');
   const isOpen = panel.classList.toggle('open');
+  if (backdrop) backdrop.classList.toggle('open', isOpen);
   trigger.setAttribute('aria-expanded', String(isOpen));
 }
 
 function closePageSwitcher() {
   const panel = document.getElementById('page-switcher-panel');
+  const backdrop = document.getElementById('ps-backdrop');
   const trigger = document.getElementById('ps-trigger');
   if (!panel) return;
   panel.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
   if (trigger) trigger.setAttribute('aria-expanded', 'false');
 }
 

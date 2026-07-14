@@ -33,12 +33,6 @@ const PAGE_ORDER = [
   { key: 'ollama',    label: 'Lokális LLM',         labelEn: 'Local LLM',       dot: '#4ec9c9' },
   { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
-  { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
-  { key: 'vectordb',  label: 'Vector adatbázisok',  labelEn: 'Vector databases', dot: '#17cb11' },
-  { key: 'dense-moe',  label: 'Dense vs MoE modellek',  labelEn: 'Dense vs Moe modells', dot: '#6160a3' },
-  { key: 'rag',       label: 'RAG',                 labelEn: 'RAG',             dot: '#1613d4' },
-  { key: 'kv-cache',       label: 'KV cache',                 labelEn: 'KV cache',             dot: '#432604' },
-  { key: 'hardware',       label: 'Hardware',                 labelEn: 'Hardware',             dot: '#f0edeb' },
 ];
 
 /* ── NYELVEK ──
@@ -58,6 +52,7 @@ const LOCALES = [
       searchNoResults: 'Nincs találat.',
       themeTitle: 'Világos / sötét mód',
       searchTitle: 'Keresés (Ctrl+K)',
+      pagesLabel: 'Oldalak',
     },
   },
   {
@@ -72,6 +67,7 @@ const LOCALES = [
       searchNoResults: 'No results.',
       themeTitle: 'Light / dark mode',
       searchTitle: 'Search (Ctrl+K)',
+      pagesLabel: 'Pages',
     },
   },
 ];
@@ -431,7 +427,14 @@ ${mapPage}
         <span class="ps-current-label" id="ps-current-label">${defaultLabel}</span>
         <svg class="ps-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
+      <div class="ps-backdrop" id="ps-backdrop" onclick="closePageSwitcher()"></div>
       <div class="page-switcher-panel" id="page-switcher-panel">
+        <div class="ps-panel-header">
+          <span>${ui.pagesLabel}</span>
+          <button class="ps-close" onclick="closePageSwitcher()" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
 ${pageSwitcherItems}
       </div>
     </div>
