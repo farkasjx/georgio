@@ -33,7 +33,14 @@ const PAGE_ORDER = [
   { key: 'ollama',    label: 'Lokális LLM',         labelEn: 'Local LLM',       dot: '#4ec9c9' },
   { key: 'aiconfig',  label: 'AI Config fájlok',    labelEn: 'AI Config Files', dot: '#f472b6' },
   { key: 'security',  label: 'Biztonság & OWASP',   labelEn: 'Security & OWASP', dot: '#e06c75' },
-];
+  { key: 'memory',    label: 'Memory',              labelEn: 'Memory',          dot: '#e1c9cb' },
+  { key: 'vectordb',  label: 'Vector adatbázisok',  labelEn: 'Vector databases', dot: '#17cb11' },
+  { key: 'dense-moe',  label: 'Dense vs MoE modellek',  labelEn: 'Dense vs Moe modells', dot: '#6160a3' },
+  { key: 'rag',       label: 'RAG',                 labelEn: 'RAG',             dot: '#1613d4' },
+  { key: 'kv-cache',       label: 'KV cache',                 labelEn: 'KV cache',             dot: '#432604' },
+  { key: 'hardware',       label: 'Hardware',                 labelEn: 'Hardware',             dot: '#f0edeb' },
+  ];
+
 
 /* ── NYELVEK ──
    A `dir` a content/<dir> almappa. Az `assetPrefix` a public/ gyökeréhez
