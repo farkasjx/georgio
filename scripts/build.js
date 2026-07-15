@@ -39,7 +39,7 @@ const PAGE_ORDER = [
   { key: 'rag',       label: 'RAG',                 labelEn: 'RAG',             dot: '#1613d4' },
   { key: 'kv-cache',       label: 'KV cache',                 labelEn: 'KV cache',             dot: '#432604' },
   { key: 'hardware',       label: 'Hardware',                 labelEn: 'Hardware',             dot: '#f0edeb' },
-   { key: 'model-routing',       label: 'Model routing',                 labelEn: 'Model routing',             dot: '#b0c9e4' },
+  { key: 'model-routing',  label: 'Latency',   labelEn: 'Latency',   dot: '#496b8f' },
   ];
 
 
