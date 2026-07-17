@@ -40,7 +40,8 @@ const PAGE_ORDER = [
   { key: 'kv-cache',       label: 'KV cache',                 labelEn: 'KV cache',             dot: '#432604' },
   { key: 'hardware',       label: 'Hardware',                 labelEn: 'Hardware',             dot: '#f0edeb' },
   { key: 'model-routing',  label: 'Model routing',   labelEn: 'Model routing',   dot: '#496b8f' },
-  { key: 'latency',  label: 'Latency',   labelEn: 'Latency',   dot: '#496b8f' },
+  { key: 'latency',  label: 'Latency',   labelEn: 'Latency',   dot: '#523986' },
+  { key: 'hallucination',  label: 'Halucináció',   labelEn: 'Hallucination',   dot: '#a3ce40' },
   ];
 
 
