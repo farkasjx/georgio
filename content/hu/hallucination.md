@@ -26,6 +26,7 @@ footer:
   <a class="toc-card" href="#hal-0"><div class="tc-num">0. rész</div><div class="tc-name">Mi az a hallucináció?</div><div class="tc-desc">Nem hiba — a generálás egy velejárója.</div></a>
   <a class="toc-card" href="#hal-1"><div class="tc-num">1. rész</div><div class="tc-name">A statisztikai eredet</div><div class="tc-desc">Miért elkerülhetetlen egy alap-szinten.</div></a>
   <a class="toc-card" href="#hal-2"><div class="tc-num">2. rész</div><div class="tc-name">Az incentive-probléma</div><div class="tc-desc">Miért hazudik a "nem tudom" helyett.</div></a>
+  <a class="toc-card" href="#hal-2b"><div class="tc-num">Kitérő</div><div class="tc-name">Vektor-szinten</div><div class="tc-desc">Hol csúszik el ténylegesen a keresés.</div></a>
   <a class="toc-card" href="#hal-3"><div class="tc-num">3. rész</div><div class="tc-name">A típusok</div><div class="tc-desc">Faktuális, faithfulness, logikai — és további felosztások.</div></a>
   <a class="toc-card" href="#hal-4"><div class="tc-num">Feladat 1</div><div class="tc-name">Idézd elő</div><div class="tc-desc">Figyeld meg élőben, hogyan történik.</div></a>
   <a class="toc-card" href="#hal-5"><div class="tc-num">4. rész</div><div class="tc-name">Felismerés</div><div class="tc-desc">Self-consistency, chain-of-verification.</div></a>
@@ -92,6 +93,61 @@ Fontos leszögezni: a modell nem "hazudik" abban az értelemben, hogy szándéko
 
 ::::: callout label="Amit te tehetsz emiatt"
 Mivel a modell alapból a magabiztos válaszra van "hangolva", a te feladatod (5-7. rész) az, hogy **explicit engedélyt és keretet adj** a bizonytalanság kifejezésére — a system promptban, a RAG-grounding-gal, vagy egy kimeneti ellenőrző réteggel. A modell nem fogja magától felajánlani a "nem tudom"-ot, ha nem kéred rá kifejezetten.
+:::::
+::::::
+
+:::::: section id=hal-2b heading="Kitérő — Vektor-szinten: hol csúszik el a keresés" nav="Vektor-szinten" group="Elmélet"
+
+<p class="topic-tagline">Cél: lásd meg geometriailag, miért születik "közeli, de rossz" válasz — és hol van itt szó szó szerinti vektor-keresésről, hol csak analógiáról.</p>
+
+### Két különböző szint — ne keverd össze őket
+
+A **vektor-adatbázis tutorial** megmutatta: a jelentés egy irány/pozíció egy sokdimenziós térben, és a hasonlóság a köztük mért koszinusz-távolság. A hallucinációnál ez a geometria **kétféleképpen** jön elő — és a kettő nem ugyanaz:
+
+::::: stack-grid
+:::: card label="1 · A modell parametrikus tudása (analógia)"
+A modell **nem szó szerint vektorokat keres elő** egy tárból, amikor válaszol — a "tudása" a tanított súlyokban van, amik **implicit módon** kódolnak geometriai viszonyokat a fogalmak között (mint a `király − férfi + nő ≈ királynő` példa). Ez analógia, nem szó szerinti keresés.
+::::
+:::: card label="2 · A RAG retrieval (szó szerinti keresés)"
+Egy RAG-rendszerben ez **ténylegesen** vektor-keresés: a kérdésed embeddingjét ténylegesen összeveted tárolt dokumentum-vektorokkal, és a legjobb koszinusz-hasonlóságú találatot adod vissza kontextusként. Itt a "vektorszámítás félremegy" szó szerint értendő.
+::::
+:::::
+
+### 1. szint — miért gyérek a ritka fogalmak régiói
+
+Az **1. rész** azt mondta: a ritka tényeknél nagyobb a hallucináció esélye, mert kevés tanítási adat volt rájuk. Geometriailag ez azt jelenti: egy ritkán látott fogalomhoz tartozó régió a modell belső terében **gyéren, pontatlanul körülhatárolt**. Amikor a modellnek "elő kell állítania" egy választ egy ilyen gyér régióból, a legközelebbi **jól betanult, jól körülhatárolt** szomszédos irány felé "csúszik" — ez egy hasonló, de téves fogalom lesz. Nem véletlen hiba, hanem a legjobban kitanult, legközelebbi geometriai szomszéd.
+
+### 2. szint — a RAG retrieval szó szerinti félrecsúszása
+
+Itt a mechanizmus konkrét és mérhető: ha a kérdésed embeddingje **nem esik elég közel** a helyes válasz embeddingjéhez — mert a megfogalmazás kétértelmű, az embedding-modell gyengébb, vagy a chunkolás elvágta a releváns részt —, a keresés egy **szemantikailag közeli, de faktuálisan rossz** dokumentumot ad vissza. A modell ezután **hűségesen** (nem hazudva!) erre a rossz kontextusra épít — ez a **RAG tutorial** és a **3. rész** faithfulness-hallucinációja, csak most a geometriai eredetét látod.
+
+```python
+import numpy as np
+
+def cosine_sim(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+# a query embeddingje és a tárolt chunkok embeddingjei (a te embed() függvényeddel)
+query_vec = embed("Mennyi a bank nyitvatartása?")  # "bank" itt PÉNZINTÉZET értelemben
+
+candidates = {
+    "Pénzintézeti nyitvatartás: H-P 8-17.": embed("Pénzintézeti nyitvatartás: H-P 8-17."),
+    "A folyó partján (bank) sétányt alakítottak ki.": embed("A folyó partján (bank) sétányt alakítottak ki."),
+}
+
+for text, vec in candidates.items():
+    print(f"{cosine_sim(query_vec, vec):.3f}  {text}")
+
+# ha a legjobb találat pontszáma is csak mérsékelt (pl. 0.4-0.6),
+# az GYANÚS JEL: a keresés "araszol", nincs igazán jó egyezés
+```
+
+::::: callout warning label="Egy konkrét, új védekezési technika: hasonlósági küszöb"
+Ha a legjobb találat koszinusz-hasonlósága **alacsony vagy mérsékelt** (a saját korpuszodon kalibrált küszöb alatt van), az azt jelzi: a retrieval **araszol**, nincs igazán releváns dokumentum. Ilyenkor **ne** add oda a találatot kontextusként úgy, mintha megbízható forrás lenne — inkább jelezd a modellnek explicit, hogy "nincs elég releváns forrás, mondd ki, hogy nem tudod". Ez egy konkrét, mérhető, kódolható kiegészítése a **6-7. rész** védekezési rétegeinek — a probléma nem "a modell hazudik", hanem "a keresés nem talált semmi igazán jót, és ezt nem jeleztük neki".
+:::::
+
+::::: callout label="A poliszémia csapdája"
+A `bank` szó fenti példája nem véletlen: egy szónak/mondatnak **egyetlen** embedding-vektorba kell besűrítenie minden lehetséges jelentését. Kétértelmű vagy több jelentésű kifejezéseknél ez a összesűrítés önmagában is forrása lehet a "közeli, de rossz" találatnak — a **RAG tutorial** hasonló gyakorlati feladata (a "bank" kétértelműsége) pontosan ezt a jelenséget mutatta be.
 :::::
 ::::::
 
