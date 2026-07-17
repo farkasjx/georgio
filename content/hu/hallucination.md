@@ -31,6 +31,7 @@ footer:
   <a class="toc-card" href="#hal-4"><div class="tc-num">Feladat 1</div><div class="tc-name">Idézd elő</div><div class="tc-desc">Figyeld meg élőben, hogyan történik.</div></a>
   <a class="toc-card" href="#hal-5"><div class="tc-num">4. rész</div><div class="tc-name">Felismerés</div><div class="tc-desc">Self-consistency, chain-of-verification.</div></a>
   <a class="toc-card" href="#hal-6"><div class="tc-num">5. rész</div><div class="tc-name">Védekezés: promptolás</div><div class="tc-desc">A legolcsóbb, leggyorsabb réteg.</div></a>
+  <a class="toc-card" href="#hal-6b"><div class="tc-num">Kitérő</div><div class="tc-name">Honnan tudja?</div><div class="tc-desc">Levezetés: hogyan "tud" a modell a nem-tudásáról.</div></a>
   <a class="toc-card" href="#hal-7"><div class="tc-num">6. rész</div><div class="tc-name">Védekezés: RAG</div><div class="tc-desc">Grounding — a válasz forráshoz kötése.</div></a>
   <a class="toc-card" href="#hal-8"><div class="tc-num">7. rész</div><div class="tc-name">Védekezés: memory</div><div class="tc-desc">Konzisztencia session-ökön át.</div></a>
   <a class="toc-card" href="#hal-9"><div class="tc-num">Feladat 2</div><div class="tc-name">Hasonlítsd össze</div><div class="tc-desc">Réteg nélkül vs. réteggel.</div></a>
@@ -302,6 +303,50 @@ Adj a promptba 1-2 példát, ahol a "helyes" válasz kifejezetten egy bizonytala
 
 ::::: callout warning label="A promptolás önmagában nem elég"
 A promptolás csökkenti, de nem szünteti meg a hallucinációt — az 1. rész statisztikai érve ettől függetlenül fennáll. A promptolás a **legolcsóbb első védelmi vonal**, de ritka, specifikus, vagy friss tényeknél a következő réteg (RAG) szükséges. Ha a **prompt engineering tutorialt** még nem nézted át, ott találod a részletesebb technikákat (pl. XML-tagek, few-shot struktúra), amik itt is alkalmazhatók.
+:::::
+::::::
+
+:::::: section id=hal-6b heading="Kitérő — Honnan \"tudja\" a modell, hogy nem tudja?" nav="Honnan tudja?" group="Védekezés"
+
+<p class="topic-tagline">Cél: vezesd le, mi történik ténylegesen, amikor a promptban azt írod, „ha nem tudod, mondd hogy nem tudod" — mert ez nem annyira triviális, mint amilyennek hangzik.</p>
+
+### A naiv (téves) elképzelés
+
+Könnyű azt hinni, hogy a modellben van valahol egy belső "tudás-lista", amit végigfut: "ezt a tényt ismerem — igen/nem", és a promptod csak előhívja ezt a listát. **Ez nem így működik.** A modellnek nincs ilyen explicit, ellenőrizhető nyilvántartása a saját tudásáról — nem konzultál egy adatbázissal, hogy eldöntse, "tudja-e" a választ.
+
+### Ami ténylegesen történik: két valós, de tökéletlen jel
+
+::::: stack-grid
+:::: card label="1 · A valószínűség-eloszlás élessége"
+Minden generált tokennél a modell egy valószínűség-eloszlást számol a lehetséges következő szavakra. Ha a modell "magabiztos", ez az eloszlás **éles csúcsú** (egy token dominál). Ha "bizonytalan", az eloszlás **lapos** (sok token közel egyenlő eséllyel). Ez egy valódi, mérhető jel — de a modell nem "olvassa ki" tudatosan, egyszerűen ez a matematikai állapot áll fenn a súlyai alapján.
+::::
+:::: card label="2 · Belső reprezentációk — a \"tudom-e\" irány"
+Interpretálhatósági kutatások (pl. Kadavath és szerzőtársai, *„Language Models (Mostly) Know What They Know"*) megmutatták: a modell belső rejtett állapotaiban azonosítható egy **irány/mintázat**, ami korrelál azzal, hogy a modell válasza valószínűleg helyes-e vagy hallucináció. A modellt meg lehet tanítani arra is, hogy ezt a jelet **explicit kimeneti valószínűségként** fejezze ki ("mekkora eséllyel helyes ez a válasz"). Ez egy **részleges, zajos**, de valódi önreflexiós képesség — nem tökéletes introspekció.
+::::
+:::::
+
+### Mit csinál valójában a promptod?
+
+Itt a lényeg, amit érdemes tisztán látni: a "ha nem tudod, mondd hogy nem tudod" utasítás **nem ad új önismeretet** a modellnek. A fenti két jel (bizonytalan eloszlás, "tudom-e" irány) **már eleve létezik** a modell belső állapotában — csak a **2. részben** tárgyalt incentive-probléma miatt a modell normál esetben **elnyomja** ezt a jelet, és helyette magabiztos találgatást ad, mert azt tanulta meg jutalmazottnak.
+
+A promptod valójában ezt teszi: **megváltoztatja, mi számít "jó" válasznak** ebben a konkrét kontextusban. Explicit **engedélyt és jutalmat** ad a bizonytalanság kimondására — így a már meglévő, de általában elnyomott bizonytalansági jel **átjuthat** a kimeneti szövegbe ("nem vagyok biztos benne"), ahelyett hogy a szokásos magabiztos-találgatás mintázat felülírná.
+
+```text
+NORMÁL ESET:
+  [bizonytalan belső jel] → (incentive: mindig tűnj magabiztosnak) → magabiztos találgatás
+
+"HA NEM TUDOD, MONDD" UTASÍTÁSSAL:
+  [bizonytalan belső jel] → (új incentive: a bizonytalanság kimondása is jó válasz) → "nem tudom" felszínre kerül
+```
+
+### A kritikus figyelmeztetés: ez a self-report NEM megbízható
+
+::::: callout danger label="Ne bízz vakon az önbevallásban"
+A modell "nem tudom" válasza **maga is lehet pontatlan** — ez egy zajos, tökéletlen jel, nem garantált introspekció. Két irányban hibázhat: **(1)** olyan tényre is bizonytalanságot jelezhet, amit valójában helyesen tudna (túlzott óvatosság, gyakran az RLHF-tanítás mellékhatása), és **(2)** olyan dologra is magabiztosan válaszolhat, amit valójában nem tud helyesen — az utasítás **csökkenti**, de nem szünteti meg a hallucinációt (ahogy az 5. rész callout-ja is jelezte). Emiatt a promptolás önmagában **soha nem elég** magas tétű helyzetekben — ez az oka, hogy a következő réteg (RAG) **külső, ellenőrizhető** alapot ad ahelyett, hogy a modell bizonytalan önreflexiójára hagyatkozna.
+:::::
+
+::::: callout label="Gyakorlati következtetés: a self-consistency ezért működik"
+Ez összeköthető a **4. részben** bemutatott self-consistency technikával: ha a belső eloszlás **éles** (magabiztos), a modell ismételt lekérdezésekor **konzisztens** választ ad. Ha az eloszlás **lapos** (bizonytalan), a válaszok **szét fognak tartani**. Vagyis a self-consistency-teszt gyakorlatilag **megkerüli** azt, hogy a modell önbevallására kelljen hagyatkoznod — helyette **külsőleg, viselkedésen keresztül** méred ugyanazt a belső bizonytalanságot, amit a modell maga nem tudna megbízhatóan szavakba önteni.
 :::::
 ::::::
 
