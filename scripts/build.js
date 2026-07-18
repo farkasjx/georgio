@@ -42,7 +42,8 @@ const PAGE_ORDER = [
   { key: 'model-routing',  label: 'Model routing',   labelEn: 'Model routing',   dot: '#496b8f' },
   { key: 'latency',  label: 'Latency',   labelEn: 'Latency',   dot: '#523986' },
   { key: 'hallucination',  label: 'Halucináció',   labelEn: 'Hallucination',   dot: '#a3ce40' },
-  ];
+{ key: 'mcp',  label: 'MCP',   labelEn: 'MCP',   dot: '#359a9c' },  
+];
 
 
 /* ── NYELVEK ──
