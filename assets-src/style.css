@@ -952,6 +952,11 @@ svg.connections {
   margin: 0;
 }
 
+.panel-open-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; margin-top: 24px;
+}
+
 .panel-list li::before {
   content: '—';
   color: var(--amber);

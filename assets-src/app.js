@@ -113,9 +113,16 @@ function attachSidebarLinks() {
 }
 
 /* ─────────────────────────────────────────────
-   ROADMAP MAP
+   TARTALMI KAPCSOLATI TÉRKÉP (kezdőoldal)
 ───────────────────────────────────────────── */
-/* roadmap[] és edges[] most a roadmap-data.js-ben él (külön betöltve) */
+/* graphNodes[] és graphEdges[] a content-graph-data.js-ben élnek (külön betöltve).
+   Ez a gráf a site ÖSSZES tartalmi oldalát mutatja, nem csak a roadmap fázisait. */
+
+const clusterLabels = {
+  workflow:  'Alapok & munkafolyamat',
+  knowledge: 'Tudás & kontextus',
+  model:     'Modell & hardver'
+};
 
 let mapInitialized = false;
 let activeFilter = 'all';
@@ -129,7 +136,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 2200, H = 1400;
+  const W = 2000, H = 1500;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -139,38 +146,37 @@ function initMap() {
   // draw edges
   const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   svgEl.appendChild(defs);
-  edges.forEach(([a,b]) => {
-    const na = roadmap.find(n=>n.id===a), nb = roadmap.find(n=>n.id===b);
+  graphEdges.forEach(([a,b]) => {
+    const na = graphNodes.find(n=>n.id===a), nb = graphNodes.find(n=>n.id===b);
     if (!na || !nb) return;
     const ax = na.x+115, ay = na.y+70, bx = nb.x+115, by = nb.y+70;
     const mx = (ax+bx)/2, my = (ay+by)/2;
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
     path.setAttribute('d', `M${ax},${ay} C${mx},${ay} ${mx},${by} ${bx},${by}`);
     path.setAttribute('class','path');
+    path.dataset.a = a;
+    path.dataset.b = b;
     svgEl.appendChild(path);
   });
 
   // create nodes
-  roadmap.forEach((node, i) => {
+  graphNodes.forEach((node, i) => {
     const el = document.createElement('div');
     el.className = 'map-node';
     el.id = `node-${node.id}`;
     el.style.cssText = `left:${node.x}px;top:${node.y}px;--node-color:${node.color}`;
 
     el.innerHTML = `
-      <span class="node-time">${node.tag}</span>
+      <span class="node-time">${clusterLabels[node.cluster] || ''}</span>
       <div class="node-label">${node.title}</div>
-      <div class="node-desc">${node.short}</div>
-      <div class="node-pills">
-        ${node.tools.slice(0,3).map(t=>`<span class="pill">${t}</span>`).join('')}
-      </div>`;
+      <div class="node-desc">${node.short}</div>`;
 
     el.addEventListener('click', () => openPanel(node));
     canvas.appendChild(el);
   });
 
   // pan & zoom
-  let tx = -200, ty = -180, scale = 0.55;
+  let tx = -100, ty = -100, scale = 0.55;
   let dragging = false, startX, startY, startTx, startTy;
 
   function applyTransform(animate) {
@@ -205,7 +211,7 @@ function initMap() {
   // zoom buttons
   document.getElementById('btn-zoom-in').addEventListener('click',  () => { scale = Math.min(2, scale*1.2); applyTransform(true); });
   document.getElementById('btn-zoom-out').addEventListener('click', () => { scale = Math.max(0.25, scale*0.83); applyTransform(true); });
-  document.getElementById('btn-reset').addEventListener('click',    () => { tx=-200; ty=-180; scale=0.55; applyTransform(true); });
+  document.getElementById('btn-reset').addEventListener('click',    () => { tx=-100; ty=-100; scale=0.55; applyTransform(true); });
 
   // filter chips
   document.querySelectorAll('.map-chip').forEach(chip => {
@@ -223,26 +229,51 @@ function initMap() {
 }
 
 function filterNodes(filter) {
-  roadmap.forEach(n => {
+  graphNodes.forEach(n => {
     const el = document.getElementById(`node-${n.id}`);
     if (!el) return;
-    const show = filter === 'all' ||
-      (filter === '1-3' && n.progress <= 3) ||
-      (filter === '4-6' && n.progress >= 4 && n.progress <= 6) ||
-      (filter === '7-10' && n.progress >= 7);
-    el.style.opacity = show ? '1' : '0.2';
+    const show = filter === 'all' || n.cluster === filter;
+    el.style.opacity = show ? '1' : '0.15';
     el.style.pointerEvents = show ? 'auto' : 'none';
   });
+
+  document.querySelectorAll('.path').forEach(p => {
+    const a = graphNodes.find(n => n.id === p.dataset.a);
+    const b = graphNodes.find(n => n.id === p.dataset.b);
+    const show = filter === 'all' || (a && a.cluster === filter) || (b && b.cluster === filter);
+    p.style.opacity = show ? '1' : '0.08';
+  });
+}
+
+/* related csomópontok az élek alapján, dinamikusan (nincs kézzel karbantartott lista) */
+function getRelatedNodes(id) {
+  const relatedIds = new Set();
+  graphEdges.forEach(([a, b]) => {
+    if (a === id) relatedIds.add(b);
+    if (b === id) relatedIds.add(a);
+  });
+  return [...relatedIds].map(rid => graphNodes.find(n => n.id === rid)).filter(Boolean);
 }
 
 function openPanel(node) {
   const panel = document.getElementById('map-panel');
   document.getElementById('panel-title').textContent = node.title;
-  document.getElementById('panel-phase').textContent = node.phase + ' · ' + node.tag;
-  document.getElementById('panel-desc').innerHTML = node.description.map(p => `<p>${p}</p>`).join('');
-  document.getElementById('panel-skills').innerHTML = node.skills.map(s => `<li>${s}</li>`).join('');
-  document.getElementById('panel-tools').innerHTML = node.tools.map(t => `<li>${t}</li>`).join('');
-  document.getElementById('panel-project').textContent = node.project;
+  document.getElementById('panel-phase').textContent = clusterLabels[node.cluster] || '';
+  document.getElementById('panel-desc').innerHTML = node.desc.map(p => `<p>${p}</p>`).join('');
+
+  const related = getRelatedNodes(node.id);
+  document.getElementById('panel-related').innerHTML = related
+    .map(r => `<li data-goto="${r.id}" style="cursor:pointer">${r.title}</li>`).join('');
+  document.querySelectorAll('#panel-related li').forEach(li => {
+    li.addEventListener('click', () => {
+      const target = graphNodes.find(n => n.id === li.dataset.goto);
+      if (target) openPanel(target);
+    });
+  });
+
+  const openBtn = document.getElementById('panel-open-btn');
+  openBtn.onclick = () => showPage(node.id);
+
   panel.classList.add('open');
 }
 
@@ -250,8 +281,8 @@ function openPanel(node) {
    INIT
 ───────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
-  const hash = (window.location.hash || '#roadmap').replace('#', '');
-  const startPage = pages.includes(hash) ? hash : 'roadmap';
+  const hash = (window.location.hash || '#map').replace('#', '');
+  const startPage = pages.includes(hash) ? hash : 'map';
   showPage(startPage);
 
   document.querySelectorAll('.ps-item').forEach(item => {

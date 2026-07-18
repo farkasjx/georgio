@@ -147,7 +147,7 @@ function renderPage(key, contentDir, missingMsg) {
     ? fm.sidebar
     : groupSidebar(collector.sections, fm.sidebar_groups);
 
-  const activeClass = key === PAGE_ORDER[1].key ? ' active' : '';
+  const activeClass = ''; // a kezdőoldal most a #page-map (JS-mentes fallback esetén a map-page.html adja az active osztályt)
   const html = `<div id="page-${key}" class="page${activeClass}">\n${
     fm.hero ? renderHero(fm.hero, key) : ''
   }${body}\n${
@@ -346,9 +346,9 @@ function buildSearchIndex(pages) {
 ───────────────────────────────────────────── */
 function buildHtml(pages, locale) {
   // az oldalváltó dropdown elemei (a sidebar tetején jelenik meg, nem a topbarban)
-  const defaultPage = PAGE_ORDER.find(p => p.key === 'roadmap');
+  const defaultPage = PAGE_ORDER.find(p => p.key === 'map');
   const pageSwitcherItems = PAGE_ORDER.map(p => {
-    const isDefault = p.key === 'roadmap';
+    const isDefault = p.key === 'map';
     const label = locale.code === 'hu' ? p.label : p.labelEn;
     return `      <button class="ps-item${isDefault ? ' active' : ''}" data-page="${p.key}" data-label="${label}" data-dot="${p.dot}">
         <span class="ps-dot" style="background:${p.dot}"></span>${label}
@@ -367,7 +367,8 @@ function buildHtml(pages, locale) {
     sidebarData[p.key] = pages[p.key].sidebar;
   }
 
-  const mapPage = fs.readFileSync(path.join(__dirname, 'map-page.html'), 'utf8');
+  const mapPage = fs.readFileSync(path.join(__dirname, 'map-page.html'), 'utf8')
+    .replace('<div id="page-map">', '<div id="page-map" class="active">');
   const searchIndex = buildSearchIndex(pages);
   const ui = locale.ui;
   const AP = locale.assetPrefix;
@@ -399,7 +400,7 @@ function buildHtml(pages, locale) {
 
 <!-- ════════ TOP NAVIGATION ════════ -->
 <nav class="topbar">
-  <a class="topbar-brand" href="#" onclick="showPage('roadmap');return false;">
+  <a class="topbar-brand" href="#" onclick="showPage('map');return false;">
     <div class="brand-icon">⬡</div>
     <span class="brand-name">AI Hub<span class="brand-version">v2.0</span></span>
   </a>
@@ -469,6 +470,7 @@ window.__SEARCH__ = ${JSON.stringify(searchIndex)};
 window.__I18N__ = ${JSON.stringify(ui)};
 </script>
 <script src="${AP}roadmap-data.js"></script>
+<script src="${AP}content-graph-data.js"></script>
 <script src="${AP}app.js"></script>
 <script src="${AP}search.js"></script>
 </body>
