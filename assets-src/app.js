@@ -136,31 +136,29 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 2000, H = 1500;
+  const W = 2500, H = 1850;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svgEl.style.width  = W + 'px';
   svgEl.style.height = H + 'px';
 
-  // draw edges
+  // draw edges (a pontos 'd' útvonalat az updateAllEdges() számolja ki)
   const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   svgEl.appendChild(defs);
   graphEdges.forEach(([a,b]) => {
     const na = graphNodes.find(n=>n.id===a), nb = graphNodes.find(n=>n.id===b);
     if (!na || !nb) return;
-    const ax = na.x+115, ay = na.y+70, bx = nb.x+115, by = nb.y+70;
-    const mx = (ax+bx)/2, my = (ay+by)/2;
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('d', `M${ax},${ay} C${mx},${ay} ${mx},${by} ${bx},${by}`);
     path.setAttribute('class','path');
     path.dataset.a = a;
     path.dataset.b = b;
     svgEl.appendChild(path);
   });
+  updateAllEdges();
 
   // create nodes
-  graphNodes.forEach((node, i) => {
+  graphNodes.forEach((node) => {
     const el = document.createElement('div');
     el.className = 'map-node';
     el.id = `node-${node.id}`;
@@ -171,12 +169,30 @@ function initMap() {
       <div class="node-label">${node.title}</div>
       <div class="node-desc">${node.short}</div>`;
 
-    el.addEventListener('click', () => openPanel(node));
     canvas.appendChild(el);
   });
 
+  /* ── node mozgatás egérrel — mousedown-tól figyeljük, elmozdult-e,
+     hogy meg tudjuk különböztetni a kattintást (panel nyitás) a húzástól ── */
+  let draggingNode = null, nodeMoved = false;
+  let nodeDragStartX, nodeDragStartY, nodeOrigX, nodeOrigY;
+
+  graphNodes.forEach(node => {
+    const el = document.getElementById(`node-${node.id}`);
+    el.addEventListener('mousedown', e => {
+      e.preventDefault();
+      draggingNode = node;
+      nodeMoved = false;
+      nodeDragStartX = e.clientX;
+      nodeDragStartY = e.clientY;
+      nodeOrigX = node.x;
+      nodeOrigY = node.y;
+      el.classList.add('dragging');
+    });
+  });
+
   // pan & zoom
-  let tx = -100, ty = -100, scale = 0.55;
+  let tx = -100, ty = -100, scale = 0.5;
   let dragging = false, startX, startY, startTx, startTy;
 
   function applyTransform(animate) {
@@ -193,13 +209,33 @@ function initMap() {
   });
 
   window.addEventListener('mousemove', e => {
+    if (draggingNode) {
+      const dx = (e.clientX - nodeDragStartX) / scale;
+      const dy = (e.clientY - nodeDragStartY) / scale;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) nodeMoved = true;
+      draggingNode.x = nodeOrigX + dx;
+      draggingNode.y = nodeOrigY + dy;
+      const el = document.getElementById(`node-${draggingNode.id}`);
+      el.style.left = draggingNode.x + 'px';
+      el.style.top  = draggingNode.y + 'px';
+      updateEdgesForNode(draggingNode.id);
+      return;
+    }
     if (!dragging) return;
     tx = startTx + (e.clientX - startX);
     ty = startTy + (e.clientY - startY);
     applyTransform(false);
   });
 
-  window.addEventListener('mouseup', () => { dragging = false; shell.classList.remove('dragging'); });
+  window.addEventListener('mouseup', () => {
+    if (draggingNode) {
+      const el = document.getElementById(`node-${draggingNode.id}`);
+      if (el) el.classList.remove('dragging');
+      if (!nodeMoved) selectNode(draggingNode);
+      draggingNode = null;
+    }
+    dragging = false; shell.classList.remove('dragging');
+  });
 
   shell.addEventListener('wheel', e => {
     e.preventDefault();
@@ -211,7 +247,7 @@ function initMap() {
   // zoom buttons
   document.getElementById('btn-zoom-in').addEventListener('click',  () => { scale = Math.min(2, scale*1.2); applyTransform(true); });
   document.getElementById('btn-zoom-out').addEventListener('click', () => { scale = Math.max(0.25, scale*0.83); applyTransform(true); });
-  document.getElementById('btn-reset').addEventListener('click',    () => { tx=-100; ty=-100; scale=0.55; applyTransform(true); });
+  document.getElementById('btn-reset').addEventListener('click',    () => { tx=-100; ty=-100; scale=0.5; applyTransform(true); });
 
   // filter chips
   document.querySelectorAll('.map-chip').forEach(chip => {
@@ -225,7 +261,52 @@ function initMap() {
 
   document.getElementById('panel-close').addEventListener('click', () => {
     panel.classList.remove('open');
+    clearHighlight();
   });
+}
+
+/* ── él-útvonalak kiszámítása a node középpontjai alapján (mozgatható node-ok miatt dinamikus) ── */
+function edgePathD(na, nb) {
+  const ax = na.x+125, ay = na.y+75, bx = nb.x+125, by = nb.y+75;
+  const mx = (ax+bx)/2, my = (ay+by)/2;
+  return `M${ax},${ay} C${mx},${ay} ${mx},${by} ${bx},${by}`;
+}
+
+function updateAllEdges() {
+  document.querySelectorAll('.path').forEach(p => {
+    const na = graphNodes.find(n => n.id === p.dataset.a);
+    const nb = graphNodes.find(n => n.id === p.dataset.b);
+    if (na && nb) p.setAttribute('d', edgePathD(na, nb));
+  });
+}
+
+function updateEdgesForNode(id) {
+  document.querySelectorAll('.path').forEach(p => {
+    if (p.dataset.a !== id && p.dataset.b !== id) return;
+    const na = graphNodes.find(n => n.id === p.dataset.a);
+    const nb = graphNodes.find(n => n.id === p.dataset.b);
+    if (na && nb) p.setAttribute('d', edgePathD(na, nb));
+  });
+}
+
+/* ── kijelölés: kiszínezi a csomóponthoz tartozó éleket és a szomszédos node-okat ── */
+function clearHighlight() {
+  document.querySelectorAll('.path').forEach(p => p.classList.remove('highlight'));
+  document.querySelectorAll('.map-node').forEach(n => n.classList.remove('node-active', 'node-related'));
+}
+
+function selectNode(node) {
+  clearHighlight();
+  const el = document.getElementById(`node-${node.id}`);
+  if (el) el.classList.add('node-active');
+  document.querySelectorAll('.path').forEach(p => {
+    if (p.dataset.a !== node.id && p.dataset.b !== node.id) return;
+    p.classList.add('highlight');
+    const otherId = p.dataset.a === node.id ? p.dataset.b : p.dataset.a;
+    const otherEl = document.getElementById(`node-${otherId}`);
+    if (otherEl) otherEl.classList.add('node-related');
+  });
+  openPanel(node);
 }
 
 function filterNodes(filter) {
@@ -267,7 +348,7 @@ function openPanel(node) {
   document.querySelectorAll('#panel-related li').forEach(li => {
     li.addEventListener('click', () => {
       const target = graphNodes.find(n => n.id === li.dataset.goto);
-      if (target) openPanel(target);
+      if (target) selectNode(target);
     });
   });
 
