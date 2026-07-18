@@ -83,7 +83,7 @@ A CUDA-kontextus, a driver, a szolgáltató keretrendszer (Ollama, vLLM) saját 
 ::::
 :::::
 
-![VRAM összetétele egy 8B modellnél, különböző kontextushosszaknál](assets/hw-01-vram-breakdown.jpg)
+![VRAM összetétele egy 8B modellnél, különböző kontextushosszaknál](__IMG__/hw-01-vram-breakdown.jpg)
 
 Az ábra jól mutatja a lényeget: rövid kontextusnál (4K) a **súlyok** dominálnak, de ahogy a kontextus nő (32K, 128K), a **KV-cache** fokozatosan átveszi a fő helyet — 128K-nál már nagyobb, mint maguk a súlyok.
 

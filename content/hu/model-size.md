@@ -32,7 +32,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=sz-0 heading="0. rész — Mi a paraméter, tulajdonképpen?" nav="0. rész" group="Elmélet"
+:::::: section id=sz-0 num="00" heading="0. rész — Mi a paraméter, tulajdonképpen?" nav="Mi a paraméter?" group="Elmélet"
 
 <p class="topic-tagline">Cél: pontosítsd a legalapvetőbb fogalmat, amire a modellméret egésze épül.</p>
 
@@ -49,7 +49,7 @@ Amikor azt mondod, egy modell "70 milliárd paraméteres", ez egyszerűen azt je
 :::::
 ::::::
 
-:::::: section id=sz-1 heading="1. rész — Méret-kategóriák: mit jelent \"több paraméter\"?" nav="1. rész" group="Elmélet"
+:::::: section id=sz-1 num="01" heading="1. rész — Méret-kategóriák: mit jelent \"több paraméter\"?" nav="Méret-kategóriák" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg, hogy a nagyobb méret nem "több tényt" jelent, hanem nagyobb mintázat-kapacitást.</p>
 
@@ -73,7 +73,7 @@ Ha a paramétert "tárolt tényként" képzeled el, azt várnád, hogy egy model
 :::::
 ::::::
 
-:::::: section id=sz-2 heading="2. rész — Chinchilla-skálázás: a méret önmagában nem elég" nav="2. rész" group="Elmélet"
+:::::: section id=sz-2 num="02" heading="2. rész — Chinchilla-skálázás: a méret önmagában nem elég" nav="Chinchilla-skálázás" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg, hogy a paraméterszám csak az egyik fele az egyenletnek.</p>
 
@@ -98,7 +98,7 @@ A **dense vs. MoE tutorialban** látott total/active paraméter-megkülönbözte
 :::::
 ::::::
 
-:::::: section id=sz-3 heading="3. rész — Mi az a \"tudás\"? Parametrikus vs. kontextuális réteg" nav="3. rész" group="Működés"
+:::::: section id=sz-3 num="03" heading="3. rész — Mi az a \"tudás\"? Parametrikus vs. kontextuális réteg" nav="Parametrikus vs. kontextuális" group="Működés"
 
 <p class="topic-tagline">Cél: a legfontosabb tisztázás — a "tudás" szó két, nagyon eltérő dolgot takarhat.</p>
 
@@ -122,7 +122,7 @@ Egy 8B-os lokális modell, aminek megadod a pontos Jira-ticket szövegét kontex
 :::::
 ::::::
 
-:::::: section id=sz-4 heading="4. rész — Méret vs. knowledge cutoff: két független tengely" nav="4. rész" group="Működés"
+:::::: section id=sz-4 num="04" heading="4. rész — Méret vs. knowledge cutoff: két független tengely" nav="Méret vs. cutoff" group="Működés"
 
 <p class="topic-tagline">Cél: a kérdésedre a direkt válasz — van-e kapcsolat a méret és a cutoff között.</p>
 
@@ -130,7 +130,7 @@ Egy 8B-os lokális modell, aminek megadod a pontos Jira-ticket szövegét kontex
 
 A **knowledge-cutoff tutorial** bevezette a "termék-szint vs. modell-szint" megkülönböztetést. Itt ennek egy fontos kiegészítése: **a modellméret és a knowledge cutoff dátuma két, egymástól teljesen független tengely.** Egy modell mérete azt határozza meg, **mennyi mintázat-kapacitása** van (1-2. rész); a cutoff azt határozza meg, **meddig terjedt** a tanítási adat időben. A kettő **nem függ össze**: lehet egy hatalmas modell régi cutoffal, és egy kicsi modell friss cutoffal — a kettő a tanítási döntések **különböző dimenziói**.
 
-![Méret és knowledge cutoff mint két független tengely](assets/size-01-independence.jpg)
+![Méret és knowledge cutoff mint két független tengely](__IMG__/size-01-independence.jpg)
 
 ### Amit ez konkrétan jelent
 
@@ -148,7 +148,7 @@ Mert a frontier laborok jellemzően **egyszerre** adnak ki nagyobb modellt és f
 :::::
 ::::::
 
-:::::: section id=sz-5 heading="5. rész — Emergens képességek: valódi ugrás, vagy mérési műtermék?" nav="5. rész" group="Működés"
+:::::: section id=sz-5 num="05" heading="5. rész — Emergens képességek: valódi ugrás, vagy mérési műtermék?" nav="Emergens képességek" group="Működés"
 
 <p class="topic-tagline">Cél: ismerd a vitát a méret és a képességek közti "ugrásszerű" változásról.</p>
 

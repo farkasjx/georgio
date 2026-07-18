@@ -104,7 +104,7 @@ A naiv RAG a produkciós rendszerekben durván az **esetek 40%-ában elhibázza 
 
 A RAG két, időben elkülönülő fázisból áll: az **indexelés** (offline, egyszer megcsinálod) előkészíti a tudásbázist; a **lekérdezés** (online, minden kérdésnél lefut) használja azt.
 
-![A RAG pipeline: indexelés és lekérdezés](assets/rag-01-pipeline.jpg)
+![A RAG pipeline: indexelés és lekérdezés](__IMG__/rag-01-pipeline.jpg)
 
 ### 1. fázis — Indexelés (offline)
 

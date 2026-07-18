@@ -69,7 +69,7 @@ Ez a Llama 3.1 70B, a Qwen 2.5 72B, vagy a Gemma-vonal működése: kiszámítha
 
 Az alábbi ábra bal fele mutatja ezt: egy token belép, végigmegy az *egyetlen, teljes* FFN-en (100% aktivált), és kilép. Nincs választás, nincs útválasztás — minden mindig fut.
 
-![Dense és MoE feed-forward blokk összehasonlítása](assets/moe-01-dense-vs-moe.jpg)
+![Dense és MoE feed-forward blokk összehasonlítása](__IMG__/moe-01-dense-vs-moe.jpg)
 
 A jobb oldal már a MoE — erről szól a következő szakasz.
 ::::::
@@ -105,7 +105,7 @@ A DeepSeek V3 tovább vitte: 8 nagy expert helyett **256 apró** expertet haszn�
 
 A router szíve egy egyszerű **lineáris réteg**. A bemenő token vektorát (`x`) beszorozza egy súlymátrixszal, így minden experthez kap egy **logit**-ot (pontszámot), ami azt fejezi ki, mennyire „illik" az adott expert ehhez a tokenhez. Ezekre softmaxot alkalmaz, majd a **top-k** függvény kiválasztja a `k` legmagasabb pontszámú expertet — a többit nullázza. A kimenet a kiválasztott expertek kimeneteinek **súlyozott összege**, ahol a súlyok a (kiválasztottakra újranormált) softmax-értékek.
 
-![A router működése — top-k gating](assets/moe-02-router.jpg)
+![A router működése — top-k gating](__IMG__/moe-02-router.jpg)
 
 ### A képlet
 
@@ -144,7 +144,7 @@ Amennyi ténylegesen fut egy token feldolgozásakor. Ez határozza meg a **compu
 
 A **sparsity** = active / total. Minél kisebb, annál agresszívebb a MoE.
 
-![Total vs. Active paraméterek különböző modelleknél](assets/moe-03-params.jpg)
+![Total vs. Active paraméterek különböző modelleknél](__IMG__/moe-03-params.jpg)
 
 ### Amit szinte mindenki félreért
 
@@ -209,7 +209,7 @@ Ha valaha finomhangolsz vagy futtatsz MoE modellt, a load balancing az, ami „e
 
 Ez a legfontosabb mondat az egész témában. A MoE azért gyors, mert tokenenként kevés paramétert aktivál (kevés **compute**). De a router futásidőben *bármelyik* expertet választhatja, ezért **az összes expertet a GPU-memóriában kell tartani** — akkor is, ha csak töredékük fut. Vagyis a MoE a **compute**-on spórol, nem a **memórián**.
 
-![A compute vs. memória kompromisszum](assets/moe-04-compute-vs-memory.jpg)
+![A compute vs. memória kompromisszum](__IMG__/moe-04-compute-vs-memory.jpg)
 
 ### Mit jelent ez a gyakorlatban?
 

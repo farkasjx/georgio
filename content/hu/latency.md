@@ -34,7 +34,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=lat-0 heading="0. rész — Miért nem egy szám a latency?" nav="0. rész" group="Elmélet"
+:::::: section id=lat-0 num="00" heading="0. rész — Miért nem egy szám a latency?" nav="Nem egy szám" group="Elmélet"
 
 <p class="topic-tagline">Cél: lásd, hogy „lassú a modell" legalább három eltérő mérést takarhat.</p>
 
@@ -58,14 +58,14 @@ A teljes válasz ideje az első kéréstől az utolsó tokenig. Ez az, amit egy 
 
 Egy konkrét, meglepő tény: **egy 500 tokenes válasz 40 ms-os ITL-lel összesen 20 másodpercet vesz igénybe** — ami rémesen hangzik. De ha a TTFT ebből csak 300 ms, a felhasználó **már a fél másodperc után olvas**, és a teljes idő alatt aktívan konzumálja a szöveget. Ezzel szemben egy 2 másodperces TTFT, amit egy azonnali, egyben kiírt válasz követ, **rosszabbnak érződik**, még ha a teljes idő azonos is. A teljes latency-t optimalizálni a TTFT figyelmen kívül hagyásával **a rossz számot optimalizálod**.
 
-![Egy kérés időzítése: queue, prefill, TTFT, majd decode-fázis token-köztes réssel](assets/lat-01-timeline.jpg)
+![Egy kérés időzítése: queue, prefill, TTFT, majd decode-fázis token-köztes réssel](__IMG__/lat-01-timeline.jpg)
 
 ::::: callout label="Egy mondatban"
 **A TTFT az, amit a felhasználó ELŐSZÖR érez; az ITL az, amit a folyamat KÖZBEN érez.** A kettő más okból lassul, és más technika javítja — ezért kell külön mérned és külön optimalizálnod őket.
 :::::
 ::::::
 
-:::::: section id=lat-1 heading="1. rész — A színfalak mögött: queue, prefill, decode" nav="1. rész" group="Elmélet"
+:::::: section id=lat-1 num="01" heading="1. rész — A színfalak mögött: queue, prefill, decode" nav="Queue, prefill, decode" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, technikailag mi történik a kérés elküldése és az első token között.</p>
 
@@ -94,7 +94,7 @@ Ha a mért TTFT több másodperc, a hiba **majdnem sosem** a modell választás�
 :::::
 ::::::
 
-:::::: section id=lat-2 heading="2. rész — Mit befolyásolja a latency-t?" nav="2. rész" group="Elmélet"
+:::::: section id=lat-2 num="02" heading="2. rész — Mit befolyásolja a latency-t?" nav="Mi befolyásolja?" group="Elmélet"
 
 <p class="topic-tagline">Cél: kösd össze a korábbi tutorialjaid tudását — mindegyik hozzátesz egy tényezőt.</p>
 
@@ -172,7 +172,7 @@ Futtasd le a mérést **20-30 alkalommal**, különböző prompt-hosszakkal (rö
 :::::
 ::::::
 
-:::::: section id=lat-4 heading="3. rész — Négy nézőpont: kinek mit jelent a latency?" nav="3. rész" group="Négy nézőpont"
+:::::: section id=lat-4 num="03" heading="3. rész — Négy nézőpont: kinek mit jelent a latency?" nav="Négy nézőpont" group="Négy nézőpont"
 
 <p class="topic-tagline">Cél: lásd, hogy ugyanaz a szám mást jelent attól függően, ki néz rá — ahogy a költség-optimalizációnál is.</p>
 
@@ -198,7 +198,7 @@ A fejlesztő a legalacsonyabb átlag-latency-t akarja; az üzlet a **kiszámíth
 :::::
 ::::::
 
-:::::: section id=lat-5 heading="4. rész — Konkrét küszöbök: mikor mennyi a sok?" nav="4. rész" group="Négy nézőpont"
+:::::: section id=lat-5 num="04" heading="4. rész — Konkrét küszöbök: mikor mennyi a sok?" nav="Konkrét küszöbök" group="Négy nézőpont"
 
 <p class="topic-tagline">Cél: konkrét, kézzelfogható számok — más-más felhasználási mód más-más elvárást szab.</p>
 
@@ -217,7 +217,7 @@ Ha egy modell "gondolkodó" (extended thinking / reasoning) módban fut, a TTFT 
 :::::
 ::::::
 
-:::::: section id=lat-6 heading="5. rész — Helyes mérés: percentilis, ne átlag" nav="5. rész" group="Mérés"
+:::::: section id=lat-6 num="05" heading="5. rész — Helyes mérés: percentilis, ne átlag" nav="Helyes mérés" group="Mérés"
 
 <p class="topic-tagline">Cél: tudd, miért hazudik az átlag, és mit mérj helyette.</p>
 
@@ -254,7 +254,7 @@ Futtasd a fenti kódot a Feladat 1-ben gyűjtött saját TTFT-mintáidra. Hasonl
 :::::
 ::::::
 
-:::::: section id=lat-7 heading="6. rész — Csökkentési technikák" nav="6. rész" group="Technikák"
+:::::: section id=lat-7 num="06" heading="6. rész — Csökkentési technikák" nav="Csökkentési technikák" group="Technikák"
 
 <p class="topic-tagline">Cél: ismerd a bevált eszközöket — melyik a TTFT-t, melyik az ITL-t javítja.</p>
 

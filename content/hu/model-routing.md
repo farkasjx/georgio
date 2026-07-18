@@ -36,7 +36,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=cr-0 heading="0. rész — A túlméretezés csapdája" nav="0. rész" group="Elmélet"
+:::::: section id=cr-0 num="00" heading="0. rész — A túlméretezés csapdája" nav="Túlméretezés csapdája" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, miért nem "biztonságos alapértelmezés" mindenre a legnagyobb modellt hívni.</p>
 
@@ -62,7 +62,7 @@ Három dolog esett egybe: (1) a **modell-tér besűrűsödött** — sok, jól d
 :::::
 ::::::
 
-:::::: section id=cr-1 heading="1. rész — A költség anatómiája" nav="1. rész" group="Elmélet"
+:::::: section id=cr-1 num="01" heading="1. rész — A költség anatómiája" nav="Költség anatómiája" group="Elmélet"
 
 <p class="topic-tagline">Cél: lásd a teljes költség-képet, nem csak a token-árat.</p>
 
@@ -92,7 +92,7 @@ Gateway, vektor-DB a semantic cache-hez, monitoring — mindezek saját üzemelt
 :::::
 ::::::
 
-:::::: section id=cr-2 heading="2. rész — Modellméret-osztályok és mire valók" nav="2. rész" group="Elmélet"
+:::::: section id=cr-2 num="02" heading="2. rész — Modellméret-osztályok és mire valók" nav="Modellméret-osztályok" group="Elmélet"
 
 <p class="topic-tagline">Cél: tudd, melyik méret-osztály melyik feladathoz "elég jó".</p>
 
@@ -118,7 +118,7 @@ Egy kétszer nagyobb modell nem ad kétszer jobb választ — a legtöbb feladat
 :::::
 ::::::
 
-:::::: section id=cr-3 heading="3. rész — Lokális vs. API: a négy döntési tengely" nav="3. rész" group="Döntési keret"
+:::::: section id=cr-3 num="03" heading="3. rész — Lokális vs. API: a négy döntési tengely" nav="Lokális vs. API" group="Döntési keret"
 
 <p class="topic-tagline">Cél: strukturált szempontrendszer, nem "érzésre" döntés.</p>
 
@@ -142,7 +142,7 @@ A legtöbb éles rendszer nem "vagy-vagy", hanem **hibrid**: gyakori, egyszerű,
 :::::
 ::::::
 
-:::::: section id=cr-4 heading="4. rész — Négy nézőpont: felhasználó, fejlesztő, elemző, vállalat" nav="4. rész" group="Döntési keret"
+:::::: section id=cr-4 num="04" heading="4. rész — Négy nézőpont: felhasználó, fejlesztő, elemző, vállalat" nav="Négy nézőpont" group="Döntési keret"
 
 <p class="topic-tagline">Cél: ugyanaz a technikai eszköztár mást jelent attól függően, ki néz rá.</p>
 
@@ -170,7 +170,7 @@ A fejlesztő a legolcsóbb, technikailag legjobb megoldást akarja; a vállalat 
 :::::
 ::::::
 
-:::::: section id=cr-5 heading="5. rész — Routing vs. cascade: a két alapminta" nav="5. rész" group="Technikák"
+:::::: section id=cr-5 num="05" heading="5. rész — Routing vs. cascade: a két alapminta" nav="Routing vs. cascade" group="Technikák"
 
 <p class="topic-tagline">Cél: ismerd fel a különbséget — gyakran összekeverik, pedig eltérő minták.</p>
 
@@ -185,7 +185,7 @@ A kérés **elsőként** a legolcsóbb modellhez megy. Ha a válasz-megbízható
 ::::
 :::::
 
-![Cascade routing folyamata: kis modell, majd eszkaláció bizonytalanság esetén](assets/cost-01-cascade.jpg)
+![Cascade routing folyamata: kis modell, majd eszkaláció bizonytalanság esetén](__IMG__/cost-01-cascade.jpg)
 
 ### A router maga is költséget/latency-t ad — de elenyészőt
 
@@ -198,7 +198,7 @@ A publikált kutatások és gyakorlati keretrendszerek (pl. a Stanford FrugalGPT
 :::::
 ::::::
 
-:::::: section id=cr-6 heading="6. rész — A MoE mint beépített, architektúra-szintű routing" nav="6. rész" group="Technikák"
+:::::: section id=cr-6 num="06" heading="6. rész — A MoE mint beépített, architektúra-szintű routing" nav="MoE mint routing" group="Technikák"
 
 <p class="topic-tagline">Cél: lásd meg, hogy a MoE tutorialban tanultak már eleve egy routing-mintát valósítanak meg.</p>
 
@@ -224,7 +224,7 @@ A szakirodalom szerint a MoE-architektúra, a kvantálás és a speculative deco
 :::::
 ::::::
 
-:::::: section id=cr-7 heading="7. rész — Cache, Route, Compress: a három pillér" nav="7. rész" group="Technikák"
+:::::: section id=cr-7 num="07" heading="7. rész — Cache, Route, Compress: a három pillér" nav="Cache, Route, Compress" group="Technikák"
 
 <p class="topic-tagline">Cél: ismerd a bevett sorrendet — ez adja a legtöbb megtakarítást a legkevesebb munkával.</p>
 
@@ -330,7 +330,7 @@ print(f"Megtérülés: ~{days:.0f} nap" if days else "Az API így is olcsóbb ma
 :::::
 ::::::
 
-:::::: section id=cr-9 heading="9. rész — Éles buktatók és a döntési fa" nav="9. rész" group="Éles használat"
+:::::: section id=cr-9 num="09" heading="9. rész — Éles buktatók és a döntési fa" nav="Éles buktatók" group="Éles használat"
 
 <p class="topic-tagline">Cél: ismerd a gyakori hibákat, és legyen egy záró, gyakorlatias döntési kereted.</p>
 

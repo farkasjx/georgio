@@ -49,7 +49,7 @@ A költség így **négyzetesen** nő a szöveg hosszával: minél többet írt 
 
 A **KV-cache (kulcs-érték gyorsítótár)** egyszerű ötlet: a korábbi tokenek attention-számításához tartozó **Key (K)** és **Value (V)** tenzorokat **egyszer** számold ki, tárold el, és **használd újra** minden további lépésben. Így minden új tokennél már csak *egyetlen* token K,V-jét kell kiszámolni — a négyzetes probléma **lineárissá** válik.
 
-![KV-cache mechanika: minden újraszámolása vs. tárolt K,V újrafelhasználása](assets/kv-01-mechanism.jpg)
+![KV-cache mechanika: minden újraszámolása vs. tárolt K,V újrafelhasználása](__IMG__/kv-01-mechanism.jpg)
 
 A bal oldal a naiv eset (minden lépésnél mindent újraszámol — piros a felesleg), a jobb a KV-cache (a régi K,V tárolva — zöld, csak az új token narancs).
 
@@ -193,7 +193,7 @@ A lényeg, amit érdemes megjegyezni: a cache **lineárisan nő a kontextus-hoss
 
 ### A meglepő fordulat: a cache nagyobb lehet, mint a modell
 
-![KV-cache memória a kontextussal, és az optimalizációs karok](assets/kv-02-memory.jpg)
+![KV-cache memória a kontextussal, és az optimalizációs karok](__IMG__/kv-02-memory.jpg)
 
 Konkrét szám: egy Llama 3 8B GQA-val, FP16-on, tokenenként ~0,1 MB cache-t használ. Egy 70B modell 32 kérést kiszolgálva 8K kontextuson ~83 GB cache-t igényel — ez gyakran **túllépi magának a modell súlyainak méretét**. 128K kontextus fölött a KV-cache memóriája nagyobb, mint a paraméter-memória; egy Llama 70B 1M kontextuson ~135 GB-ot eszik FP16-on — több, mint a 140 GB-os modellsúly.
 

@@ -3,7 +3,12 @@
    ═══════════════════════════════════════════════ */
 
 /* ── PAGE NAVIGATION ── */
-const pages = ['map', 'roadmap', 'tools', 'prompting', 'ollama', 'aiconfig', 'security'];
+const pages = [
+  'map', 'tools', 'prompting', 'ollama', 'aiconfig', 'security',
+  'memory', 'vectordb', 'dense-moe', 'rag', 'kv-cache', 'hardware',
+  'model-routing', 'latency', 'hallucination', 'mcp',
+  'quantization-quality', 'knowledge-cutoff', 'rlhf', 'model-size'
+];
 
 function showPage(id) {
   // oldalváltó gomb frissítése (dot + felirat) a kattintott elem adataiból
@@ -116,13 +121,11 @@ function attachSidebarLinks() {
    TARTALMI KAPCSOLATI TÉRKÉP (kezdőoldal)
 ───────────────────────────────────────────── */
 /* graphNodes[] és graphEdges[] a content-graph-data.js-ben élnek (külön betöltve).
-   Ez a gráf a site ÖSSZES tartalmi oldalát mutatja, nem csak a roadmap fázisait. */
+   Ez a gráf a site összes tartalmi oldalát mutatja, és ez adja a kezdőoldalt. */
 
-const clusterLabels = {
-  workflow:  'Alapok & munkafolyamat',
-  knowledge: 'Tudás & kontextus',
-  model:     'Modell & hardver'
-};
+/* graphClusterLabels a content-graph-data.js-ből jön, már a megfelelő nyelven
+   (a window.__LOCALE__ alapján állt össze — lásd ott) */
+const clusterLabels = graphClusterLabels;
 
 let mapInitialized = false;
 let activeFilter = 'all';
@@ -359,6 +362,79 @@ function openPanel(node) {
 }
 
 /* ─────────────────────────────────────────────
+   TARTALOM-FRISSÍTÉS FIGYELÉS (localStorage)
+   Minden .md tartalomhoz épül egy hash (lásd build.js), amit a
+   window.__CONTENT_VERSIONS__ tartalmaz. Ezt hasonlítjuk össze azzal,
+   amit korábban elmentettünk a böngészőben, hogy megmutassuk, mi
+   változott az előző látogatás óta.
+───────────────────────────────────────────── */
+const VERSION_STORAGE_KEY = 'aihub-content-versions';
+
+function initVersionTracking() {
+  const current = window.__CONTENT_VERSIONS__ || {};
+  if (!Object.keys(current).length) return;
+
+  let stored = null;
+  try {
+    const raw = localStorage.getItem(VERSION_STORAGE_KEY);
+    stored = raw ? JSON.parse(raw) : null;
+  } catch (e) { stored = null; }
+
+  if (!stored) {
+    // első alkalom — nincs mihez viszonyítani, csak jelezzük, hogy mostantól figyeljük
+    showVersionPopup({ intro: true, changed: [] });
+  } else {
+    const changed = [];
+    Object.keys(current).forEach(key => {
+      const prev = stored[key];
+      if (!prev) {
+        changed.push({ key, title: current[key].title, type: 'new' });
+      } else if (prev.version !== current[key].version) {
+        changed.push({ key, title: current[key].title, type: 'updated' });
+      }
+    });
+    if (changed.length) showVersionPopup({ intro: false, changed });
+  }
+
+  try { localStorage.setItem(VERSION_STORAGE_KEY, JSON.stringify(current)); } catch (e) {}
+}
+
+function showVersionPopup({ intro, changed }) {
+  const overlay = document.getElementById('version-popup-overlay');
+  const titleEl = document.getElementById('version-popup-title');
+  const bodyEl  = document.getElementById('version-popup-body');
+  if (!overlay || !titleEl || !bodyEl) return;
+  const i18n = window.__I18N__ || {};
+
+  if (intro) {
+    titleEl.textContent = i18n.versionPopupTitleIntro || '';
+    bodyEl.innerHTML = `<p>${i18n.versionPopupBodyIntro || ''}</p>`;
+  } else {
+    titleEl.textContent = i18n.versionPopupTitleUpdate || '';
+    const items = changed.map(c => `
+      <li data-goto="${c.key}">
+        <span class="version-item-tag ${c.type}">${c.type === 'new' ? (i18n.versionPopupNewTag || '') : (i18n.versionPopupUpdatedTag || '')}</span>
+        <span class="version-item-title">${c.title}</span>
+        <span class="version-item-open">${i18n.versionPopupOpenLabel || ''} →</span>
+      </li>`).join('');
+    bodyEl.innerHTML = `<p>${i18n.versionPopupBodyUpdate || ''}</p><ul class="version-popup-list">${items}</ul>`;
+    bodyEl.querySelectorAll('li[data-goto]').forEach(li => {
+      li.addEventListener('click', () => {
+        closeVersionPopup();
+        showPage(li.dataset.goto);
+      });
+    });
+  }
+
+  overlay.classList.add('open');
+}
+
+function closeVersionPopup() {
+  const overlay = document.getElementById('version-popup-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+/* ─────────────────────────────────────────────
    INIT
 ───────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -370,13 +446,15 @@ document.addEventListener('DOMContentLoaded', () => {
     item.addEventListener('click', () => showPage(item.dataset.page));
   });
 
+  initVersionTracking();
+
   // panel bezárása kattintásra kívülre, vagy Escape-re
   document.addEventListener('click', (e) => {
     const switcher = document.getElementById('page-switcher');
     if (switcher && !switcher.contains(e.target)) closePageSwitcher();
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closePageSwitcher();
+    if (e.key === 'Escape') { closePageSwitcher(); closeVersionPopup(); }
   });
 });
 

@@ -32,7 +32,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=kc-0 heading="0. rész — Tanítás vs. inferencia: a súlyok befagyasztása" nav="0. rész" group="Elmélet"
+:::::: section id=kc-0 num="00" heading="0. rész — Tanítás vs. inferencia: a súlyok befagyasztása" nav="Tanítás vs. inferencia" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg az alapvető tényt, amire az egész téma épül — a modell, amivel beszélgetsz, nem tanul közben.</p>
 
@@ -58,7 +58,7 @@ A beszélgetésed a modellel **nem tanítja** azt — nincs olyan mechanizmus, h
 :::::
 ::::::
 
-:::::: section id=kc-1 heading="1. rész — A knowledge cutoff mechanikája" nav="1. rész" group="Elmélet"
+:::::: section id=kc-1 num="01" heading="1. rész — A knowledge cutoff mechanikája" nav="Cutoff mechanikája" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, miért van rés a modell "tudása" és a tényleges kiadás dátuma között.</p>
 
@@ -71,7 +71,7 @@ Egy új modell-generáció nem egyik napról a másikra készül el — egy töb
 3. **Biztonsági tesztelés** — red teaming, kiértékelés, iterálás — ez **hetekig-hónapokig** tart egy felelős kiadás előtt.
 4. **Kiadás** — a modell nyilvánossá válik.
 
-![A tanítási pipeline és a cutoff-rés](assets/cutoff-01-timeline.jpg)
+![A tanítási pipeline és a cutoff-rés](__IMG__/cutoff-01-timeline.jpg)
 
 ### Miért olyan nagy a rés?
 
@@ -82,7 +82,7 @@ Amikor egy modell azt mondja, "a tudásom eddig és eddig tart", ez **nem** azt 
 :::::
 ::::::
 
-:::::: section id=kc-2 heading="2. rész — Miért nem \"csak frissítik menet közben\"?" nav="2. rész" group="Elmélet"
+:::::: section id=kc-2 num="02" heading="2. rész — Miért nem \"csak frissítik menet közben\"?" nav="Miért nem frissítik?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, miért nem egyszerű megoldás az, hogy "adjunk hozzá friss adatot, és tanítsuk tovább".</p>
 
@@ -103,7 +103,7 @@ A folytatólagos tanítás **működik**, de kényes: alacsonyabb tanulási rát
 A kutatás egyértelmű vezérelvet ad: **ha a hiányzó tudás friss tény** (mi történt tegnap, mennyi egy árfolyam most) — **a RAG oldja meg**, nem a újratanítás. Ha a hiányzó tudás **domain-specifikus szókincs vagy érvelési minta** (pl. egy szűk szakterület zsargonja), akkor a folytatólagos tanítás indokolt lehet — de a legtöbb csapat **feleslegesen** nyúl hozzá, amikor a RAG **a költség töredékéért** megoldaná ugyanazt.
 ::::::
 
-:::::: section id=kc-3 heading="3. rész — Hogyan jut mégis friss infóhoz: tool-use és web-search" nav="3. rész" group="Működés"
+:::::: section id=kc-3 num="03" heading="3. rész — Hogyan jut mégis friss infóhoz: tool-use és web-search" nav="Tool-use & web-search" group="Működés"
 
 <p class="topic-tagline">Cél: értsd meg pontosan a mechanizmust, amivel egy modell "friss" választ tud adni anélkül, hogy a súlyai megváltoznának.</p>
 
@@ -164,7 +164,7 @@ Válassz egy **gyorsan változó** témát (egy sportbajnokság állása, egy c�
 :::::
 ::::::
 
-:::::: section id=kc-5 heading="4. rész — Termék-szint vs. modell-szint frissítés" nav="4. rész" group="Működés"
+:::::: section id=kc-5 num="04" heading="4. rész — Termék-szint vs. modell-szint frissítés" nav="Termék vs. modell-szint" group="Működés"
 
 <p class="topic-tagline">Cél: különböztesd meg, mi változhat a súlyok érintése nélkül — ez a saját tapasztalatod is ebben a beszélgetésben.</p>
 
@@ -188,7 +188,7 @@ Ha valaki azt látja, hogy egy AI-asszisztens "tud" valami nagyon friss dologró
 :::::
 ::::::
 
-:::::: section id=kc-6 heading="5. rész — Döntési keret: mikor bízz, mikor kérj keresést?" nav="5. rész" group="Referencia"
+:::::: section id=kc-6 num="05" heading="5. rész — Döntési keret: mikor bízz, mikor kérj keresést?" nav="Döntési keret" group="Referencia"
 
 <p class="topic-tagline">Cél: egy gyakorlatias szabály, amit magaddal vihetsz.</p>
 

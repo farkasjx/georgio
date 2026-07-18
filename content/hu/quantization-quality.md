@@ -33,7 +33,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=q-0 heading="0. rész — Gyors felidézés: mi a kvantálás?" nav="0. rész" group="Elmélet"
+:::::: section id=q-0 num="00" heading="0. rész — Gyors felidézés: mi a kvantálás?" nav="Mi a kvantálás?" group="Elmélet"
 
 <p class="topic-tagline">Cél: egy mondatban felidézni, amit a hardver tutorial már bevezetett — innen indulunk tovább, a minőség felé.</p>
 
@@ -46,7 +46,7 @@ Ez a tutorial azzal folytatja, amit ott csak érintettünk: **pontosan mit vesz�
 :::::
 ::::::
 
-:::::: section id=q-1 heading="1. rész — Vektor-szinten: mi történik egy súllyal?" nav="1. rész" group="Vektor-szinten"
+:::::: section id=q-1 num="01" heading="1. rész — Vektor-szinten: mi történik egy súllyal?" nav="Vektor-szinten" group="Vektor-szinten"
 
 <p class="topic-tagline">Cél: lásd meg konkrétan, mit jelent a "kerekítés" egyetlen szám szintjén.</p>
 
@@ -80,7 +80,7 @@ A kvantálás nem "vakon" kerekít mindent egyformán — a jó módszerek (pl. 
 :::::
 ::::::
 
-:::::: section id=q-2 heading="2. rész — Hogyan terjed a hiba: mátrixszorzat" nav="2. rész" group="Vektor-szinten"
+:::::: section id=q-2 num="02" heading="2. rész — Hogyan terjed a hiba: mátrixszorzat" nav="Hogyan terjed a hiba" group="Vektor-szinten"
 
 <p class="topic-tagline">Cél: értsd, miért nem omlik össze azonnal minden a sok apró hibától.</p>
 
@@ -104,7 +104,7 @@ Nem csak az számít, **hány bit**, hanem **hogyan** csoportosítod és skálá
 :::::
 ::::::
 
-:::::: section id=q-3 heading="3. rész — Hogyan mérjük: a perplexity és a vakfoltja" nav="3. rész" group="Számok"
+:::::: section id=q-3 num="03" heading="3. rész — Hogyan mérjük: a perplexity és a vakfoltja" nav="Mérés: perplexity" group="Számok"
 
 <p class="topic-tagline">Cél: ismerd a standard mérőszámot — és azt is, mikor félrevezető.</p>
 
@@ -121,11 +121,11 @@ Ha csak a perplexityre hagyatkozol, **hamis biztonságérzetet** kaphatsz. Ezér
 :::::
 ::::::
 
-:::::: section id=q-4 heading="4. rész — Konkrét számok: mennyit veszítesz valójában?" nav="4. rész" group="Számok"
+:::::: section id=q-4 num="04" heading="4. rész — Konkrét számok: mennyit veszítesz valójában?" nav="Konkrét számok" group="Számok"
 
 <p class="topic-tagline">Cél: konkrét, kutatásból származó tájékozódási pontok — nem csak "kisebb = rosszabb".</p>
 
-![Minőségromlás kvantálási szintenként](assets/quant-01-degradation.jpg)
+![Minőségromlás kvantálási szintenként](__IMG__/quant-01-degradation.jpg)
 
 ### A táblázat, amit érdemes fejben tartani
 
@@ -150,7 +150,7 @@ A perplexity főleg a "hangzik-e természetesen" jelleget méri — a **matemati
 :::::
 ::::::
 
-:::::: section id=q-5 heading="5. rész — Mi romlik ténylegesen: tokenizáció vagy token-választás?" nav="5. rész" group="Vektor-szinten"
+:::::: section id=q-5 num="05" heading="5. rész — Mi romlik ténylegesen: tokenizáció vagy token-választás?" nav="Mi romlik ténylegesen?" group="Vektor-szinten"
 
 <p class="topic-tagline">Cél: tisztázzunk egy gyakori félreértést — ez a kettő nem ugyanaz.</p>
 

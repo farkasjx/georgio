@@ -42,7 +42,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=hal-0 heading="0. rész — Mi az a hallucináció?" nav="0. rész" group="Elmélet"
+:::::: section id=hal-0 num="00" heading="0. rész — Mi az a hallucináció?" nav="Mi a hallucináció?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, hogy ez nem egy javítható "bug", hanem a generálás egyik alapvető velejárója.</p>
 
@@ -59,7 +59,7 @@ Egy hagyományos szoftverhibát ki lehet javítani — megtalálod a sort, ahol 
 :::::
 ::::::
 
-:::::: section id=hal-1 heading="1. rész — A statisztikai eredet: miért elkerülhetetlen egy alapszinten" nav="1. rész" group="Elmélet"
+:::::: section id=hal-1 num="01" heading="1. rész — A statisztikai eredet: miért elkerülhetetlen egy alapszinten" nav="Statisztikai eredet" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd a matematikai/statisztikai gyökeret, nem csak a tünetet.</p>
 
@@ -76,7 +76,7 @@ Ha tudod, hogy a hallucináció **strukturálisan valószínűbb** ritka, specif
 :::::
 ::::::
 
-:::::: section id=hal-2 heading="2. rész — Az incentive-probléma: miért hazudik a \"nem tudom\" helyett" nav="2. rész" group="Elmélet"
+:::::: section id=hal-2 num="02" heading="2. rész — Az incentive-probléma: miért hazudik a \"nem tudom\" helyett" nav="Az incentive-probléma" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg a második, legalább ilyen fontos okot — ez már nem statisztika, hanem ösztönző-rendszer kérdése.</p>
 
@@ -155,7 +155,7 @@ A `bank` szó fenti példája nem véletlen: egy szónak/mondatnak **egyetlen** 
 :::::
 ::::::
 
-:::::: section id=hal-3 heading="3. rész — A hallucináció típusai" nav="3. rész" group="Elmélet"
+:::::: section id=hal-3 num="03" heading="3. rész — A hallucináció típusai" nav="Típusai" group="Elmélet"
 
 <p class="topic-tagline">Cél: ismerd fel, melyik típussal állsz szemben — mert mindegyiket más réteg kezeli.</p>
 
@@ -276,7 +276,7 @@ Futtasd le a fenti (vagy hasonló, saját magad kitalálta) kérdéseket. Figyel
 :::::
 ::::::
 
-:::::: section id=hal-5 heading="4. rész — Felismerés: hogyan detektáld, ha nem vagy biztos" nav="4. rész" group="Felismerés"
+:::::: section id=hal-5 num="04" heading="4. rész — Felismerés: hogyan detektáld, ha nem vagy biztos" nav="Felismerés" group="Felismerés"
 
 <p class="topic-tagline">Cél: ismerj néhány gyakorlati technikát, amivel magad is ellenőrizheted egy válasz megbízhatóságát.</p>
 
@@ -319,7 +319,7 @@ A **RAG tutorial** RAGAS kiértékelési kerete pontosan ezt teszi rendszerszint
 :::::
 ::::::
 
-:::::: section id=hal-6 heading="5. rész — Védekezés 1. réteg: promptolás" nav="5. rész" group="Védekezés"
+:::::: section id=hal-6 num="05" heading="5. rész — Védekezés 1. réteg: promptolás" nav="Védekezés: promptolás" group="Védekezés"
 
 <p class="topic-tagline">Cél: a legolcsóbb, leggyorsabban bevezethető réteg — és meglepően hatékony.</p>
 
@@ -393,7 +393,7 @@ Ez összeköthető a **4. részben** bemutatott self-consistency technikával: h
 :::::
 ::::::
 
-:::::: section id=hal-7 heading="6. rész — Védekezés 2. réteg: RAG (grounding)" nav="6. rész" group="Védekezés"
+:::::: section id=hal-7 num="06" heading="6. rész — Védekezés 2. réteg: RAG (grounding)" nav="Védekezés: RAG" group="Védekezés"
 
 <p class="topic-tagline">Cél: értsd, miért a RAG a leghatékonyabb eszköz kifejezetten a faktuális hallucináció ellen.</p>
 
@@ -414,7 +414,7 @@ A RAG csökkenti a faktuális hallucinációt, de **nem old meg mindent**: ha a 
 :::::
 ::::::
 
-:::::: section id=hal-8 heading="7. rész — Védekezés 3. réteg: memory-konzisztencia" nav="7. rész" group="Védekezés"
+:::::: section id=hal-8 num="07" heading="7. rész — Védekezés 3. réteg: memory-konzisztencia" nav="Védekezés: memória" group="Védekezés"
 
 <p class="topic-tagline">Cél: értsd, hogyan okozhat a rossz memory-kezelés hallucináció-szerű hibákat, és hogyan előzd meg.</p>
 
@@ -528,7 +528,7 @@ Futtasd le mindkét változatot. Figyeld meg: az **A** válasz hajlamos-e magabi
 :::::
 ::::::
 
-:::::: section id=hal-10 heading="8. rész — Döntési keret: melyik réteg mikor?" nav="8. rész" group="Referencia"
+:::::: section id=hal-10 num="08" heading="8. rész — Döntési keret: melyik réteg mikor?" nav="Döntési keret" group="Referencia"
 
 <p class="topic-tagline">Cél: egy gyakorlatias checklist, hogy tudd, hova fektesd az energiát.</p>
 

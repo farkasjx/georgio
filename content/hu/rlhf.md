@@ -34,7 +34,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=rlhf-0 heading="0. rész — Mi az RLHF, és miért nem ilyen a CAPTCHA?" nav="0. rész" group="Elmélet"
+:::::: section id=rlhf-0 num="00" heading="0. rész — Mi az RLHF, és miért nem ilyen a CAPTCHA?" nav="Mi az RLHF?" group="Elmélet"
 
 <p class="topic-tagline">Cél: pontos definíció, és egy gyakori félreértés tisztázása.</p>
 
@@ -51,11 +51,11 @@ Gyakori félreértés, hogy a CAPTCHA (pl. "válaszd ki, melyik képen van busz"
 :::::
 ::::::
 
-:::::: section id=rlhf-1 heading="1. rész — A klasszikus pipeline: SFT → reward modell → PPO" nav="1. rész" group="Elmélet"
+:::::: section id=rlhf-1 num="01" heading="1. rész — A klasszikus pipeline: SFT → reward modell → PPO" nav="Klasszikus pipeline" group="Elmélet"
 
 <p class="topic-tagline">Cél: ismerd a három lépést, ami a nyers modellből asszisztenst csinál.</p>
 
-![A klasszikus RLHF-pipeline: SFT, reward modell, PPO](assets/rlhf-01-pipeline.jpg)
+![A klasszikus RLHF-pipeline: SFT, reward modell, PPO](__IMG__/rlhf-01-pipeline.jpg)
 
 ### A három lépés
 
@@ -80,7 +80,7 @@ A **hallucináció tutorial** 2. részében (az incentive-probléma) és a "Kit�
 :::::
 ::::::
 
-:::::: section id=rlhf-2 heading="2. rész — Az alap: preferencia-adat és a Bradley-Terry modell" nav="2. rész" group="Elmélet"
+:::::: section id=rlhf-2 num="02" heading="2. rész — Az alap: preferencia-adat és a Bradley-Terry modell" nav="Preferencia-adat" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, hogyan lesz "A jobb, mint B" típusú emberi ítéletből egy számszerű pontszám.</p>
 
@@ -103,7 +103,7 @@ Az RLHF alapfeltevése: **az emberi preferencia jó proxy az emberi értékekre.
 :::::
 ::::::
 
-:::::: section id=rlhf-3 heading="3. rész — PPO vs. DPO: miért lett a DPO a gyakorlati alapértelmezés" nav="3. rész" group="Működés"
+:::::: section id=rlhf-3 num="03" heading="3. rész — PPO vs. DPO: miért lett a DPO a gyakorlati alapértelmezés" nav="PPO vs. DPO" group="Működés"
 
 <p class="topic-tagline">Cél: értsd, miért egyszerűsödött a recept az évek során.</p>
 
@@ -128,7 +128,7 @@ A **DPO (Direct Preference Optimization)** radikálisan egyszerűsít: **teljese
 A `trl` könyvtárban ma már a DPO mellett elérhető **IPO** (Identity Preference Optimization), **KTO** (Kahneman-Tversky Optimization) és **SimPO** — mind a Bradley-Terry feltevés valamilyen finomítása/kiváltása, más-más helyzetre optimalizálva. Gyakorlati célra a sima DPO **jó kiindulópont**, ezekre csak akkor érdemes váltani, ha konkrét problémát tapasztalsz vele.
 ::::::
 
-:::::: section id=rlhf-4 heading="4. rész — RLAIF és Constitutional AI: amikor AI ad visszacsatolást" nav="4. rész" group="Technikák"
+:::::: section id=rlhf-4 num="04" heading="4. rész — RLAIF és Constitutional AI: amikor AI ad visszacsatolást" nav="RLAIF & Constitutional AI" group="Technikák"
 
 <p class="topic-tagline">Cél: értsd, hogyan skálázható az emberi annotálás szűk keresztmetszete.</p>
 
@@ -153,7 +153,7 @@ A RLAIF/CAI egyik lényegi korlátja: **egy AI-modell ítéletének minősége s
 :::::
 ::::::
 
-:::::: section id=rlhf-5 heading="5. rész — GRPO: verifikálható jutalom matekhoz és kódhoz" nav="5. rész" group="Technikák"
+:::::: section id=rlhf-5 num="05" heading="5. rész — GRPO: verifikálható jutalom matekhoz és kódhoz" nav="GRPO" group="Technikák"
 
 <p class="topic-tagline">Cél: értsd, miért nem kell mindig reward modell — néha a helyesség objektíven eldönthető.</p>
 
@@ -235,7 +235,7 @@ A DPO **nem** ad neked újrafelhasználható reward modellt (amit pl. más model
 :::::
 ::::::
 
-:::::: section id=rlhf-7 heading="6. rész — Gyakori buktatók: reward hacking, torzítás, mikor éri meg" nav="6. rész" group="Referencia"
+:::::: section id=rlhf-7 num="06" heading="6. rész — Gyakori buktatók: reward hacking, torzítás, mikor éri meg" nav="Gyakori buktatók" group="Referencia"
 
 <p class="topic-tagline">Cél: ismerd a korlátokat, mielőtt bármelyik technikát bevezetnéd.</p>
 

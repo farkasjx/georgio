@@ -39,7 +39,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=mcp-0 heading="0. rész — Mi az MCP, és miért létezik?" nav="0. rész" group="Elmélet"
+:::::: section id=mcp-0 num="00" heading="0. rész — Mi az MCP, és miért létezik?" nav="Mi az MCP?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg, milyen konkrét problémát old meg — nem egy divatszó, hanem egy integrációs probléma megoldása.</p>
 
@@ -60,7 +60,7 @@ Az MCP-t sokan a **USB-C-hez** hasonlítják: egy szabványos csatlakozó, ami n
 Ha van egy Jira-, Slack- vagy GitHub-MCP-szervered (gyakran **készen** elérhető, nem kell megírnod), a Claude, a Cursor, vagy egy saját agent **azonnal** tud vele dolgozni — nem kell egyedi API-wrappert írnod minden egyes kombinációhoz. Ez a tutorial ezt a mechanizmust, és a köré épülő gyakorlati mintákat mutatja be.
 ::::::
 
-:::::: section id=mcp-1 heading="1. rész — Architektúra: host, client, server" nav="1. rész" group="Elmélet"
+:::::: section id=mcp-1 num="01" heading="1. rész — Architektúra: host, client, server" nav="Architektúra" group="Elmélet"
 
 <p class="topic-tagline">Cél: ismerd a három szerepkört, és hogy mi kommunikál mivel.</p>
 
@@ -78,7 +78,7 @@ Egy **könnyű, fókuszált folyamat**, ami szabványosított primitívákon (to
 ::::
 :::::
 
-![MCP architektúra: a host több klienst indít, mindegyik külön szerverhez kapcsolódik](assets/mcp-01-architecture.jpg)
+![MCP architektúra: a host több klienst indít, mindegyik külön szerverhez kapcsolódik](__IMG__/mcp-01-architecture.jpg)
 
 ### A kommunikáció: JSON-RPC 2.0, két transporttal
 
@@ -94,7 +94,7 @@ Az architektúra két dolgot biztosít egyszerre: **biztonságos izolációt** (
 :::::
 ::::::
 
-:::::: section id=mcp-2 heading="2. rész — A három primitíva: mit ad az MCP a modellnek" nav="2. rész" group="Elmélet"
+:::::: section id=mcp-2 num="02" heading="2. rész — A három primitíva: mit ad az MCP a modellnek" nav="Három primitíva" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd pontosan, milyen három "csatornán" kaphat a modell külső képességet és tudást.</p>
 
@@ -121,7 +121,7 @@ Ha egy adatot a modell **automatikusan, saját döntése alapján** kérjen le �
 :::::
 ::::::
 
-:::::: section id=mcp-3 heading="3. rész — Hogyan működik: handshake és session" nav="3. rész" group="Működés"
+:::::: section id=mcp-3 num="03" heading="3. rész — Hogyan működik: handshake és session" nav="Handshake & session" group="Működés"
 
 <p class="topic-tagline">Cél: értsd a kapcsolat felépülésének lépéseit — ez nem "csak egy API-hívás".</p>
 
@@ -202,7 +202,7 @@ Futtasd le a szervert, majd a kliens-scriptet — figyeld meg, hogy a `list_tool
 :::::
 ::::::
 
-:::::: section id=mcp-5 heading="4. rész — Teams / Slack összekötés" nav="4. rész" group="Gyakorlat"
+:::::: section id=mcp-5 num="04" heading="4. rész — Teams / Slack összekötés" nav="Teams/Slack integráció" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: kapcsolj egy valós, gyakorlatban használt csapateszközt egy MCP-szerveren keresztül.</p>
 
@@ -257,7 +257,7 @@ A legtöbb éles Slack/Teams/Jira MCP-szerver **OAuth 2.1-alapú** hitelesítés
 :::::
 ::::::
 
-:::::: section id=mcp-6 heading="5. rész — MCP vs. sima function calling vs. REST wrapper" nav="5. rész" group="Éles használat"
+:::::: section id=mcp-6 num="05" heading="5. rész — MCP vs. sima function calling vs. REST wrapper" nav="MCP vs. function calling" group="Éles használat"
 
 <p class="topic-tagline">Cél: tudd eldönteni, mikor éri meg az MCP-t bevezetni, és mikor felesleges overhead.</p>
 
@@ -277,7 +277,7 @@ Ha **egyetlen** alkalmazásban, **egyetlen** eszközhöz kell integráció, és 
 :::::
 ::::::
 
-:::::: section id=mcp-7 heading="6. rész — A token-adó: amit senki nem lát a számlán" nav="6. rész" group="Éles használat"
+:::::: section id=mcp-7 num="06" heading="6. rész — A token-adó: amit senki nem lát a számlán" nav="A token-adó" group="Éles használat"
 
 <p class="topic-tagline">Cél: ismerd a rejtett kontextus-költséget, ami minden bekötött MCP-szerverrel jár — még ha nem is hívod a toolt.</p>
 
@@ -306,7 +306,7 @@ Ha egy szervert bekötöttél, de a tool-jainak nagy részét sosem hívod, táv
 :::::
 ::::::
 
-:::::: section id=mcp-8 heading="7. rész — Nagy példa: Jira multi-agent workflow" nav="7. rész" group="Nagy példa"
+:::::: section id=mcp-8 num="07" heading="7. rész — Nagy példa: Jira multi-agent workflow" nav="Jira workflow példa" group="Nagy példa"
 
 <p class="topic-tagline">Cél: kösd össze mindazt, amit eddig tanultál, egy teljes, gyakorlati folyamatban.</p>
 
@@ -314,7 +314,7 @@ Ha egy szervert bekötöttél, de a tool-jainak nagy részét sosem hívod, táv
 
 Egy folyamat, ahol: a Jira-taskok **automatikusan lejönnek** egy MCP-szerveren keresztül, egy **planner agent szétosztja** őket, egy **coder agent megírja** a kódot és pusholja, egy **reviewer agent** átnézi, és a Jira-ticket státusza **automatikusan frissül**.
 
-![Jira → multi-agent workflow MCP-n keresztül](assets/mcp-02-jira-workflow.jpg)
+![Jira → multi-agent workflow MCP-n keresztül](__IMG__/mcp-02-jira-workflow.jpg)
 
 ### Architektúra-döntés: egy agent vagy több?
 
@@ -394,7 +394,7 @@ Bővítsd a vázlatot egy negyedik, **QA agent** szerepkörrel — a te háttere
 :::::
 ::::::
 
-:::::: section id=mcp-9 heading="8. rész — Biztonság: context poisoning, prompt injection, OAuth" nav="8. rész" group="Éles használat"
+:::::: section id=mcp-9 num="08" heading="8. rész — Biztonság: context poisoning, prompt injection, OAuth" nav="Biztonság" group="Éles használat"
 
 <p class="topic-tagline">Cél: értsd, hogy az MCP pontosan azért nagy erejű, mert valós rendszerekhez enged hozzáférést — ez komoly biztonsági felelősséggel jár.</p>
 
@@ -423,7 +423,7 @@ Egy 2025 júniusi specifikáció-frissítés az MCP-szervereket **OAuth Resource
 :::::
 ::::::
 
-:::::: section id=mcp-10 heading="9. rész — MCP vs. A2A: eszköz-protokoll vagy agent-protokoll?" nav="9. rész" group="Referencia"
+:::::: section id=mcp-10 num="09" heading="9. rész — MCP vs. A2A: eszköz-protokoll vagy agent-protokoll?" nav="MCP vs. A2A" group="Referencia"
 
 <p class="topic-tagline">Cél: egy gyakori elhatárolás, hogy ne keverd össze a két kiegészítő szabványt.</p>
 
@@ -447,7 +447,7 @@ A specifikáció aktívan fejlődik: stateless szerver-működés, automatikus f
 :::::
 ::::::
 
-:::::: section id=mcp-11 heading="10. rész — Mikor és hol érdemes használni: döntési keret" nav="10. rész" group="Referencia"
+:::::: section id=mcp-11 num="10" heading="10. rész — Mikor és hol érdemes használni: döntési keret" nav="Döntési keret" group="Referencia"
 
 <p class="topic-tagline">Cél: egy gyakorlatias összegzés, mielőtt nekiállsz építeni.</p>
 
