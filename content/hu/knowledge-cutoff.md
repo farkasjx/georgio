@@ -109,7 +109,7 @@ A kutatás egyértelmű vezérelvet ad: **ha a hiányzó tudás friss tény** (m
 
 ### A modell nem "néz ki" a netre — valaki ad neki egy eszközt
 
-Ez a te megérzésed pontosan helyes volt: a modellnek **nincs saját, autonóm internet-hozzáférése**. Amikor egy AI-alkalmazás (pl. ez a chat-felület) képes friss információt adni, az azért van, mert a **host-alkalmazás** biztosít egy **eszközt** (pl. `web_search`), amit a modell **hívhat** — pontosan úgy, ahogy az **MCP tutorial** 2. részében a "tools" primitíva működik.
+A modellnek **nincs saját, autonóm internet-hozzáférése**. Amikor egy AI-alkalmazás (pl. ez a chat-felület) képes friss információt adni, az azért van, mert a **host-alkalmazás** biztosít egy **eszközt** (pl. `web_search`), amit a modell **hívhat** — pontosan úgy, ahogy az **MCP tutorial** 2. részében a "tools" primitíva működik.
 
 ### A folyamat lépései
 
