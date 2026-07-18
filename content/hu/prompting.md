@@ -460,3 +460,11 @@ response = client.messages.create(
 )
 ```
 ::::::
+
+:::::: section id=p-closing num="EOF" nav="Összefoglalás" group="Kiegészítők"
+## A három dolog, amit <em>érdemes elvinni</em>
+
+1. **A context a prompt.** Nem a megfogalmazás művészete a fontos — hanem hogy mit teszel az ablakba és mit hagysz ki.
+2. **Egy példa > öt szabály.** Few-shot szinte mindig olcsóbb és hatékonyabb, mint hosszú instrukciók írogatása.
+3. **Tervezz támadásra.** Ahogy egy webappnál az inputot soha nem bízod meg, úgy az LLM inputban sem. Tagek, privilege separation, monitoring.
+::::::

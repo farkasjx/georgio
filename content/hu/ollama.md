@@ -33,7 +33,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=ol-0 heading="0. szint — Alap setup és mental model" nav="0. szint"
+:::::: section id=ol-0 num="00" heading="0. szint — Alap setup és mental model" nav="Alap setup"
 
 <p class="topic-tagline">Cél: értsd, mi történik a háttérben — ne csak gépeld be a parancsokat.</p>
 
@@ -71,7 +71,7 @@ Futtass 2 különböző modellt (`ollama run llama3` és `ollama run mistral`), 
 :::::
 ::::::
 
-:::::: section id=ol-1 heading="1. szint — Model management &amp; kísérletezés" nav="1. szint"
+:::::: section id=ol-1 num="01" heading="1. szint — Model management &amp; kísérletezés" nav="Model management"
 
 <p class="topic-tagline">Cél: tudd kezelni a modelleket, ne csak használni őket.</p>
 
@@ -101,7 +101,7 @@ Tölts le egy small és egy large modellt. Ugyanazt a 3 kérdést tedd fel mindk
 :::::
 ::::::
 
-:::::: section id=ol-2 heading="2. szint — API használat és paraméterezés" nav="2. szint"
+:::::: section id=ol-2 num="02" heading="2. szint — API használat és paraméterezés" nav="API használat"
 
 <p class="topic-tagline">Cél: ne black box legyen, hanem kontrollált rendszer.</p>
 
@@ -147,7 +147,7 @@ Ugyanarra a promptra hívd meg az API-t `temperature: 0.1`-gyel és `temperature
 :::::
 ::::::
 
-:::::: section id=ol-3 heading="3. szint — Streaming és real-time UX" nav="3. szint"
+:::::: section id=ol-3 num="03" heading="3. szint — Streaming és real-time UX" nav="Streaming & UX"
 
 <p class="topic-tagline">Cél: modern LLM élmény építése — a felhasználó ne nézzen üres képernyőt.</p>
 
@@ -182,7 +182,7 @@ Bővítsd ki a fenti kódot interaktív CLI chat kliensbe: `while True` loop, fe
 :::::
 ::::::
 
-:::::: section id=ol-4 heading="4. szint — Tool használat és agent workflow" nav="4. szint"
+:::::: section id=ol-4 num="04" heading="4. szint — Tool használat és agent workflow" nav="Tool & agent workflow"
 
 <p class="topic-tagline">Cél: az LLM ne csak válaszoljon, hanem „dolgozzon" — döntést hozzon, eszközt hívjon.</p>
 
@@ -247,7 +247,7 @@ Bővítsd az agentet: adj hozzá egy `calculate(expr)` tool-t (`eval()`-lal vagy
 :::::
 ::::::
 
-:::::: section id=ol-5 heading="5. szint — Docker és deployment" nav="5. szint"
+:::::: section id=ol-5 num="05" heading="5. szint — Docker és deployment" nav="Docker & deployment"
 
 <p class="topic-tagline">Cél: ne csak lokális legyen — reprodukálható, hordozható szerver.</p>
 
@@ -291,7 +291,7 @@ Indítsd el az Ollama konténert, tölts le egy modellt, és hívd meg a Python 
 :::::
 ::::::
 
-:::::: section id=ol-6 heading="6. szint — Security és production gondolkodás" nav="6. szint"
+:::::: section id=ol-6 num="06" heading="6. szint — Security és production gondolkodás" nav="Security & production"
 
 <p class="topic-tagline">Cél: ne legyen véletlenül nyitott AI szervered az interneten.</p>
 
@@ -330,7 +330,7 @@ server {
 :::::
 ::::::
 
-:::::: section id=ol-7 heading="7. szint — Performance és optimalizáció" nav="7. szint"
+:::::: section id=ol-7 num="07" heading="7. szint — Performance és optimalizáció" nav="Performance"
 
 <p class="topic-tagline">Cél: értsd, miért lassú vagy gyors — és mit tudsz rajta változtatni.</p>
 
@@ -379,7 +379,7 @@ Mérd meg a small és large modell latency-jét ugyanarra a promptra. Próbáld 
 :::::
 ::::::
 
-:::::: section id=ol-8 heading="8. szint — Debugging és hibakezelés" nav="8. szint"
+:::::: section id=ol-8 num="08" heading="8. szint — Debugging és hibakezelés" nav="Debugging"
 
 <p class="topic-tagline">Cél: ne akadj el — ismerd fel és javítsd a leggyakoribb hibákat.</p>
 
@@ -413,7 +413,7 @@ Szándékosan hibás setupot csinálj: hívj egy nem létező modellt, állítsd
 :::::
 ::::::
 
-:::::: section id=ol-9 heading="9. szint — Full developer workflow projekt" nav="9. szint"
+:::::: section id=ol-9 num="09" heading="9. szint — Full developer workflow projekt" nav="Fejlesztői workflow projekt"
 
 <p class="topic-tagline">Cél: mindent összekötni — egy production-közelű lokális AI asszisztens.</p>
 
