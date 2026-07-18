@@ -28,26 +28,32 @@ const PUBLIC = path.join(ROOT, 'public');
    A topbar és a lapváltás sorrendje. A `key` = MD-fájl neve kiterjesztés nélkül,
    a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként. */
 const PAGE_ORDER = [
-  { key: 'map',       label: 'Interaktív térkép',     labelEn: 'Interactive Map',     dot: '#7dd3fc', special: 'map' },
-  { key: 'tools',     label: 'AI Eszközök',           labelEn: 'AI Tools',            dot: '#4ecb8d' },
-  { key: 'prompting', label: 'Prompt Engineering',    labelEn: 'Prompt Engineering',  dot: '#e8a84a' },
-  { key: 'ollama',    label: 'Lokális LLM',           labelEn: 'Local LLM',           dot: '#4ec9c9' },
-  { key: 'aiconfig',  label: 'AI Config fájlok',      labelEn: 'AI Config Files',     dot: '#f472b6' },
-  { key: 'security',  label: 'Biztonság & OWASP',     labelEn: 'Security & OWASP',    dot: '#e06c75' },
-  { key: 'memory',    label: 'Memory',                labelEn: 'Memory',              dot: '#e1c9cb' },
-  { key: 'vectordb',  label: 'Vector adatbázisok',    labelEn: 'Vector databases',    dot: '#17cb11' },
-  { key: 'dense-moe', label: 'Dense vs MoE modellek', labelEn: 'Dense vs Moe modells',  dot: '#6160a3' },
-  { key: 'rag',       label: 'RAG',                   labelEn: 'RAG',                 dot: '#1613d4' },
-  { key: 'kv-cache',  label: 'KV cache',              labelEn: 'KV cache',            dot: '#432604' },
-  { key: 'hardware',  label: 'Hardware',              labelEn: 'Hardware',            dot: '#f0edeb' },
-  { key: 'model-routing',   label: 'Model routing',   labelEn: 'Model routing',       dot: '#496b8f' },
-  { key: 'latency',   label: 'Latency',               labelEn: 'Latency',             dot: '#523986' },
-  { key: 'hallucination',   label: 'Halucináció',   labelEn: 'Hallucination',         dot: '#a3ce40' },
-  { key: 'mcp',       label: 'MCP',               labelEn: 'MCP',                                 dot: '#359a9c' },
-  { key: 'quantization-quality',  label: 'Kvantálás és minőség',   labelEn: 'Quantization and quality',   dot: '#00ff55' },
-  { key: 'knowledge-cutoff', label: 'Tudás limit',   labelEn: 'Knowledge cutoff',   dot: '#896671' },
-  { key: 'rlhf',      label: 'RLHF',   labelEn: 'RLHF',   dot: '#2b2426' },
-  { key: 'model-size',label: 'Model paraméterek',   labelEn: 'Model parameters',   dot: '#98d016' },
+    { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
+
+  /* ── Alapok & munkafolyamat ── */
+  { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
+  { key: 'prompting',             label: 'Prompt Engineering',      labelEn: 'Prompt Engineering',       dot: '#e8a84a' },
+  { key: 'aiconfig',              label: 'AI Config fájlok',        labelEn: 'AI Config Files',          dot: '#f472b6' },
+  { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
+  { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
+
+  /* ── Modell & hardver ── */
+  { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
+  { key: 'hardware',              label: 'Hardware',                labelEn: 'Hardware',                 dot: '#f0edeb' },
+  { key: 'model-size',            label: 'Model paraméterek',       labelEn: 'Model parameters',         dot: '#98d016' },
+  { key: 'quantization-quality',  label: 'Kvantálás és minőség',    labelEn: 'Quantization and quality', dot: '#00ff55' },
+  { key: 'dense-moe',             label: 'Dense vs MoE modellek',   labelEn: 'Dense vs Moe modells',      dot: '#6160a3' },
+  { key: 'kv-cache',              label: 'KV cache',                labelEn: 'KV cache',                 dot: '#432604' },
+  { key: 'latency',               label: 'Latency',                 labelEn: 'Latency',                  dot: '#523986' },
+  { key: 'model-routing',         label: 'Model routing',           labelEn: 'Model routing',            dot: '#496b8f' },
+
+  /* ── Tudás & kontextus ── */
+  { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
+  { key: 'vectordb',              label: 'Vector adatbázisok',      labelEn: 'Vector databases',         dot: '#17cb11' },
+  { key: 'memory',                label: 'Memory',                 labelEn: 'Memory',                   dot: '#e1c9cb' },
+  { key: 'hallucination',         label: 'Halucináció',             labelEn: 'Hallucination',            dot: '#a3ce40' },
+  { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
+  { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },
 ];
 
 /* ── NYELVEK ──
