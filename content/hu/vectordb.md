@@ -39,7 +39,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=vec-0 heading="0. rész — Miért kell vektor-adatbázis?" nav="0. rész" group="Elmélet"
+:::::: section id=vec-0 num="00" heading="0. rész — Miért kell vektor-adatbázis?" nav="Miért kell vektoradatbázis?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, milyen problémát old meg, amit egy hagyományos DB nem.</p>
 
@@ -65,7 +65,7 @@ A vektor-DB **nem** helyettesíti a relációs adatbázist — kiegészíti. A r
 :::::
 ::::::
 
-:::::: section id=vec-1 heading="1. rész — Mi az a vektor és az embedding?" nav="1. rész" group="Elmélet"
+:::::: section id=vec-1 num="01" heading="1. rész — Mi az a vektor és az embedding?" nav="Vektor és embedding" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg, hogy a „jelentés" egy irány egy sokdimenziós térben.</p>
 
@@ -109,7 +109,7 @@ Gondolj három szópárra a saját szakterületedről (pl. „QA / tesztelés", 
 :::::
 ::::::
 
-:::::: section id=vec-2 heading="2. rész — Hogyan lesz szövegből embedding? (kézzel)" nav="2. rész" group="Működés"
+:::::: section id=vec-2 num="02" heading="2. rész — Hogyan lesz szövegből embedding? (kézzel)" nav="Szöveg → embedding" group="Működés"
 
 <p class="topic-tagline">Cél: állítsd elő az első vektoraidat, és nézd meg őket.</p>
 
@@ -168,7 +168,7 @@ console.log(v.length);     // → 768
 :::::
 ::::::
 
-:::::: section id=vec-3 heading="3. rész — Távolság és hasonlóság: hogyan számolódik?" nav="3. rész" group="Működés"
+:::::: section id=vec-3 num="03" heading="3. rész — Távolság és hasonlóság: hogyan számolódik?" nav="Távolság és hasonlóság" group="Működés"
 
 <p class="topic-tagline">Cél: értsd meg a matekot, ami eldönti, mi „hasonló".</p>
 
@@ -229,7 +229,7 @@ Számold ki a három szópárod koszinusz-hasonlóságát a fenti kóddal. Egyez
 :::::
 ::::::
 
-:::::: section id=vec-4 heading="4. rész — Indexelés: hogyan gyors milliárd elemnél is?" nav="4. rész" group="Működés"
+:::::: section id=vec-4 num="04" heading="4. rész — Indexelés: hogyan gyors milliárd elemnél is?" nav="Indexelés" group="Működés"
 
 <p class="topic-tagline">Cél: értsd, miért nem néz végig a DB minden vektort — és hogyan csinálja ANN-nel.</p>
 
@@ -269,7 +269,7 @@ A HNSW két fő építési paramétere határozza meg a minőség/memória/sebes
 A számok magukért beszélnek arról, miért nem mindegy a méret és az index. Nagy léptékű (50M vektor) tesztekben a dedikált, vektorra optimalizált motorok és a jól hangolt Postgres-kiterjesztések között nagyságrendi különbség is lehet a másodpercenkénti lekérdezésszámban. A Rust-alapú Qdrant a nyílt forrású mezőnyben a késleltetés terén vezet: 10M vektornál a p99 késleltetése jellemzően 12 ms körül van, szemben a Weaviate ~16 ms-ával és a Milvus ~18 ms-ával. A lényeg: a HNSW gráf-alapú keresés komplexitása logaritmikusan nő, nem lineárisan, ezért kezel jól milliárdos nagyságrendet.
 ::::::
 
-:::::: section id=vec-5 heading="5. rész — Vektor vs. relációs vs. gráf adatbázis" nav="5. rész" group="Elmélet"
+:::::: section id=vec-5 num="05" heading="5. rész — Vektor vs. relációs vs. gráf adatbázis" nav="Vektor vs. relációs vs. gráf" group="Elmélet"
 
 <p class="topic-tagline">Cél: helyezd el a vektor-DB-t a már ismert adatbázis-világodban.</p>
 
@@ -596,7 +596,7 @@ Hozz létre egy `dokumentumok` táblát a saját Postgresedben, tölts fel 10 so
 :::::
 ::::::
 
-:::::: section id=vec-10 heading="10. rész — Éles használat: chunkolás, hybrid search, tuning" nav="10. rész" group="Éles használat"
+:::::: section id=vec-10 num="10" heading="10. rész — Éles használat: chunkolás, hybrid search, tuning" nav="Éles használat" group="Éles használat"
 
 <p class="topic-tagline">Cél: a prototípustól a produkciós minőségig — ahol a valódi munka van.</p>
 
@@ -638,7 +638,7 @@ A `ef_search` (HNSW) növelése javítja a recall-t, de rontja a latency-t — e
 :::::
 ::::::
 
-:::::: section id=vec-11 heading="11. rész — Döntési keret: melyiket, mikor?" nav="11. rész" group="Éles használat"
+:::::: section id=vec-11 num="11" heading="11. rész — Döntési keret: melyiket, mikor?" nav="Döntési keret" group="Éles használat"
 
 <p class="topic-tagline">Cél: egy gyakorlatias algoritmus a választáshoz — a te helyzetedre szabva.</p>
 

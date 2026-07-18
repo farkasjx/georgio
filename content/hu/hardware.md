@@ -36,7 +36,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=hw-0 heading="0. rész — Miért a GPU futtat egy LLM-et?" nav="0. rész" group="Elmélet"
+:::::: section id=hw-0 num="00" heading="0. rész — Miért a GPU futtat egy LLM-et?" nav="Miért a GPU?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, milyen probléma miatt lett a GPU (és nem a CPU) az AI munkalova.</p>
 
@@ -62,7 +62,7 @@ Eldönti, **milyen gyorsan** generálódnak a tokenek. Az inferencia zöme nem s
 :::::
 ::::::
 
-:::::: section id=hw-1 heading="1. rész — Mi van pontosan a VRAM-ban?" nav="1. rész" group="Elmélet"
+:::::: section id=hw-1 num="01" heading="1. rész — Mi van pontosan a VRAM-ban?" nav="Mi van a VRAM-ban?" group="Elmélet"
 
 <p class="topic-tagline">Cél: bontsd négy komponensre, hogy értsd, mi mennyit eszik.</p>
 
@@ -131,7 +131,7 @@ Indíts el egy modellt Ollamával (pl. `ollama run llama3.1:8b`), és közben m�
 :::::
 ::::::
 
-:::::: section id=hw-3 heading="2. rész — Kvantálás: bájt paraméterenként" nav="2. rész" group="VRAM-matek"
+:::::: section id=hw-3 num="02" heading="2. rész — Kvantálás: bájt paraméterenként" nav="Kvantálás: bájt/paraméter" group="VRAM-matek"
 
 <p class="topic-tagline">Cél: tudd, pontosan mennyi helyet foglal egyetlen paraméter az egyes precizitásokon.</p>
 
@@ -161,7 +161,7 @@ A Q4_K_M nem naiv 4-bites kerekítés — **K-quant**: a modell saját súly-fon
 Mindkettő 2 bájt/paraméter. A BF16-nak nagyobb az exponens-tartománya (kevésbé hajlamos túlcsordulásra), az FP16-nak nagyobb a pontossága kis értékeknél. Tanításnál a BF16-ot preferálják (stabilabb), de inferenciánál a memória-lábnyom és a gyakorlati minőség szinte azonos.
 ::::::
 
-:::::: section id=hw-4 heading="3. rész — A VRAM-képlet: a flagship számítás" nav="3. rész" group="VRAM-matek"
+:::::: section id=hw-4 num="03" heading="3. rész — A VRAM-képlet: a flagship számítás" nav="A VRAM-képlet" group="VRAM-matek"
 
 <p class="topic-tagline">Cél: tudd kiszámolni előre, befér-e egy modell — mielőtt letöltöd vagy megveszed a kártyát.</p>
 
@@ -235,7 +235,7 @@ Futtasd le a fenti kódot, majd egészítsd ki egy negyedik argumentummal: a te 
 :::::
 ::::::
 
-:::::: section id=hw-6 heading="4. rész — A MoE csapda: total, nem active paraméter" nav="4. rész" group="VRAM-matek"
+:::::: section id=hw-6 num="04" heading="4. rész — A MoE csapda: total, nem active paraméter" nav="A MoE csapda" group="VRAM-matek"
 
 <p class="topic-tagline">Cél: ne ess bele abba a hibába, hogy az aktivált paraméterszám alapján tervezel VRAM-ot.</p>
 
@@ -269,7 +269,7 @@ A dense/MoE tutorial KV-cache bónusza itt is érvényes: mivel a MoE-nál a *sz
 :::::
 ::::::
 
-:::::: section id=hw-7 heading="5. rész — CUDA, ROCm, Metal: a szoftverréteg" nav="5. rész" group="Szoftverréteg"
+:::::: section id=hw-7 num="05" heading="5. rész — CUDA, ROCm, Metal: a szoftverréteg" nav="Szoftverréteg" group="Szoftverréteg"
 
 <p class="topic-tagline">Cél: értsd, hogy a hardver önmagában semmit sem ér a megfelelő szoftverstack nélkül.</p>
 
@@ -300,7 +300,7 @@ Ha kimondottan **Linuxon**, **Ollamával/llama.cpp-vel** futtatsz (nem vLLM-mel 
 A driver, a CUDA-toolkit verziója és a keretrendszer (PyTorch, vLLM) build-je **egymáshoz kell illeszkedjen** — az újabb driver visszafelé kompatibilis a régebbi toolkittal, de fordítva nem. Eltérésnél nem feltétlen kapsz hibaüzenetet — inkább lassulást vagy hiányzó funkciót (pl. FP8 nem érhető el).
 ::::::
 
-:::::: section id=hw-8 heading="6. rész — GPU-választás 2026-ban: konkrét kártyák" nav="6. rész" group="Gyakorlat"
+:::::: section id=hw-8 num="06" heading="6. rész — GPU-választás 2026-ban: konkrét kártyák" nav="GPU-választás 2026" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: fordítsd le a matekot valódi vásárlási/bérlési döntésre.</p>
 
@@ -337,7 +337,7 @@ A Mac unified memóriájával gyakorlatilag "VRAM-korlát nélkül" dolgozol a r
 :::::
 ::::::
 
-:::::: section id=hw-9 heading="7. rész — Ha nem fér egy kártyára: multi-GPU és offloading" nav="7. rész" group="Gyakorlat"
+:::::: section id=hw-9 num="07" heading="7. rész — Ha nem fér egy kártyára: multi-GPU és offloading" nav="Multi-GPU és offloading" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: tudd, mi történik, ha a modell nagyobb, mint egyetlen GPU VRAM-ja.</p>
 

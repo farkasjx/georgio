@@ -5,7 +5,28 @@ sidebar_groups:
   - Topics
   - Techniques
   - Extras
+hero:
+  eyebrow: "Prompt & Context Engineering · 2026 Overview"
+  title: "How to <em>actually</em> communicate with a model"
+  lead: "A prompt isn't text — it's an interface. This page covers four areas — from context window management to attack vectors — with practical examples."
+  stats:
+    - { val: "5", lbl: "Topics" }
+    - { val: "12", lbl: "Techniques" }
+    - { val: "~25", lbl: "Examples" }
+footer:
+  left: "AI Hub · Prompt Engineering"
+  right: "Compiled June 2026"
 ---
+
+:::::: raw
+<div class="toc-grid" style="margin-top:24px">
+  <a class="toc-card" href="#p-context"><div class="tc-num">&lt;01&gt;</div><div class="tc-name">Context window engineering</div><div class="tc-desc">What fits, what goes where, what to leave out.</div></a>
+  <a class="toc-card" href="#p-basics"><div class="tc-num">&lt;02&gt;</div><div class="tc-name">Prompt engineering basics</div><div class="tc-desc">The 5 building blocks of a good prompt.</div></a>
+  <a class="toc-card" href="#p-techniques"><div class="tc-num">&lt;03&gt;</div><div class="tc-name">Prompt techniques</div><div class="tc-desc">Zero-shot, CoT, ReAct, caveman, and friends.</div></a>
+  <a class="toc-card" href="#p-injection"><div class="tc-num">&lt;04&gt;</div><div class="tc-name">Prompt injection</div><div class="tc-desc">Attacks and defenses.</div></a>
+  <a class="toc-card" href="#p-extras"><div class="tc-num">&lt;05&gt;</div><div class="tc-name">Extras</div><div class="tc-desc">JSON output, tool use, RAG, eval, costs.</div></a>
+</div>
+::::::
 
 :::::: section id=p-context num=01 nav="Context window" group="Topics"
 ## Context window <em>engineering</em>

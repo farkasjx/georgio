@@ -368,7 +368,10 @@ function openPanel(node) {
    amit korábban elmentettünk a böngészőben, hogy megmutassuk, mi
    változott az előző látogatás óta.
 ───────────────────────────────────────────── */
-const VERSION_STORAGE_KEY = 'aihub-content-versions';
+/* Nyelvenként külön kulcs — a HU és EN tartalom hash-e magától is eltér
+   (más a szöveg), szóval ha egy közös kulcsot használnánk, minden
+   nyelvváltás "mindenhol változott" hamis riasztást adna. */
+const VERSION_STORAGE_KEY = 'aihub-content-versions-' + (window.__LOCALE__ || 'hu');
 
 function initVersionTracking() {
   const current = window.__CONTENT_VERSIONS__ || {};

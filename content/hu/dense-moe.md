@@ -36,7 +36,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=dm-0 heading="0. rész — Miért van két tábor?" nav="0. rész" group="Elmélet"
+:::::: section id=dm-0 num="00" heading="0. rész — Miért van két tábor?" nav="Miért van két tábor?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, milyen problémára válasz a MoE, és miért lett 2026-ra domináns.</p>
 
@@ -55,7 +55,7 @@ A váltás gyors volt. 2024-ben a Mixtral 8x22B volt a nyílt súlyú standard 2
 :::::
 ::::::
 
-:::::: section id=dm-1 heading="1. rész — A dense transformer" nav="1. rész" group="Elmélet"
+:::::: section id=dm-1 num="01" heading="1. rész — A dense transformer" nav="A dense transformer" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, mi az a „sűrű", amihez a MoE-t viszonyítjuk.</p>
 
@@ -74,7 +74,7 @@ Az alábbi ábra bal fele mutatja ezt: egy token belép, végigmegy az *egyetlen
 A jobb oldal már a MoE — erről szól a következő szakasz.
 ::::::
 
-:::::: section id=dm-2 heading="2. rész — A MoE alapötlet" nav="2. rész" group="Elmélet"
+:::::: section id=dm-2 num="02" heading="2. rész — A MoE alapötlet" nav="A MoE alapötlet" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, hogyan cseréli le a MoE az egyetlen FFN-t sok expertre és egy routerre.</p>
 
@@ -97,7 +97,7 @@ A „8x7B" **nem** 56B-t jelent. A 8 expert *osztozik* az attention rétegeken �
 A DeepSeek V3 tovább vitte: 8 nagy expert helyett **256 apró** expertet használ, tokenenként 8 aktívval. Miért? A kombinatorika robban: 256-ból 8 kiválasztása ~4,3 milliárd lehetséges kombinációt ad (szemben a Mixtral 8-ból 2 = 28 kombinációjával). Ez sokkal specifikusabb tudás-célzást enged a routernek tokenenként. Emellett egy **megosztott (shared) expert** mindig aktív, ami a közös tudást (nyelvtan, szintaxis, alapténykek) szívja fel, felszabadítva a többit a specializációra.
 ::::::
 
-:::::: section id=dm-3 heading="3. rész — A router működése (top-k gating)" nav="3. rész" group="Működés"
+:::::: section id=dm-3 num="03" heading="3. rész — A router működése (top-k gating)" nav="A router működése" group="Működés"
 
 <p class="topic-tagline">Cél: értsd meg pontosan, hogyan dönti el a router, melyik expert fut.</p>
 
@@ -125,7 +125,7 @@ Vagyis: a router pontszámoz (`s`), kiválasztja a top-k-t (`g`), és csak azoka
 A `k` tipikusan 1 vagy 2 (a DeepSeek 8-at használ a 256 apró expertjéből). A kis `k` a lényeg: **ez adja a sparsityt**. Ha minden expertet aktiválnál, visszakapnád a dense modellt, csak bonyolultabban.
 ::::::
 
-:::::: section id=dm-4 heading="4. rész — Total vs. Active: a sparsity és a félreértés" nav="4. rész" group="Működés"
+:::::: section id=dm-4 num="04" heading="4. rész — Total vs. Active: a sparsity és a félreértés" nav="Total vs. Active" group="Működés"
 
 <p class="topic-tagline">Cél: értsd meg a MoE két számát, és amit szinte mindenki félreért velük.</p>
 
@@ -160,7 +160,7 @@ Egy 744B-os MoE (pl. GLM-5.2) ~40B-t aktivál tokenenként: a *számlád* egy 40
 :::::
 ::::::
 
-:::::: section id=dm-5 heading="5. rész — Load balancing: miért omlik össze router nélkül?" nav="5. rész" group="Működés"
+:::::: section id=dm-5 num="05" heading="5. rész — Load balancing: miért omlik össze router nélkül?" nav="Load balancing" group="Működés"
 
 <p class="topic-tagline">Cél: értsd, miért a router betanítása a MoE legkényesebb pontja.</p>
 
@@ -201,7 +201,7 @@ Ha valaha finomhangolsz vagy futtatsz MoE modellt, a load balancing az, ami „e
 :::::
 ::::::
 
-:::::: section id=dm-6 heading="6. rész — Sebesség, méret, hatékonyság: a csapda" nav="6. rész" group="Összehasonlítás"
+:::::: section id=dm-6 num="06" heading="6. rész — Sebesség, méret, hatékonyság: a csapda" nav="Sebesség vs. hatékonyság" group="Összehasonlítás"
 
 <p class="topic-tagline">Cél: értsd meg a MoE legfontosabb, leggyakrabban elhallgatott kompromisszumát.</p>
 
@@ -232,7 +232,7 @@ Mivel a MoE expert-súlyai „szétosztódnak", GPU-nként kevesebb súly kell, 
 :::::
 ::::::
 
-:::::: section id=dm-7 heading="7. rész — Előny / hátrány mérlegen" nav="7. rész" group="Összehasonlítás"
+:::::: section id=dm-7 num="07" heading="7. rész — Előny / hátrány mérlegen" nav="Előny / hátrány" group="Összehasonlítás"
 
 <p class="topic-tagline">Cél: lásd egyben, mit nyersz és mit veszítesz mindkét irányban.</p>
 
@@ -335,7 +335,7 @@ Futtasd le többször, különböző `x` bemenetekkel — figyeld, hogy más-má
 Bővítsd a kódot: futtass 1000 véletlen tokent a rétegen, és számold meg, hányszor választotta a router az egyes experteket. Rajzold ki (vagy csak írasd ki) az eloszlást. Nagy eséllyel **egyenetlen** lesz — ez élőben mutatja a routing collapse-hajlamot, és azt, miért kell a load-balancing loss az 5. részből.
 ::::::
 
-:::::: section id=dm-9 heading="9. rész — Mikor melyiket? Döntés és lokális futtatás" nav="9. rész" group="Gyakorlat"
+:::::: section id=dm-9 num="09" heading="9. rész — Mikor melyiket? Döntés és lokális futtatás" nav="Mikor melyiket?" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: gyakorlati fogódzó — mint felhasználó/fejlesztő mikor melyik jobb neked.</p>
 

@@ -38,7 +38,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=mem-0 heading="0. rész — Miért kell memory? Az elméleti alap" nav="0. rész" group="Elmélet"
+:::::: section id=mem-0 num="00" heading="0. rész — Miért kell memory? Az elméleti alap" nav="Miért kell memory?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, hogy a memory nem a modell képessége, hanem egy réteg, amit köréépítesz.</p>
 
@@ -89,7 +89,7 @@ Ne overengineer-elj. Kerüld, ha: egyszeri, kontextusmentes Q&A (fordítás, ös
 :::::
 ::::::
 
-:::::: section id=mem-1 heading="1. rész — Memory architektúrák" nav="1. rész" group="Architektúra"
+:::::: section id=mem-1 num="01" heading="1. rész — Memory architektúrák" nav="Memory architektúrák" group="Architektúra"
 
 <p class="topic-tagline">Cél: ismerd a lehetőségeket és a köztük lévő kompromisszumokat.</p>
 
@@ -124,7 +124,7 @@ Ne overengineer-elj. Kerüld, ha: egyszeri, kontextusmentes Q&A (fordítás, ös
 | Hybrid | Optimalizált | Nagyon jó | Magas | Nagyon jó |
 ::::::
 
-:::::: section id=mem-2 heading="2. rész — Előkészület" nav="2. rész" group="Gyakorlat"
+:::::: section id=mem-2 num="02" heading="2. rész — Előkészület" nav="Előkészület" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: legyen működő Python és Node környezeted a feladatokhoz.</p>
 
@@ -551,7 +551,7 @@ A RAG önmagában megér egy külön tutorialt — chunkolás, retrieval-minős�
 :::::
 ::::::
 
-:::::: section id=mem-7 heading="7. rész — Security: a memory mint támadási felület" nav="7. rész" group="Éles használat"
+:::::: section id=mem-7 num="07" heading="7. rész — Security: a memory mint támadási felület" nav="Security" group="Éles használat"
 
 <p class="topic-tagline">Cél: a memory nem csak feature, hanem kockázat — amit tárolsz és visszateszel, az bizalmi határt lép át.</p>
 
@@ -576,7 +576,7 @@ A RAG önmagában megér egy külön tutorialt — chunkolás, retrieval-minős�
 :::::
 ::::::
 
-:::::: section id=mem-8 heading="8. rész — Framework-áttekintés" nav="8. rész" group="Éles használat"
+:::::: section id=mem-8 num="08" heading="8. rész — Framework-áttekintés" nav="Framework-áttekintés" group="Éles használat"
 
 <p class="topic-tagline">Cél: tudd, mikor írj saját memory-logikát, és mikor nyúlj kész eszközhöz.</p>
 
@@ -612,7 +612,7 @@ relevant = m.search("autó", user_id="fj")  # auto-extract + retrieve
 ```
 ::::::
 
-:::::: section id=mem-9 heading="9. rész — Éles használat és best practices" nav="9. rész" group="Éles használat"
+:::::: section id=mem-9 num="09" heading="9. rész — Éles használat és best practices" nav="Éles használat" group="Éles használat"
 
 <p class="topic-tagline">Cél: production-közeli memory — takarítás, perzisztencia, tesztelés.</p>
 
@@ -644,7 +644,7 @@ Ha „FJ Yaris-t akar" később „FJ megvette a Yaris-t" lesz, **frissítsd/ér
 | **Regresszió** | Summary-összegzés után megmaradnak-e a kulcs-tények (nevek, ID-k, számok)? |
 ::::::
 
-:::::: section id=mem-10 heading="10. rész — Összefoglaló projekt: hybrid CLI agent" nav="10. rész" group="Gyakorlat"
+:::::: section id=mem-10 num="10" heading="10. rész — Összefoglaló projekt: hybrid CLI agent" nav="Összefoglaló projekt" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: mindent összekötni — sliding window (rövid táv) + summary (közép táv) + Chroma vektor (hosszú táv).</p>
 

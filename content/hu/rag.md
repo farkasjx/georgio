@@ -38,7 +38,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=rag-0 heading="0. rész — Mi az a RAG és miért kell?" nav="0. rész" group="Elmélet"
+:::::: section id=rag-0 num="00" heading="0. rész — Mi az a RAG és miért kell?" nav="Mi az a RAG?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, milyen problémát old meg, és hol a helye a context engineeringben.</p>
 
@@ -63,7 +63,7 @@ A RAG ebben a képben az a mechanizmus, ami **eldönti, mi kerüljön a RAM-ba**
 A RAG nem légüres térben él: a **vektor-adatbázis** tutorial adja az alatta dolgozó retrieval-motort (embedding, hasonlóság, index), a **memory** tutorial pedig a testvér-fogalom — ugyanaz a gépezet, más cél (RAG = tudás a világról, memory = a felhasználó/beszélgetés állapota).
 ::::::
 
-:::::: section id=rag-1 heading="1. rész — Mikor éri meg RAG, és mikor nem?" nav="1. rész" group="Elmélet"
+:::::: section id=rag-1 num="01" heading="1. rész — Mikor éri meg RAG, és mikor nem?" nav="Mikor éri meg RAG?" group="Elmélet"
 
 <p class="topic-tagline">Cél: tudd eldönteni, hogy a te problémádra tényleg RAG a válasz.</p>
 
@@ -96,7 +96,7 @@ A tudás **belefér** a promptba és ritkán változik (csak tedd be) · a felad
 A naiv RAG a produkciós rendszerekben durván az **esetek 40%-ában elhibázza a visszakeresést** — magabiztos, jól strukturált választ ad, csak épp rossz dokumentumokból. 2026-ban a szűk keresztmetszet nem a generálás, hanem a **retrieval**. Ezért szól a tutorial nagy része arról, hogyan tedd jóvá a visszakeresést.
 ::::::
 
-:::::: section id=rag-2 heading="2. rész — Az alap pipeline: indexelés + lekérdezés" nav="2. rész" group="Alap pipeline"
+:::::: section id=rag-2 num="02" heading="2. rész — Az alap pipeline: indexelés + lekérdezés" nav="Alap pipeline" group="Alap pipeline"
 
 <p class="topic-tagline">Cél: lásd a teljes folyamatot végponttól végpontig, két fázisban.</p>
 
@@ -177,7 +177,7 @@ Tedd fel a „Meddig alszanak a macskák?" kérdést — figyeld, hogy a helyes 
 Ez a naiv RAG — működik demóban, de a produkciós minőséghez a következő szakaszok technikái kellenek.
 ::::::
 
-:::::: section id=rag-4 heading="3. rész — Chunkolás: a legnagyobb minőségi kar" nav="3. rész" group="Technikák"
+:::::: section id=rag-4 num="03" heading="3. rész — Chunkolás: a legnagyobb minőségi kar" nav="Chunkolás" group="Technikák"
 
 <p class="topic-tagline">Cél: a retrieval minősége leginkább ezen múlik — csináld jól.</p>
 
@@ -211,7 +211,7 @@ Vedd egy valódi dokumentumodat (pl. a Nevogate teszt-tervedet), és chunkold h�
 :::::
 ::::::
 
-:::::: section id=rag-5 heading="4. rész — Hybrid search: dense + sparse" nav="4. rész" group="Technikák"
+:::::: section id=rag-5 num="04" heading="4. rész — Hybrid search: dense + sparse" nav="Hybrid search" group="Technikák"
 
 <p class="topic-tagline">Cél: kombináld a szemantikus és a kulcsszavas keresést a vakfoltok ellen.</p>
 
@@ -244,7 +244,7 @@ A hybrid retrieval (dense + BM25) + egy reranker a legjobb kiindulópont a legt�
 :::::
 ::::::
 
-:::::: section id=rag-6 heading="5. rész — Reranking: cross-encoder a pontosságért" nav="5. rész" group="Technikák"
+:::::: section id=rag-6 num="05" heading="5. rész — Reranking: cross-encoder a pontosságért" nav="Reranking" group="Technikák"
 
 <p class="topic-tagline">Cél: emeld a top találatok pontosságát egy második, erősebb szűréssel.</p>
 
@@ -277,7 +277,7 @@ A reranking gyakran sokat javít — de nem mindig. Egy benchmark (ARAGOG) szeri
 :::::
 ::::::
 
-:::::: section id=rag-7 heading="6. rész — Haladó minták: agentic, GraphRAG, RAPTOR, adaptive" nav="6. rész" group="Technikák"
+:::::: section id=rag-7 num="06" heading="6. rész — Haladó minták: agentic, GraphRAG, RAPTOR, adaptive" nav="Haladó minták" group="Technikák"
 
 <p class="topic-tagline">Cél: ismerd a naiv pipeline-on túli architektúrákat, és hogy mikor kellenek.</p>
 
@@ -309,7 +309,7 @@ Kezdd a legegyszerűbbel, ami működik: hybrid + rerank + jó chunkolás. Mérj
 :::::
 ::::::
 
-:::::: section id=rag-8 heading="7. rész — Kiértékelés: RAGAS és a retrieval-metrikák" nav="7. rész" group="Éles használat"
+:::::: section id=rag-8 num="07" heading="7. rész — Kiértékelés: RAGAS és a retrieval-metrikák" nav="Kiértékelés: RAGAS" group="Éles használat"
 
 <p class="topic-tagline">Cél: ne „érzésre" hangolj — mérd a RAG minőségét számokkal.</p>
 
@@ -334,7 +334,7 @@ QA-mérnökként ez otthonos lesz: állíts össze egy kis, reprezentatív **ké
 :::::
 ::::::
 
-:::::: section id=rag-9 heading="8. rész — Éles buktatók: lost in the middle, context rot" nav="8. rész" group="Éles használat"
+:::::: section id=rag-9 num="08" heading="8. rész — Éles buktatók: lost in the middle, context rot" nav="Éles buktatók" group="Éles használat"
 
 <p class="topic-tagline">Cél: ismerd a leggyakoribb, nem nyilvánvaló hibaforrásokat.</p>
 
@@ -355,7 +355,7 @@ Ehhez társul a **context rot**: ahogy a kontextus nő, a precizitás csökken, 
 Adj a modellnek 5–20 rerankelt chunkot egy 16–64K tokenes promptban, világos rendszer-utasítással (és példákkal, ha kell). A teljes context windowt csak akkor használd ki, ha a szintézis tényleg megköveteli (hosszú riport, kódbázis) — ne a retrieval helyettesítőjeként. A legfontosabb chunkokat tedd a prompt **elejére vagy végére**, ne a közepére.
 ::::::
 
-:::::: section id=rag-10 heading="9. rész — Döntési keret: melyik mintát, mikor?" nav="9. rész" group="Éles használat"
+:::::: section id=rag-10 num="09" heading="9. rész — Döntési keret: melyik mintát, mikor?" nav="Döntési keret" group="Éles használat"
 
 <p class="topic-tagline">Cél: egy gyakorlatias döntési fa a te helyzetedhez.</p>
 

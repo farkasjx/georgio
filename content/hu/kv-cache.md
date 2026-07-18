@@ -35,7 +35,7 @@ footer:
 </div>
 ::::::
 
-:::::: section id=kv-0 heading="0. rész — Miért kell KV-cache?" nav="0. rész" group="Elmélet"
+:::::: section id=kv-0 num="00" heading="0. rész — Miért kell KV-cache?" nav="Miért kell KV-cache?" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd meg, milyen pazarlást szüntet meg — és miért nélküle nem létezne valós idejű szöveggenerálás.</p>
 
@@ -58,7 +58,7 @@ A bal oldal a naiv eset (minden lépésnél mindent újraszámol — piros a fel
 :::::
 ::::::
 
-:::::: section id=kv-1 heading="1. rész — Q, K, V: honnan jön a Key és a Value?" nav="1. rész" group="Elmélet"
+:::::: section id=kv-1 num="01" heading="1. rész — Q, K, V: honnan jön a Key és a Value?" nav="Q, K, V eredete" group="Elmélet"
 
 <p class="topic-tagline">Cél: értsd, mit is tárolunk valójában — és miért pont K-t és V-t.</p>
 
@@ -87,7 +87,7 @@ Ez a Q·K összevetés fogalmilag rokon a vektor-adatbázis tutorial **hasonlós
 :::::
 ::::::
 
-:::::: section id=kv-2 heading="2. rész — Hogyan működik: prefill és decode" nav="2. rész" group="Működés"
+:::::: section id=kv-2 num="02" heading="2. rész — Hogyan működik: prefill és decode" nav="Prefill és decode" group="Működés"
 
 <p class="topic-tagline">Cél: értsd a két fázist, amiben a cache felépül és használódik.</p>
 
@@ -174,7 +174,7 @@ Adj a `add_token`-hez egy számlálót, ami összeadja, hány K,V-számítás t�
 :::::
 ::::::
 
-:::::: section id=kv-4 heading="3. rész — A memória-matek: mitől nő a cache?" nav="3. rész" group="Működés"
+:::::: section id=kv-4 num="03" heading="3. rész — A memória-matek: mitől nő a cache?" nav="Memória-matek" group="Működés"
 
 <p class="topic-tagline">Cél: tudd kiszámolni, mekkora VRAM-ot eszik a KV-cache — mert ez lesz a szűk keresztmetszet.</p>
 
@@ -206,7 +206,7 @@ Rövid kontextuson az inferencia **compute-kötött** (a számítás a szűk ker
 A **dense vs. MoE** tutorialban láttad: a MoE azért fér el hosszú kontextussal ugyanazon a hardveren, mert az expert-súlyok „szétosztódnak", és így **több VRAM marad a KV-cache-nek**. Most már látod, miért számít ez annyira — a KV-cache a hosszú kontextus valódi ára.
 ::::::
 
-:::::: section id=kv-5 heading="4. rész — PagedAttention: OS-lapozás a cache-nek" nav="4. rész" group="Optimalizáció"
+:::::: section id=kv-5 num="04" heading="4. rész — PagedAttention: OS-lapozás a cache-nek" nav="PagedAttention" group="Optimalizáció"
 
 <p class="topic-tagline">Cél: értsd, hogyan szünteti meg a memória-pazarlást a vLLM alapmegoldása.</p>
 
@@ -225,7 +225,7 @@ Ha valaha modellt szolgálsz ki a homelabodban (nem csak Ollamával futtatod, ha
 :::::
 ::::::
 
-:::::: section id=kv-6 heading="5. rész — GQA, MQA, MLA: architektúra-szintű tömörítés" nav="5. rész" group="Optimalizáció"
+:::::: section id=kv-6 num="05" heading="5. rész — GQA, MQA, MLA: architektúra-szintű tömörítés" nav="GQA, MQA, MLA" group="Optimalizáció"
 
 <p class="topic-tagline">Cél: értsd, hogyan csökkentik a modell felépítésébe építve a cache méretét.</p>
 
@@ -257,7 +257,7 @@ Az MLA az architekturális oka annak, hogy a DeepSeek V2/V3/V4 gazdaságosan kí
 :::::
 ::::::
 
-:::::: section id=kv-7 heading="6. rész — Kvantálás és prefix caching" nav="6. rész" group="Optimalizáció"
+:::::: section id=kv-7 num="06" heading="6. rész — Kvantálás és prefix caching" nav="Kvantálás és prefix caching" group="Optimalizáció"
 
 <p class="topic-tagline">Cél: két további kar — az egyik memóriát, a másik ismétlődő számítást spórol.</p>
 
@@ -286,7 +286,7 @@ A prefix caching közvetlenül jutalmazza a **stabil prompt-szerkezetet**: ha a 
 :::::
 ::::::
 
-:::::: section id=kv-8 heading="7. rész — Lokális gyakorlat: a KV-cache csapda" nav="7. rész" group="Gyakorlat"
+:::::: section id=kv-8 num="07" heading="7. rész — Lokális gyakorlat: a KV-cache csapda" nav="A KV-cache csapda" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: kösd össze az elméletet a te homelab-tapasztalatoddal.</p>
 
