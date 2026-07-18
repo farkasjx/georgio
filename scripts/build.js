@@ -43,7 +43,8 @@ const PAGE_ORDER = [
   { key: 'latency',  label: 'Latency',   labelEn: 'Latency',   dot: '#523986' },
   { key: 'hallucination',  label: 'Halucináció',   labelEn: 'Hallucination',   dot: '#a3ce40' },
 { key: 'mcp',  label: 'MCP',   labelEn: 'MCP',   dot: '#359a9c' },  
-{ key: 'quantization-quality',  label: 'Kvantálás',   labelEn: 'Quantization',   dot: '#00ff55' },  
+{ key: 'quantization-quality',  label: 'Kvantálás és miőség',   labelEn: 'Quantization and quality',   dot: '#00ff55' },  
+{ key: 'knowledge-cutoff',  label: 'Tudás limit',   labelEn: 'Knowledge cutoff',   dot: '#896671' },  
 ];
 
 
