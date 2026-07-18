@@ -42,10 +42,11 @@ const PAGE_ORDER = [
   { key: 'model-routing',  label: 'Model routing',   labelEn: 'Model routing',   dot: '#496b8f' },
   { key: 'latency',  label: 'Latency',   labelEn: 'Latency',   dot: '#523986' },
   { key: 'hallucination',  label: 'Halucináció',   labelEn: 'Hallucination',   dot: '#a3ce40' },
-{ key: 'mcp',  label: 'MCP',   labelEn: 'MCP',   dot: '#359a9c' },  
-{ key: 'quantization-quality',  label: 'Kvantálás és minőség',   labelEn: 'Quantization and quality',   dot: '#00ff55' },  
-{ key: 'knowledge-cutoff',  label: 'Tudás limit',   labelEn: 'Knowledge cutoff',   dot: '#896671' },  
-{ key: 'rlhf',  label: 'RLHF',   labelEn: 'RLHF',   dot: '#896671' },  
+  { key: 'mcp',  label: 'MCP',   labelEn: 'MCP',   dot: '#359a9c' },  
+  { key: 'quantization-quality',  label: 'Kvantálás és minőség',   labelEn: 'Quantization and quality',   dot: '#00ff55' },  
+  { key: 'knowledge-cutoff',  label: 'Tudás limit',   labelEn: 'Knowledge cutoff',   dot: '#896671' },  
+  { key: 'rlhf',  label: 'RLHF',   labelEn: 'RLHF',   dot: '#2b2426' },  
+  { key: 'model-size',  label: 'Model paraméterek',   labelEn: 'Model parameters',   dot: '#98d016' },  
 ];
 
 

@@ -172,7 +172,7 @@ Egy elterjedt döntési szabály: **ha van verifikálható kimeneted** (matek, k
 
 :::::: section id=rlhf-6 heading="Feladat — DPO kipróbálása a saját gépeden" nav="Feladat" group="Gyakorlat"
 
-<p class="topic-tagline">Cél: lásd, hogy a DPO tényleg elérhető a te hardveredhez — akár az M4 Pro Mac-eden is.</p>
+<p class="topic-tagline">Cél: lásd, hogy a DPO tényleg elérhető a te hardveredhez</p>
 
 ### Mit kell hozzá
 
