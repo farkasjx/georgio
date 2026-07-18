@@ -566,6 +566,51 @@ function closeVersionPopup() {
 }
 
 /* ─────────────────────────────────────────────
+   COOKIE / ANALYTICS CONSENT (Google Analytics, Consent Mode v2)
+   Alapból minden gtag consent 'denied' (lásd a <head>-ben). Ez a
+   kód csak azt dönti el, mutassuk-e a bannert, és ha a látogató már
+   döntött korábban, minden oldalbetöltéskor újra alkalmazza azt a
+   döntést — a Google Consent Mode API-ja NEM perzisztál automatikusan
+   lapváltás/újratöltés között, ezt nekünk kell megtennünk.
+───────────────────────────────────────────── */
+const COOKIE_CONSENT_KEY = 'aihub-cookie-consent'; // 'granted' | 'denied'
+
+function applyStoredConsent() {
+  let stored = null;
+  try { stored = localStorage.getItem(COOKIE_CONSENT_KEY); } catch (e) { stored = null; }
+  if (stored === 'granted' || stored === 'denied') {
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', { analytics_storage: stored });
+    }
+  }
+  return stored;
+}
+
+function setConsent(value) {
+  try { localStorage.setItem(COOKIE_CONSENT_KEY, value); } catch (e) {}
+  if (typeof gtag === 'function') {
+    gtag('consent', 'update', { analytics_storage: value });
+  }
+  const banner = document.getElementById('cookie-banner');
+  if (banner) banner.classList.remove('open');
+}
+
+function initCookieConsent() {
+  const decided = applyStoredConsent();
+  const banner = document.getElementById('cookie-banner');
+  if (!banner) return;
+
+  if (!decided) {
+    banner.classList.add('open');
+  }
+
+  const acceptBtn = document.getElementById('cookie-accept');
+  const declineBtn = document.getElementById('cookie-decline');
+  if (acceptBtn) acceptBtn.addEventListener('click', () => setConsent('granted'));
+  if (declineBtn) declineBtn.addEventListener('click', () => setConsent('denied'));
+}
+
+/* ─────────────────────────────────────────────
    INIT
 ───────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -579,6 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initVersionTracking();
   initTermPreviews();
+  initCookieConsent();
 
   // panel bezárása kattintásra kívülre, vagy Escape-re
   document.addEventListener('click', (e) => {

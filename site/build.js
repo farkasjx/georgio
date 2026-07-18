@@ -24,11 +24,23 @@ const CONTENT = path.join(ROOT, 'content');
 const ASSETS = path.join(ROOT, 'assets');
 const PUBLIC = path.join(ROOT, 'public');
 
+/* ── GOOGLE ANALYTICS (GA4) ──
+   Ide írd be a saját Measurement ID-det (a G- kezdetű kód, amit a GA4
+   Admin → Data Streams → [a te web stream-ed] alatt találsz).
+   A tracking csak akkor küld ténylegesen adatot, ha a látogató elfogadta
+   a cookie-bannert (lásd Consent Mode a <head>-ben és a bannert lejjebb). */
+const GA_MEASUREMENT_ID = 'G-HLRPY0MH9C';
+
 /* ── OLDALSORREND ──
    A topbar és a lapváltás sorrendje. A `key` = MD-fájl neve kiterjesztés nélkül,
-   a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként. */
+   a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként.
+
+   A sorrend ugyanazt a három klasztert követi, mint a kezdőoldali kapcsolati
+   térkép (assets/js/content-graph-data.js) — Alapok & munkafolyamat → Modell
+   & hardver → Tudás & kontextus —, hogy a dropdown és a térkép ugyanazt a
+   logikát kövesse. */
 const PAGE_ORDER = [
-    { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
+  { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
 
   /* ── Alapok & munkafolyamat ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
@@ -76,7 +88,7 @@ const LOCALES = [
       searchTitle: 'Keresés (Ctrl+K)',
       pagesLabel: 'Oldalak',
       versionPopupTitleIntro: 'Új funkció: tartalom-frissítés jelzés',
-      versionPopupBodyIntro: 'Mostantól ha egy cikk változtik az előző látogatásod óta, egy ilyen felugró ablakban jelzem, ha frissül valami.',
+      versionPopupBodyIntro: 'Ha bármilyen tartalom változott az előző látogatáso óta, felugró ablakban megjelenik a változás mely taralmat érintette.',
       versionPopupTitleUpdate: 'Frissült tartalom',
       versionPopupBodyUpdate: 'Az előző látogatásod óta az alábbi anyagok változtak:',
       versionPopupNewTag: 'új',
@@ -92,8 +104,12 @@ const LOCALES = [
       mapFilterModel: 'Modell & hardver',
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
       mapRelatedTopics: 'Kapcsolódó témák',
-      termPreviewOpenLabel: 'Teljes cikk megnyitása →',
       mapOpenButton: 'Megnyitás →',
+      termPreviewOpenLabel: 'Teljes cikk megnyitása →',
+      cookieBannerTitle: 'Sütik és látogatottság-mérés',
+      cookieBannerBody: 'Az oldal Google Analytics-et használ, hogy lássuk, mely tartalmak hasznosak — ehhez a böngésződben sütiket helyezne el. Ez csak akkor aktiválódik, ha elfogadod.',
+      cookieBannerAccept: 'Elfogadom',
+      cookieBannerDecline: 'Elutasítom',
     },
   },
   {
@@ -110,7 +126,7 @@ const LOCALES = [
       searchTitle: 'Search (Ctrl+K)',
       pagesLabel: 'Pages',
       versionPopupTitleIntro: 'New feature: content update alerts',
-      versionPopupBodyIntro: 'From now on, if an article has changed since your last visit, I\'ll let you know in a pop-up window like this whenever something is updated.',
+      versionPopupBodyIntro: 'If any content has changed since your last visit, a pop-up window will appear showing which content has been updated.',
       versionPopupTitleUpdate: 'Updated content',
       versionPopupBodyUpdate: 'The following topics have changed since your last visit:',
       versionPopupNewTag: 'new',
@@ -126,8 +142,12 @@ const LOCALES = [
       mapFilterModel: 'Model & Hardware',
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',
       mapRelatedTopics: 'Related topics',
-      termPreviewOpenLabel: 'Open full article →',
       mapOpenButton: 'Open →',
+      termPreviewOpenLabel: 'Open full article →',
+      cookieBannerTitle: 'Cookies & analytics',
+      cookieBannerBody: 'This site uses Google Analytics to see which content is useful — this would place cookies in your browser. It only activates if you accept.',
+      cookieBannerAccept: 'Accept',
+      cookieBannerDecline: 'Decline',
     },
   },
 ];
@@ -198,8 +218,41 @@ function buildHtml(pages, locale) {
       } catch (e) {}
     })();
   </script>
+
+  <!-- ════════ GOOGLE ANALYTICS (GA4) — Consent Mode v2 ════════
+       Alapból MINDEN tárolás 'denied' — a gtag.js csak cookie-mentes,
+       modellezett pingeket küld, tényleges méréshez a látogatónak el
+       kell fogadnia a bannert (lásd assets/js/app.js initCookieConsent). -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
+  <script>
+    gtag('js', new Date());
+    gtag('config', '${GA_MEASUREMENT_ID}');
+  </script>
 </head>
 <body>
+
+<!-- ════════ COOKIE / ANALYTICS CONSENT BANNER ════════ -->
+<div class="cookie-banner" id="cookie-banner">
+  <div class="cookie-banner-text">
+    <strong>${ui.cookieBannerTitle}</strong>
+    <p>${ui.cookieBannerBody}</p>
+  </div>
+  <div class="cookie-banner-actions">
+    <button class="map-btn" id="cookie-decline">${ui.cookieBannerDecline}</button>
+    <button class="map-btn cookie-accept" id="cookie-accept">${ui.cookieBannerAccept}</button>
+  </div>
+</div>
 
 <!-- ════════ TOP NAVIGATION ════════ -->
 <nav class="topbar">
