@@ -5,7 +5,28 @@ sidebar_groups:
   - Témák
   - Technikák
   - Kiegészítők
+hero:
+  eyebrow: "Prompt & Context Engineering · Összefoglaló 2026"
+  title: "Ahogy egy modellel <em>tényleg</em> kommunikálni érdemes"
+  lead: "A prompt nem szöveg, hanem interfész. Ez az oldal négy területet jár körbe — a context window kezelésétől a támadási vektorokig —, gyakorlati példákkal, magyar nyelvi környezetben."
+  stats:
+    - { val: "5", lbl: "Témakör" }
+    - { val: "12", lbl: "Technika" }
+    - { val: "~25", lbl: "Példa" }
+footer:
+  left: "AI Hub · Prompt Engineering"
+  right: "Összeállítva 2026 júniusában"
 ---
+
+:::::: raw
+<div class="toc-grid" style="margin-top:24px">
+  <a class="toc-card" href="#p-context"><div class="tc-num">&lt;01&gt;</div><div class="tc-name">Context window engineering</div><div class="tc-desc">Mi fér be, mi kerüljön hova, mit hagyj ki.</div></a>
+  <a class="toc-card" href="#p-basics"><div class="tc-num">&lt;02&gt;</div><div class="tc-name">Prompt engineering alapok</div><div class="tc-desc">Egy jó prompt 5 építőeleme.</div></a>
+  <a class="toc-card" href="#p-techniques"><div class="tc-num">&lt;03&gt;</div><div class="tc-name">Prompt technikák</div><div class="tc-desc">Zero-shot, CoT, ReAct, caveman és társai.</div></a>
+  <a class="toc-card" href="#p-injection"><div class="tc-num">&lt;04&gt;</div><div class="tc-name">Prompt injection</div><div class="tc-desc">Támadások és védekezés.</div></a>
+  <a class="toc-card" href="#p-extras"><div class="tc-num">&lt;05&gt;</div><div class="tc-name">Kiegészítések</div><div class="tc-desc">JSON output, tool use, RAG, eval, költségek.</div></a>
+</div>
+::::::
 
 :::::: section id=p-context num=01 nav="Context window" group="Témák"
 ## Context window <em>engineering</em>
