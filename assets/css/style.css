@@ -1360,3 +1360,58 @@ section[id], .tech[id] {
 }
 .popup-close svg { width: 16px; height: 16px; }
 .popup-close:hover { background: var(--bg-4); color: var(--text); }
+
+/* ═══════════════════════════════════════════════
+   TERM PREVIEW — hover/tap kártya az auto-linkelt fogalmaknál
+   ═══════════════════════════════════════════════ */
+.term-preview {
+  position: absolute;
+  z-index: 500;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  padding: 16px 18px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity .15s, transform .15s, visibility .15s;
+  pointer-events: none;
+}
+
+.term-preview.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.term-preview-title {
+  font-size: 14px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px; line-height: 1.3;
+}
+
+.term-preview-desc {
+  font-size: 12.5px; color: var(--text-muted);
+  line-height: 1.55; margin-bottom: 12px;
+}
+
+.term-preview-open {
+  display: inline-flex; align-items: center;
+  background: none; border: none; padding: 0;
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: var(--amber); cursor: pointer; letter-spacing: 0.03em;
+}
+.term-preview-open:hover { text-decoration: underline; }
+
+/* mobilon fix, bottom-sheet jellegű megjelenés a linkhez való
+   pozícionálás helyett — így nem lóghat ki a képernyőről */
+.term-preview.term-preview-sheet {
+  position: fixed;
+  left: 16px; right: 16px; bottom: 16px; top: auto;
+  width: auto; max-width: none;
+  transform: translateY(12px);
+}
+.term-preview.term-preview-sheet.open { transform: translateY(0); }

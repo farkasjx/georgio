@@ -98,6 +98,7 @@ const LOCALES = [
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
       mapRelatedTopics: 'Kapcsolódó témák',
       mapOpenButton: 'Megnyitás a tartalomban →',
+      termPreviewOpenLabel: 'Teljes cikk megnyitása →',
     },
   },
   {
@@ -131,6 +132,7 @@ const LOCALES = [
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',
       mapRelatedTopics: 'Related topics',
       mapOpenButton: 'Open in content →',
+      termPreviewOpenLabel: 'Open full article →',
     },
   },
 ];

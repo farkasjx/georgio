@@ -78,6 +78,134 @@ function goToSection(page, id) {
   }, 60);
 }
 
+/* ─────────────────────────────────────────────
+   FOGALOM-ELŐNÉZET — hover (desktop) / tap (mobil) kártya
+   az automatikusan linkelt kifejezéseknél (.auto-link).
+
+   Cél: ne kelljen azonnal elnavigálni egy másik cikkre csak azért,
+   mert egy előfeltétel-fogalom felbukkan a szövegben — a kártya a
+   content-graph-data.js-ben már meglévő rövid leírást (short) mutatja,
+   és csak explicit kattintásra navigál tovább a teljes cikkhez.
+───────────────────────────────────────────── */
+let termPreviewEl = null;
+let termPreviewShowTimer = null;
+let termPreviewHideTimer = null;
+
+function ensureTermPreview() {
+  if (termPreviewEl) return termPreviewEl;
+  const el = document.createElement('div');
+  el.className = 'term-preview';
+  el.innerHTML = `
+    <div class="term-preview-title"></div>
+    <div class="term-preview-desc"></div>
+    <button type="button" class="term-preview-open"></button>
+  `;
+  document.body.appendChild(el);
+  // ha a kártyára visz az egér (pl. hogy megnyomd a gombot), ne tűnjön el
+  el.addEventListener('mouseenter', () => clearTimeout(termPreviewHideTimer));
+  el.addEventListener('mouseleave', scheduleHideTermPreview);
+  termPreviewEl = el;
+  return el;
+}
+
+function positionTermPreview(el, link) {
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  el.classList.toggle('term-preview-sheet', isMobile);
+  if (isMobile) {
+    el.style.left = '';
+    el.style.top = '';
+    return;
+  }
+
+  const margin = 10;
+  const rect = link.getBoundingClientRect();
+  el.style.visibility = 'hidden';
+  el.style.left = (rect.left + window.scrollX) + 'px';
+  el.style.top = (rect.bottom + margin + window.scrollY) + 'px';
+
+  // ha kilógna a viewportból, igazítsuk vissza
+  const elRect = el.getBoundingClientRect();
+  let left = rect.left + window.scrollX;
+  let top = rect.bottom + margin + window.scrollY;
+  if (elRect.right > window.innerWidth - 12) {
+    left = window.innerWidth - elRect.width - 12 + window.scrollX;
+  }
+  if (elRect.bottom > window.innerHeight - 12) {
+    top = rect.top + window.scrollY - elRect.height - margin;
+  }
+  el.style.left = Math.max(12, left) + 'px';
+  el.style.top = top + 'px';
+  el.style.visibility = '';
+}
+
+function showTermPreview(link) {
+  const pageKey = link.dataset.gotoPage;
+  const sectionId = link.dataset.gotoId;
+  if (!pageKey || typeof graphNodes === 'undefined') return;
+  const node = graphNodes.find(n => n.id === pageKey);
+  if (!node) return; // nincs gráf-adat ehhez a témához, nem mutatunk kártyát
+
+  const el = ensureTermPreview();
+  el.querySelector('.term-preview-title').textContent = node.title;
+  el.querySelector('.term-preview-desc').textContent = node.short;
+  const openBtn = el.querySelector('.term-preview-open');
+  const i18n = window.__I18N__ || {};
+  openBtn.textContent = i18n.termPreviewOpenLabel || 'Open →';
+  openBtn.onclick = () => {
+    hideTermPreview(true);
+    goToSection(pageKey, sectionId);
+  };
+
+  positionTermPreview(el, link);
+  el.classList.add('open');
+}
+
+function hideTermPreview(immediate) {
+  if (!termPreviewEl) return;
+  clearTimeout(termPreviewHideTimer);
+  if (immediate) {
+    termPreviewEl.classList.remove('open');
+  } else {
+    termPreviewHideTimer = setTimeout(() => termPreviewEl.classList.remove('open'), 200);
+  }
+}
+function scheduleHideTermPreview() { hideTermPreview(false); }
+
+function initTermPreviews() {
+  // desktop: hover — rövid késleltetéssel, hogy véletlen átmozgásra ne ugorjon fel
+  document.addEventListener('mouseover', (e) => {
+    const link = e.target.closest('.auto-link');
+    if (!link) return;
+    clearTimeout(termPreviewHideTimer);
+    clearTimeout(termPreviewShowTimer);
+    termPreviewShowTimer = setTimeout(() => showTermPreview(link), 250);
+  });
+  document.addEventListener('mouseout', (e) => {
+    const link = e.target.closest('.auto-link');
+    if (!link) return;
+    clearTimeout(termPreviewShowTimer);
+    scheduleHideTermPreview();
+  });
+
+  // mobil / kattintás: sosem navigál azonnal, mindig előbb a kártyát mutatja
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('.auto-link');
+    if (link) {
+      e.preventDefault();
+      clearTimeout(termPreviewShowTimer);
+      showTermPreview(link);
+      return;
+    }
+    if (termPreviewEl && termPreviewEl.classList.contains('open') && !termPreviewEl.contains(e.target)) {
+      hideTermPreview(true);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideTermPreview(true);
+  });
+}
+
 
 /* ── SIDEBAR — a build által generált adatból (window.__SIDEBAR__) ── */
 function buildSidebar(id) {
@@ -450,6 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initVersionTracking();
+  initTermPreviews();
 
   // panel bezárása kattintásra kívülre, vagy Escape-re
   document.addEventListener('click', (e) => {

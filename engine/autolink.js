@@ -62,7 +62,7 @@ function tryLinkInSection(sectionHtml, entry, currentSectionId) {
         const before = tok.slice(0, m.index);
         const matched = m[1];
         const after = tok.slice(m.index + matched.length);
-        const linkHtml = `<a href="#${entry.id}" onclick="goToSection('${entry.page}','${entry.id}');return false;" class="auto-link">${matched}</a>`;
+        const linkHtml = `<a href="#${entry.id}" data-goto-page="${entry.page}" data-goto-id="${entry.id}" class="auto-link">${matched}</a>`;
         tokens[i] = before + linkHtml + after;
         return { html: tokens.join(''), linked: true };
       }

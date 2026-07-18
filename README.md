@@ -203,6 +203,8 @@ Ha a kifejezésnek több írásmódja is van, add meg `variants` tömbként:
 "prompt injection": { "page": "security", "id": "sec-jailbreak", "variants": ["prompt injectiont"] }
 ```
 
+**Előnézeti kártya (hover/tap).** Az így linkelt kifejezések nem navigálnak azonnal — hover (desktop) vagy tap (mobil) esetén egy kis kártya jelenik meg a céltéma rövid leírásával (ugyanaz a `short` szöveg, amit a kezdőoldali kapcsolati térkép is használ, lásd `assets/js/content-graph-data.js`), és csak a kártyán belüli "Teljes cikk megnyitása →" gombra kattintva navigál el ténylegesen a másik oldal adott szekciójához. Ez azért van, hogy egy előfeltétel-fogalom gyors felidézéséhez ne kelljen elhagyni az éppen olvasott cikket. A logika az `assets/js/app.js`-ben él (`initTermPreviews`), az auto-linkek pedig `data-goto-page`/`data-goto-id` attribútumokat kapnak `onclick` helyett (lásd `engine/autolink.js`).
+
 ### Nyelvesítés (HU / EN)
 
 A tartalom `content/hu/` és `content/en/` almappákban él. A build **mindkét nyelvet lebuildeli**: a magyar a `public/index.html`-be (gyökér), az angol a `public/en/index.html`-be. Az `assets/` (CSS, JS) közös, nem duplikálódik.
