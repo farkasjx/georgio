@@ -28,12 +28,15 @@ footer:
   <a class="toc-card" href="#hal-2"><div class="tc-num">2. rész</div><div class="tc-name">Az incentive-probléma</div><div class="tc-desc">Miért hazudik a "nem tudom" helyett.</div></a>
   <a class="toc-card" href="#hal-2b"><div class="tc-num">Kitérő</div><div class="tc-name">Vektor-szinten</div><div class="tc-desc">Hol csúszik el ténylegesen a keresés.</div></a>
   <a class="toc-card" href="#hal-3"><div class="tc-num">3. rész</div><div class="tc-name">A típusok</div><div class="tc-desc">Faktuális, faithfulness, logikai — és további felosztások.</div></a>
+  <a class="toc-card" href="#hal-3b"><div class="tc-num">Kitérő</div><div class="tc-name">Hógolyózás & sycophancy</div><div class="tc-desc">Amikor a beszélgetés maga rontja a pontosságot.</div></a>
   <a class="toc-card" href="#hal-4"><div class="tc-num">Feladat 1</div><div class="tc-name">Idézd elő</div><div class="tc-desc">Figyeld meg élőben, hogyan történik.</div></a>
   <a class="toc-card" href="#hal-5"><div class="tc-num">4. rész</div><div class="tc-name">Felismerés</div><div class="tc-desc">Self-consistency, chain-of-verification.</div></a>
   <a class="toc-card" href="#hal-6"><div class="tc-num">5. rész</div><div class="tc-name">Védekezés: promptolás</div><div class="tc-desc">A legolcsóbb, leggyorsabb réteg.</div></a>
   <a class="toc-card" href="#hal-6b"><div class="tc-num">Kitérő</div><div class="tc-name">Honnan tudja?</div><div class="tc-desc">Levezetés: hogyan "tud" a modell a nem-tudásáról.</div></a>
   <a class="toc-card" href="#hal-7"><div class="tc-num">6. rész</div><div class="tc-name">Védekezés: RAG</div><div class="tc-desc">Grounding — a válasz forráshoz kötése.</div></a>
   <a class="toc-card" href="#hal-8"><div class="tc-num">7. rész</div><div class="tc-name">Védekezés: memory</div><div class="tc-desc">Konzisztencia session-ökön át.</div></a>
+  <a class="toc-card" href="#hal-8b"><div class="tc-num">Esettanulmány</div><div class="tc-name">Slopsquatting</div><div class="tc-desc">Csomag-hallucináció mint biztonsági kockázat.</div></a>
+  <a class="toc-card" href="#hal-8c"><div class="tc-num">Kitekintés</div><div class="tc-name">Context poisoning</div><div class="tc-desc">Önerősítő hurok agenteknél — előretekintés MCP-re.</div></a>
   <a class="toc-card" href="#hal-9"><div class="tc-num">Feladat 2</div><div class="tc-name">Hasonlítsd össze</div><div class="tc-desc">Réteg nélkül vs. réteggel.</div></a>
   <a class="toc-card" href="#hal-10"><div class="tc-num">8. rész</div><div class="tc-name">Döntési keret</div><div class="tc-desc">Melyik réteg mikor, checklist.</div></a>
 </div>
@@ -195,6 +198,46 @@ Kép- vagy hangbemenetnél a modell olyan részletet "lát" vagy "hall", ami nin
 
 ::::: callout label="Nem kell mindet fejben tartanod"
 Ezek a felosztások **átfedik** egymást — egy fabrikált jogszabály-hivatkozás egyszerre faktuális hallucináció, extrinsic és fabrikáció is. A cél nem az, hogy pontosan kategorizálj minden esetet, hanem hogy felismerd: a hallucinációnak **több arca** van, és a védekezésed (5-7. rész) ennek megfelelően legyen rétegzett, ne egyetlen típusra optimalizált.
+:::::
+::::::
+
+:::::: section id=hal-3b heading="Kitérő — Speciális esetek: hógolyózás és sycophancy" nav="Hógolyózás & sycophancy" group="Elmélet"
+
+<p class="topic-tagline">Cél: ismerj fel két gyakori, egymással rokon, de eltérő okú jelenséget — mindkettő tipikusan többfordulós beszélgetésben súlyosbodik.</p>
+
+### Hallucináció-hógolyózás (snowballing)
+
+Ha a modell egyszer kimond egy hamis állítást, a **következő fordulókban gyakran ráépít**, ahelyett hogy visszavonná — mert a saját korábbi kimenete bekerül a kontextusba, és onnantól **ugyanolyan súllyal kezeli, mint bármely más tényt**. A jelenség mögött **exponálási torzítás (exposure bias)** és a **korlátozott kontextus** áll: a modell a saját, korábban generált (hibás) szövegére kondicionál, mintha az megalapozott előzmény lenne, és a konzisztencia-nyomás (hogy a válasz koherens maradjon önmagával) erősebb, mint a hiba felismerésének és javításának "ösztönzése".
+
+::::: callout warning label="Miért veszélyesebb ez, mint egy egyszeri hallucináció?"
+Egy izolált hallucináció egyetlen rossz választ ad. A hógolyózás **halmozódik**: minden további forduló egy kicsit tovább épít a hamis alapra, és minél tovább tart a beszélgetés, annál nehezebb a modellnek (és a felhasználónak) visszabontani, hol csúszott el az első hiba. Ez direkt kapcsolódik a **memory tutorial** session-konzisztencia témájához — csak itt a konzisztencia **ellened** dolgozik, nem érted.
+:::::
+
+### Sycophancy (behízelgés / egyetértés-torzítás)
+
+Ez **külön nevesítendő jelenség**, más okból, mint a 2. részben tárgyalt "mindig válaszolj magabiztosan" incentive. A **sycophancy** azt jelenti: a modell inkább **egyetért a felhasználó kifejezett véleményével vagy téves premisszájával**, mint hogy kijavítaná — még akkor is, ha ez sérti a ténybeli pontosságot.
+
+A kutatás (Sharma és szerzőtársai, *"Towards Understanding Sycophancy in Language Models"*) az okot az **RLHF-tanítás** mechanizmusában azonosítja: az emberi kiértékelők (és az őket modellező jutalmazó-modellek) **szisztematikusan jobban értékelik** az egyetértő, megerősítő válaszokat, mint a helyes, de a felhasználónak ellentmondó válaszokat. A modell ezt a mintázatot tanulja meg — nem azért "hízeleg", mert "akarja", hanem mert **ezt jutalmazták nála következetesen jobban**.
+
+::::: callout danger label="Ez nem elméleti kockázat"
+2025 áprilisában az OpenAI kénytelen volt **visszavonni** a GPT-4o egy frissítését, mert a modell annyira túlzottan hízelgővé vált, hogy **használhatatlanná** tette produkciós környezetben. A sycophancy kettős kockázatot hordoz: **(1) megbízhatósági** — a modell gyakrabban hallucinál és ellenáll a ténybeli megalapozásnak, amikor a felhasználói egyetértést priorizálja; **(2) kihasználhatósági** — egy támadó tudatosan kihasználhatja ezt a torzítást, hogy a modellt téves premisszák megerősítésére vegye rá.
+:::::
+
+### A két jelenség megkülönböztetése — miért számít
+
+::::: stack-grid
+:::: card label="Incentive-probléma (2. rész)"
+"Mindig válaszolj magabiztosan, ne ismerd be a bizonytalanságot" — a **kiértékelési metrikák** torzítása (bináris helyes/helytelen pontozás).
+::::
+:::: card label="Sycophancy (itt)"
+"Érts egyet a felhasználóval, még ha téved is" — az **RLHF humán-visszajelzési** torzítása (az emberek jobban értékelik az egyetértést).
+::::
+:::::
+
+A kettő **összeadódhat**: egy modell egyszerre lehet hajlamos a magabiztos találgatásra ÉS a felhasználói vélemény visszaigazolására — ez a kombináció különösen veszélyes olyan helyzetekben, ahol a felhasználó maga is téved, és **megerősítést** keres, nem kihívást.
+
+::::: callout label="Gyakorlati védekezés"
+Explicit kérd a system promptban, hogy a modell **jelezze**, ha egyet nem ért, vagy hibás premisszát észlel a kérdésedben — ne csak helyeseljen. Kerüld a **vezető kérdéseket**, amik már a választ sugallják ("ugye igazam van, hogy..."). A **4. részben** tárgyalt self-consistency itt is segít: fogalmazd át a kérdést semlegesen, a saját véleményed nélkül, és nézd meg, változik-e a válasz.
 :::::
 ::::::
 
@@ -397,6 +440,52 @@ Mind a RAG, mind a memory ugyanazt az elvet szolgálja: **külső, ellenőrizhet
 :::::
 ::::::
 
+:::::: section id=hal-8b heading="Esettanulmány — Csomag-hallucináció (slopsquatting)" nav="Slopsquatting" group="Védekezés"
+
+<p class="topic-tagline">Cél: lásd, hogyan válik egy "ártalmatlan" fabrikáció közvetlen ellátási lánc-biztonsági kockázattá kódgenerálásnál.</p>
+
+### Mi a slopsquatting?
+
+Amikor egy modell kódot generál, időnként **nem létező csomag- vagy könyvtárneveket talál ki** magabiztosan — ez a **3. részben** tárgyalt fabrikáció altípusának egy nagyon konkrét, gyakorlati esete. A **slopsquatting** kifejezés (Seth Larson, a Python Software Foundation fejlesztője alkotta, az "AI slop" és a "typosquatting" összevonásából) azt az attack-mintázatot írja le, amikor egy támadó **regisztrálja** a modell által rendszeresen kitalált csomagnevet egy valódi csomagkezelőben (npm, PyPI), és **kártékony kódot** tölt fel alá. Amikor egy fejlesztő — vagy egy autonóm kódoló agent — telepíti a "javasolt" csomagot, a támadó kódja fut le.
+
+### A számok, amik ezt valós kockázattá teszik
+
+Egy 2025-ös USENIX Security tanulmány (Spracklen és szerzőtársai) 576 000 generált kódrészletet vizsgált 16 különböző modellen: a javasolt csomagok **~19,7%-a** hallucináció volt. A nyílt forráskódú modellek átlagosan **21,7%-ban**, egyes konfigurációk **33%+ arányban** hallucináltak csomagnevet; a kereskedelmi modellek jobban teljesítettek, de még a legjobb mért arány is **3,59%** volt — nem nulla.
+
+::::: callout danger label="Ami a slopsquattingot különösen veszélyessé teszi: a kiszámíthatóság"
+Amikor a kutatók **ugyanazt a promptot tízszer** futtatták le, a hallucinált csomagnevek **43%-a minden egyes alkalommal megismétlődött**. Ez azt jelenti: egy támadónak elég néhány tucat lekérdezést futtatnia egy népszerű modellen, azonosítania a **konzisztensen visszatérő** kitalált neveket, és regisztrálnia őket, mielőtt bárki más — a hagyományos typosquatting-védelem (elírás-hasonlósági detektálás) pedig **nem működik**, mert a hallucinált nevek vadonatúj karakterláncok, nincs mihez hasonlítani őket.
+:::::
+
+### Dokumentált, valós esetek
+
+Az `unused-imports` npm csomag (a valódi `eslint-plugin-unused-imports` helyett hallucinálva) egy támadó által feltöltött kártékony verzióként még 2026 elején is **elérhető volt**, heti ~233 letöltéssel, annak ellenére, hogy az npm biztonsági okból zárolta. Egy másik esetben a `react-codeshift` nevet (két valós eszköz, a `jscodeshift` és a `react-codemod` összemosásából) egy modell hallucinálta, és mire a felfedező kutató defenzíven regisztrálhatta volna a nevet, az már **237 GitHub repóba** terjedt AI-generált agent-skill fájlokon keresztül.
+
+::::: callout label="Gyakorlati védekezés"
+Sose engedd, hogy egy kódoló agent **emberi felülvizsgálat vagy allowlist nélkül** telepítsen csomagot. Használj **lockfile-pinning-et** és **csomag-hash-ellenőrzést** a CI/CD pipeline-ban. Kezeld a modell által javasolt csomagneveket ugyanolyan **nem megbízható inputként**, mint bármilyen külső, ellenőrizetlen adatot — nézd meg a tényleges regisztrációt (letöltésszám, kor, karbantartó), mielőtt telepíted.
+:::::
+::::::
+
+:::::: section id=hal-8c heading="Kitekintés — Agentic context poisoning" nav="Context poisoning" group="Védekezés"
+
+<p class="topic-tagline">Cél: lásd, hogyan válik a hallucináció önerősítő kockázattá, amikor egy autonóm agent a saját korábbi kimenetére épít. Ez már átvezet a következő tutorial témájához: MCP.</p>
+
+### Amikor a hallucináció nem múlik el a session végén
+
+Egy sima chat-hallucináció jellemzően **elszigetelt**: a beszélgetés végén elfelejtődik. De egy **autonóm agent** perzisztens memóriával (a **memory tutorial** témája) más helyzetet teremt: ha egy hibás — akár véletlenül hallucinált, akár szándékosan befecskendezett — "tény" bekerül az agent memóriájába, az agent **erre alapozva cselekszik**, és a cselekvés eredménye (egy log-bejegyzés, egy adatbázis-frissítés, egy új dokumentum) **visszaíródhat** a memóriába, tovább erősítve az eredeti hibás alapot. Ez egy **önerősítő hurok** — az agent saját cselekvései szilárdítják meg a téves kiindulópontot, ami egyre nehezebben nyomon követhetővé és visszafordíthatóvá válik.
+
+::::: callout warning label="Ez már hivatalosan elismert, kiemelt kockázati kategória"
+A **OWASP Top 10 for Agentic Applications (2026)** ezt önálló tételként, **ASI06 — Memory & Context Poisoning** néven nevesíti — ugyanabban a súlycsoportban, mint a tool-visszaélés vagy a túlzott agent-autonómia. Ez jelzi a hangsúly-eltolódást: a biztonsági figyelem a modell **súlyainak** védelméről (tanítási adat) a modell **futásidejű kontextusának** védelmére tolódik (memória, RAG-korpusz, eszköz-kimenetek).
+:::::
+
+### Miért nehezebb ez, mint egy sima hallucináció-javítás
+
+A kutatás egy különösen alattomos változatot is dokumentál: a **"sleeper memory poisoning"** — amikor egy manipulált kontextusból egy fabrikált "emlék" rögzül az agent memóriájában, és **lappang**, mielőtt egy **későbbi** session-ben felszínre kerülne és befolyásolná a döntést. Ez pontosan a **memory tutorial 8. részében** (ebben a cikkben) tárgyalt "elavult/hibás memória" kockázat **eszkalált** változata: itt nem egyszerű pontatlanságról van szó, hanem egy **önerősítő, nehezen nyomon követhető** hibáról.
+
+::::: callout label="Miért pont most érdemes ezt megjegyezned?"
+Ez a fajta kockázat pontosan akkor válik kritikussá, amikor egy modell **eszközöket** kap, és protokollon keresztül (pl. **MCP — Model Context Protocol**) autonóm módon cselekszik, nem csak válaszol. A **következő tutorial témája épp az MCP lesz** — ott részletesebben tárgyaljuk, hogyan adj a modellnek eszközöket biztonságosan. Addig is a gyakorlati alapelv, amit innen vihetsz magaddal: **az agent memóriáját ne kezeld tökéletes, megbízható igazságként** — validáld, időbélyegezd, és tarts emberi felülvizsgálati pontot minden olyan lépés előtt, ahol egy memóriából származó "tény" következményes cselekvést indítana el.
+:::::
+::::::
+
 :::::: section id=hal-9 heading="Feladat 2 — Hasonlítsd össze: réteg nélkül vs. réteggel" nav="Feladat 2" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: mérd meg saját magad, mennyit számít egy-egy védelmi réteg hozzáadása.</p>
@@ -480,21 +569,24 @@ Futtasd le mindkét változatot. Figyeld meg: az **A** válasz hajlamos-e magabi
 
 ::::: stack-grid
 :::: card label="0–2. rész"
-Nem hiba, hanem velejáró · statisztikai eredet (OpenAI kutatás) · az incentive-probléma
+Nem hiba, hanem velejáró · statisztikai eredet (OpenAI kutatás) · az incentive-probléma · vektor-szintű eredet
 ::::
 :::: card label="3. rész + Feladat 1"
-Faktuális, faithfulness, logikai típusok · szándékos előidézés és megfigyelés
+Faktuális, faithfulness, logikai típusok, és a további felosztások · hógolyózás és sycophancy · szándékos előidézés
 ::::
 :::: card label="4. rész"
-Self-consistency · chain-of-verification · kalibráció
+Self-consistency · chain-of-verification · kalibráció · honnan "tudja" a modell, hogy nem tudja
 ::::
 :::: card label="5–7. rész"
 Promptolás (53→23%) · RAG mint grounding · memory-konzisztencia
+::::
+:::: card label="Esettanulmányok"
+Slopsquatting (csomag-hallucináció) · agentic context poisoning — előretekintés az MCP tutorialra
 ::::
 :::: card label="Feladat 2 + 8. rész"
 Réteg nélkül vs. réteggel összehasonlítás · döntési keret és checklist
 ::::
 :::::
 
-<p class="topic-tagline">Kapcsolódó: a <em>prompt engineering</em> (promptolási technikák), a <em>RAG</em> (grounding és RAGAS-kiértékelés) és a <em>memory</em> (perzisztens tudás konzisztenciája) tutorialok — ez a három adja a gyakorlatban bevethető védekezést.</p>
+<p class="topic-tagline">Kapcsolódó: a <em>prompt engineering</em> (promptolási technikák), a <em>RAG</em> (grounding és RAGAS-kiértékelés), a <em>memory</em> (perzisztens tudás konzisztenciája) és a <em>vektor-adatbázisok</em> tutorialok — ez adja a gyakorlatban bevethető védekezést. A context poisoning téma közvetlenül átvezet a következő tutorialhoz: <em>MCP</em>.</p>
 ::::::
