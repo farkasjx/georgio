@@ -151,12 +151,12 @@ pip install fastmcp
 ```python
 from fastmcp import FastMCP
 
-mcp = FastMCP("nevogate-demo")
+mcp = FastMCP("acme-demo")
 
 # --- 1. Tool: amit a modell hívhat ---
 @mcp.tool()
 def get_transaction_status(transaction_id: str) -> dict:
-    """Lekérdezi egy SimplePay tranzakció aktuális státuszát."""
+    """Lekérdezi egy tranzakció aktuális státuszát."""
     # a valóságban itt hívnád a tényleges API-t
     return {"transaction_id": transaction_id, "status": "PENDING"}
 
@@ -185,7 +185,7 @@ import asyncio
 from fastmcp import Client
 
 async def main():
-    async with Client("nevogate-demo") as client:
+    async with Client("acme-demo") as client:
         tools = await client.list_tools()
         print("Elérhető tool-ok:", [t.name for t in tools])
 
@@ -222,8 +222,8 @@ async def post_deploy_notification(channel: str, message: str):
 
 # használat: egy CI/CD pipeline végén
 await post_deploy_notification(
-    "#nevogate-deploys",
-    "✅ A SimplePay integráció v2.3 sikeresen élesítve."
+    "#acme-deploys",
+    "✅ A Acme integráció v2.3 sikeresen élesítve."
 )
 ```
 
@@ -237,7 +237,7 @@ const transport = new StdioClientTransport({
   command: "npx",
   args: ["-y", "@modelcontextprotocol/server-teams"],
 });
-const client = new Client({ name: "nevogate-agent", version: "1.0.0" });
+const client = new Client({ name: "acme-agent", version: "1.0.0" });
 await client.connect(transport);
 
 const tools = await client.listTools();
@@ -342,7 +342,7 @@ llm = anthropic.Anthropic()
 async def planner_agent(jira_client):
     # 1. Taskok lehívása Jira MCP-n keresztül
     tasks = await jira_client.call_tool("jira_search", {
-        "jql": "project = NEVOGATE AND status = 'To Do'"
+        "jql": "project = ACME AND status = 'To Do'"
     })
     # 2. A modell szétosztja a taskokat prioritás és komplexitás szerint
     resp = llm.messages.create(

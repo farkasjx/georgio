@@ -26,39 +26,28 @@ const PUBLIC = path.join(ROOT, 'public');
 
 /* ── OLDALSORREND ──
    A topbar és a lapváltás sorrendje. A `key` = MD-fájl neve kiterjesztés nélkül,
-   a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként.
-
-   A sorrend ugyanazt a három klasztert követi, mint a kezdőoldali kapcsolati
-   térkép (assets/js/content-graph-data.js) — Alapok & munkafolyamat → Modell
-   & hardver → Tudás & kontextus —, hogy a dropdown és a térkép ugyanazt a
-   logikát kövesse. */
+   a `dot` = a navigációs pötty színe. `label`/`labelEn` a topbar felirat nyelvenként. */
 const PAGE_ORDER = [
-  { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
-
-  /* ── Alapok & munkafolyamat ── */
-  { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
-  { key: 'prompting',             label: 'Prompt Engineering',      labelEn: 'Prompt Engineering',       dot: '#e8a84a' },
-  { key: 'aiconfig',              label: 'AI Config fájlok',        labelEn: 'AI Config Files',          dot: '#f472b6' },
-  { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
-  { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
-
-  /* ── Modell & hardver ── */
-  { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
-  { key: 'hardware',              label: 'Hardware',                labelEn: 'Hardware',                 dot: '#f0edeb' },
-  { key: 'model-size',            label: 'Model paraméterek',       labelEn: 'Model parameters',         dot: '#98d016' },
-  { key: 'quantization-quality',  label: 'Kvantálás és minőség',    labelEn: 'Quantization and quality', dot: '#00ff55' },
-  { key: 'dense-moe',             label: 'Dense vs MoE modellek',   labelEn: 'Dense vs Moe modells',      dot: '#6160a3' },
-  { key: 'kv-cache',              label: 'KV cache',                labelEn: 'KV cache',                 dot: '#432604' },
-  { key: 'latency',               label: 'Latency',                 labelEn: 'Latency',                  dot: '#523986' },
-  { key: 'model-routing',         label: 'Model routing',           labelEn: 'Model routing',            dot: '#496b8f' },
-
-  /* ── Tudás & kontextus ── */
-  { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
-  { key: 'vectordb',              label: 'Vector adatbázisok',      labelEn: 'Vector databases',         dot: '#17cb11' },
-  { key: 'memory',                label: 'Memory',                 labelEn: 'Memory',                   dot: '#e1c9cb' },
-  { key: 'hallucination',         label: 'Halucináció',             labelEn: 'Hallucination',            dot: '#a3ce40' },
-  { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
-  { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },
+  { key: 'map',       label: 'Interaktív térkép',     labelEn: 'Interactive Map',     dot: '#7dd3fc', special: 'map' },
+  { key: 'tools',     label: 'AI Eszközök',           labelEn: 'AI Tools',            dot: '#4ecb8d' },
+  { key: 'prompting', label: 'Prompt Engineering',    labelEn: 'Prompt Engineering',  dot: '#e8a84a' },
+  { key: 'ollama',    label: 'Lokális LLM',           labelEn: 'Local LLM',           dot: '#4ec9c9' },
+  { key: 'aiconfig',  label: 'AI Config fájlok',      labelEn: 'AI Config Files',     dot: '#f472b6' },
+  { key: 'security',  label: 'Biztonság & OWASP',     labelEn: 'Security & OWASP',    dot: '#e06c75' },
+  { key: 'memory',    label: 'Memory',                labelEn: 'Memory',              dot: '#e1c9cb' },
+  { key: 'vectordb',  label: 'Vector adatbázisok',    labelEn: 'Vector databases',    dot: '#17cb11' },
+  { key: 'dense-moe', label: 'Dense vs MoE modellek', labelEn: 'Dense vs Moe modells',  dot: '#6160a3' },
+  { key: 'rag',       label: 'RAG',                   labelEn: 'RAG',                 dot: '#1613d4' },
+  { key: 'kv-cache',  label: 'KV cache',              labelEn: 'KV cache',            dot: '#432604' },
+  { key: 'hardware',  label: 'Hardware',              labelEn: 'Hardware',            dot: '#f0edeb' },
+  { key: 'model-routing',   label: 'Model routing',   labelEn: 'Model routing',       dot: '#496b8f' },
+  { key: 'latency',   label: 'Latency',               labelEn: 'Latency',             dot: '#523986' },
+  { key: 'hallucination',   label: 'Halucináció',   labelEn: 'Hallucination',         dot: '#a3ce40' },
+  { key: 'mcp',       label: 'MCP',               labelEn: 'MCP',                                 dot: '#359a9c' },
+  { key: 'quantization-quality',  label: 'Kvantálás és minőség',   labelEn: 'Quantization and quality',   dot: '#00ff55' },
+  { key: 'knowledge-cutoff', label: 'Tudás limit',   labelEn: 'Knowledge cutoff',   dot: '#896671' },
+  { key: 'rlhf',      label: 'RLHF',   labelEn: 'RLHF',   dot: '#2b2426' },
+  { key: 'model-size',label: 'Model paraméterek',   labelEn: 'Model parameters',   dot: '#98d016' },
 ];
 
 /* ── NYELVEK ──
@@ -81,7 +70,7 @@ const LOCALES = [
       searchTitle: 'Keresés (Ctrl+K)',
       pagesLabel: 'Oldalak',
       versionPopupTitleIntro: 'Új funkció: tartalom-frissítés jelzés',
-      versionPopupBodyIntro: 'Mostantól figyeljük, hogy mely anyagok változtak egy előző látogatásod óta, és egy ilyen felugró ablakban jelezzük, ha frissül valami.',
+      versionPopupBodyIntro: 'Mostantól ha egy cikk változtik az előző látogatásod óta, egy ilyen felugró ablakban jelzem, ha frissül valami.',
       versionPopupTitleUpdate: 'Frissült tartalom',
       versionPopupBodyUpdate: 'Az előző látogatásod óta az alábbi anyagok változtak:',
       versionPopupNewTag: 'új',
@@ -97,8 +86,8 @@ const LOCALES = [
       mapFilterModel: 'Modell & hardver',
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
       mapRelatedTopics: 'Kapcsolódó témák',
-      mapOpenButton: 'Megnyitás a tartalomban →',
       termPreviewOpenLabel: 'Teljes cikk megnyitása →',
+      mapOpenButton: 'Megnyitás →',
     },
   },
   {
@@ -115,7 +104,7 @@ const LOCALES = [
       searchTitle: 'Search (Ctrl+K)',
       pagesLabel: 'Pages',
       versionPopupTitleIntro: 'New feature: content update alerts',
-      versionPopupBodyIntro: 'From now on we\'ll keep track of which topics changed since your last visit, and let you know in a popup like this whenever something\'s updated.',
+      versionPopupBodyIntro: 'From now on, if an article has changed since your last visit, I\'ll let you know in a pop-up window like this whenever something is updated.',
       versionPopupTitleUpdate: 'Updated content',
       versionPopupBodyUpdate: 'The following topics have changed since your last visit:',
       versionPopupNewTag: 'new',
@@ -131,8 +120,8 @@ const LOCALES = [
       mapFilterModel: 'Model & Hardware',
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',
       mapRelatedTopics: 'Related topics',
-      mapOpenButton: 'Open in content →',
       termPreviewOpenLabel: 'Open full article →',
+      mapOpenButton: 'Open →',
     },
   },
 ];
