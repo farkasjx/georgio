@@ -22,6 +22,7 @@ const graphNodesBase = [
   { id: 'mcp',          cluster: 'workflow', color: '#359a9c', x: 1260, y: 220 },
   { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 1060, y: 540 },
   { id: 'aiconfig',     cluster: 'workflow', color: '#f472b6', x: 560,  y: 540 },
+  { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 960,  y: 380 },
 
   /* ── Tudás & kontextus ── */
   { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1780, y: 420 },
@@ -47,6 +48,7 @@ const graphEdges = [
   ['prompting','aiconfig'], ['prompting','hallucination'], ['prompting','mcp'], ['prompting','rlhf'],
   ['aiconfig','security'],
   ['security','mcp'],
+  ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['memory','kv-cache'],
@@ -92,6 +94,11 @@ const graphText = {
         title: 'AI Config fájlok',
         short: 'CLAUDE.md, .cursorrules és hasonló konfigurációs fájlok szerepe és felépítése.',
         desc: ['Ezek a fájlok gyakorlatilag "állandó promptok" egy projekthez — ezért él szoros kapcsolatban a prompt engineering résszel.', 'Biztonsági szempontból is releváns, hiszen ide kerülhetnek hozzáférési és viselkedési szabályok is.']
+      },
+      reasoning: {
+        title: 'Reasoning',
+        short: 'Attention, gondolkodó tokenek és eszközhasználat — hogyan old meg egy AI egy összetett feladatot.',
+        desc: ['A reasoning (chain-of-thought) és a tool use együtt adja azt a hurkot, amivel a modell egy Excel-elemzést vagy egy kódolási feladatot lépésről lépésre végigvisz.', 'Szorosan kapcsolódik a prompthoz (hogyan írd le a feladatot) és az MCP-hez (milyen eszközökhöz fér hozzá a modell).']
       },
       rag: {
         title: 'RAG',
@@ -197,6 +204,11 @@ const graphText = {
         title: 'AI Config Files',
         short: 'The role and structure of files like CLAUDE.md, .cursorrules, and similar config files.',
         desc: ['These files are essentially "persistent prompts" for a project — which is why they\u2019re closely tied to prompt engineering.', 'They\u2019re also security-relevant, since access and behavior rules can live here too.']
+      },
+      reasoning: {
+        title: 'Reasoning',
+        short: 'Attention, reasoning tokens, and tool use — how an AI works through a complex task.',
+        desc: ['Reasoning (chain-of-thought) and tool use together form the loop a model uses to carry out something like an Excel analysis or a coding task, step by step.', 'It ties closely to prompting (how you describe the task) and to MCP (what tools the model can access).']
       },
       rag: {
         title: 'RAG',

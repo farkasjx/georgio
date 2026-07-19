@@ -34,7 +34,7 @@ footer:
   <a class="toc-card" href="#vec-7"><div class="tc-num">Feladat A</div><div class="tc-name">ChromaDB</div><div class="tc-desc">Prototípus, beágyazott, Python.</div></a>
   <a class="toc-card" href="#vec-8"><div class="tc-num">Feladat B</div><div class="tc-name">Qdrant</div><div class="tc-desc">Self-host Dockerrel, Python + Node.</div></a>
   <a class="toc-card" href="#vec-9"><div class="tc-num">Feladat C</div><div class="tc-name">pgvector</div><div class="tc-desc">Postgres + vektorok egy DB-ben.</div></a>
-  <a class="toc-card" href="#vec-10"><div class="tc-num">10. rész</div><div class="tc-name">Éles használat</div><div class="tc-desc">Chunkolás, hybrid search, metaadat, tuning.</div></a>
+  <a class="toc-card" href="#vec-10"><div class="tc-num">10. rész</div><div class="tc-name">Éles használat</div><div class="tc-desc">Tuning, recall/latency — chunkolás és hybrid search a RAG tutorialban.</div></a>
   <a class="toc-card" href="#vec-11"><div class="tc-num">11. rész</div><div class="tc-name">Döntési keret</div><div class="tc-desc">Melyiket válaszd, és mikor.</div></a>
 </div>
 ::::::
@@ -596,32 +596,24 @@ Hozz létre egy `dokumentumok` táblát a saját Postgresedben, tölts fel 10 so
 :::::
 ::::::
 
-:::::: section id=vec-10 num="10" heading="10. rész — Éles használat: chunkolás, hybrid search, tuning" nav="Éles használat" group="Éles használat"
+:::::: section id=vec-10 num="10" heading="10. rész — Éles használat: tuning, és ami a RAG tutorialban van" nav="Éles használat" group="Éles használat"
 
 <p class="topic-tagline">Cél: a prototípustól a produkciós minőségig — ahol a valódi munka van.</p>
 
-### Chunkolás — a leggyakoribb hibaforrás
+### Chunkolás és hybrid search — lásd a RAG tutorialt
 
-Egy hosszú dokumentumot nem egyben ágyazol be, hanem **darabokra (chunk) vágod**. A retrieval minősége leginkább ezen múlik.
+A **chunkolás** (hogyan vágj hosszú dokumentumot kereshető darabokra) és a **hybrid search** (dense + sparse/BM25 kombinálása) nem vektor-DB-specifikus kérdés, hanem a RAG-pipeline döntése — ezért ott, önálló, mélyebb szekcióban tárgyaljuk őket:
 
 ::::: stack-grid
-:::: card label="Túl nagy chunk"
-Hígul a jelentés — egy 2000 szavas chunk vektora „átlagol", és semmire sem lesz igazán közel. Rossz recall.
+:::: card label="Chunkolás → RAG tutorial, 3. rész"
+Fixed-size, sentence window, semantic chunking, structure-aware stratégiák, gyakorlati alapértékek (~200–500 token, 10–20% overlap) és egy összehasonlító feladat.
 ::::
-:::: card label="Túl kicsi chunk"
-Elvész a kontextus — egy fél mondat vektora önmagában értelmetlen. Töredezett találatok.
-::::
-:::: card label="Jó gyakorlat"
-~200–500 token / chunk, **10–20% átfedéssel** (overlap), lehetőleg szemantikus határon (bekezdés, szekció), ne szó közepén.
-::::
-:::: card label="Metaadat"
-Minden chunkhoz tedd el a forrást, oldalszámot, szekciócímet — így a találat visszavezethető és szűrhető.
+:::: card label="Hybrid search → RAG tutorial, 4. rész"
+Miért gyenge a tiszta vektor-keresés pontos tokeneknél (termékkód, hibakód), és hogyan olvasztja össze a dense + sparse listát az RRF (Reciprocal Rank Fusion).
 ::::
 :::::
 
-### Hybrid search — vektor + kulcsszó
-
-A tiszta vektor-keresés gyenge a pontos tokeneknél: termékkód (`YARIS-2024`), hibakód, tulajdonnév. A **hybrid search** kombinálja a szemantikus (dense) és a kulcsszavas (sparse, pl. BM25) keresést, majd az eredményeket **re-rank**-eli. A Weaviate és a Qdrant ezt natívan tudja; pgvectorban a `tsvector` full-text kereséssel párosítható.
+Itt, a vektor-DB szinten csak annyi számít: melyik motorod tudja **natívan**, hogy technikát tudsz-e választani. A Weaviate és a Qdrant natívan tud hybrid search-öt; pgvectorban a `tsvector` full-text kereséssel párosítható kézzel.
 
 ### Metrika, amit figyelj
 
@@ -688,7 +680,7 @@ Vektor vs. relációs vs. gráf · Determinisztikus vs. valószínűségi keres�
 Chroma (prototípus) · Qdrant (self-host) · pgvector (Postgres-integrált)
 ::::
 :::: card label="10–11. rész"
-Chunkolás · Hybrid search · Recall/latency · Döntési keret
+Tuning (recall/latency/QPS) · éles buktatók · döntési keret — chunkolás és hybrid search a RAG tutorialban
 ::::
 :::::
 

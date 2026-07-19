@@ -48,6 +48,7 @@ const PAGE_ORDER = [
   { key: 'aiconfig',              label: 'AI Config fájlok',        labelEn: 'AI Config Files',          dot: '#f472b6' },
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
+  { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
