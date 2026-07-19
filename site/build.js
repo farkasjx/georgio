@@ -64,6 +64,7 @@ const PAGE_ORDER = [
   { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
   { key: 'vectordb',              label: 'Vector adatbázisok',      labelEn: 'Vector databases',         dot: '#17cb11' },
   { key: 'memory',                label: 'Memory',                 labelEn: 'Memory',                   dot: '#e1c9cb' },
+  { key: 'okf',                   label: 'Open Knowledge Format',   labelEn: 'Open Knowledge Format',    dot: '#a78bfa' },
   { key: 'hallucination',         label: 'Halucináció',             labelEn: 'Hallucination',            dot: '#a3ce40' },
   { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
   { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },

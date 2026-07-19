@@ -28,6 +28,7 @@ const graphNodesBase = [
   { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1780, y: 420 },
   { id: 'vectordb',         cluster: 'knowledge', color: '#17cb11', x: 1420, y: 580 },
   { id: 'memory',           cluster: 'knowledge', color: '#e1c9cb', x: 2160, y: 580 },
+  { id: 'okf',              cluster: 'knowledge', color: '#a78bfa', x: 2160, y: 260 },
   { id: 'hallucination',    cluster: 'knowledge', color: '#a3ce40', x: 1780, y: 760 },
   { id: 'knowledge-cutoff', cluster: 'knowledge', color: '#896671', x: 2160, y: 920 },
   { id: 'rlhf',             cluster: 'knowledge', color: '#c9a9ac', x: 1420, y: 940 },
@@ -51,6 +52,7 @@ const graphEdges = [
   ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
+  ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
   ['memory','kv-cache'],
   ['hallucination','knowledge-cutoff'], ['hallucination','rlhf'],
   ['kv-cache','hardware'], ['kv-cache','latency'], ['kv-cache','model-size'],
@@ -114,6 +116,11 @@ const graphText = {
         title: 'Memory',
         short: 'Hosszú távú memória agenteknek: mit, hogyan és meddig érdemes megjegyezni.',
         desc: ['A memória-rendszerek gyakran vektoradatbázisra épülnek, de a KV cache-hez hasonlóan a "mit tartsunk meg" kérdése is központi.', 'Rossz memóriakezelés egyenesen vezet halucinációhoz vagy elavult válaszokhoz.']
+      },
+      okf: {
+        title: 'Open Knowledge Format',
+        short: 'A Google 2026-os nyílt szabványa: markdown + frontmatter tudásformátum AI-ügynököknek.',
+        desc: ['Nem RAG-helyettesítő, hanem kurált, verzió-kontrollált tudásreprezentáció — a RAG és a vektor-DB gyakran erre épülhet rá lekérdezéskor.', 'Az AGENTS.md/CLAUDE.md konvenciót (AI Config fájlok) és az MCP-vel elérhető tudást is közös keretbe helyezi.']
       },
       hallucination: {
         title: 'Halucináció',
@@ -224,6 +231,11 @@ const graphText = {
         title: 'Memory',
         short: 'Long-term memory for agents: what to remember, how, and for how long.',
         desc: ['Memory systems often build on a vector database, but — much like KV cache — the core question is "what\u2019s worth keeping."', 'Poor memory handling leads directly to hallucination or stale answers.']
+      },
+      okf: {
+        title: 'Open Knowledge Format',
+        short: 'Google\u2019s 2026 open standard: a markdown + frontmatter knowledge format for AI agents.',
+        desc: ['Not a RAG replacement but a curated, version-controlled knowledge representation — RAG and vector databases can build on top of it at query time.', 'It brings the AGENTS.md/CLAUDE.md convention (AI Config Files) and MCP-exposed knowledge into a shared frame.']
       },
       hallucination: {
         title: 'Hallucination',
