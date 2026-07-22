@@ -4,10 +4,10 @@
 
 /* ── PAGE NAVIGATION ── */
 const pages = [
-  'map', 'tools', 'prompting', 'ollama', 'aiconfig', 'security',
-  'memory', 'vectordb', 'dense-moe', 'rag', 'kv-cache', 'hardware',
-  'model-routing', 'latency', 'hallucination', 'mcp',
-  'quantization-quality', 'knowledge-cutoff', 'rlhf', 'model-size'
+  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding',
+  'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
+  'latency', 'model-routing',
+  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf'
 ];
 
 function showPage(id) {

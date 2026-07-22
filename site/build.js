@@ -49,6 +49,7 @@ const PAGE_ORDER = [
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
   { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
+  { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },

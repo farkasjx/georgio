@@ -23,6 +23,7 @@ const graphNodesBase = [
   { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 1060, y: 540 },
   { id: 'aiconfig',     cluster: 'workflow', color: '#f472b6', x: 560,  y: 540 },
   { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 960,  y: 380 },
+  { id: 'vibecoding',   cluster: 'workflow', color: '#60a5fa', x: 660,  y: 320 },
 
   /* ── Tudás & kontextus ── */
   { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1780, y: 420 },
@@ -50,6 +51,7 @@ const graphEdges = [
   ['aiconfig','security'],
   ['security','mcp'],
   ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
+  ['vibecoding','prompting'], ['vibecoding','reasoning'], ['vibecoding','tools'], ['vibecoding','security'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
@@ -101,6 +103,11 @@ const graphText = {
         title: 'Reasoning',
         short: 'Attention, gondolkodó tokenek és eszközhasználat — hogyan old meg egy AI egy összetett feladatot.',
         desc: ['A reasoning (chain-of-thought) és a tool use együtt adja azt a hurkot, amivel a modell egy Excel-elemzést vagy egy kódolási feladatot lépésről lépésre végigvisz.', 'Szorosan kapcsolódik a prompthoz (hogyan írd le a feladatot) és az MCP-hez (milyen eszközökhöz fér hozzá a modell).']
+      },
+      vibecoding: {
+        title: 'Vibe coding',
+        short: 'Karpathy 2025-ös tweetjétől az "agentic engineering" fordulatig — hatások, kockázatok, határok.',
+        desc: ['A szűk értelemben vett vibe coding — felügyelet nélküli, "Accept All" munkamód — hasznos alacsony tétű prototípusoknál, de dokumentált biztonsági incidensek sora köthető a felügyelet nélküli productionba engedéséhez.', 'Szorosan kapcsolódik a prompt engineeringhez (a specifikáció minősége), a reasoninghoz (mi történik a hurokban) és a biztonsághoz (mit kell ellenőrizni, mielőtt élesítesz).']
       },
       rag: {
         title: 'RAG',
@@ -216,6 +223,11 @@ const graphText = {
         title: 'Reasoning',
         short: 'Attention, reasoning tokens, and tool use — how an AI works through a complex task.',
         desc: ['Reasoning (chain-of-thought) and tool use together form the loop a model uses to carry out something like an Excel analysis or a coding task, step by step.', 'It ties closely to prompting (how you describe the task) and to MCP (what tools the model can access).']
+      },
+      vibecoding: {
+        title: 'Vibe Coding',
+        short: 'From Karpathy\\u2019s 2025 tweet to the \\u201cagentic engineering\\u201d turn — impact, risks, and limits.',
+        desc: ['Vibe coding in the narrow sense \\u2014 unreviewed, \\u201cAccept All\\u201d development \\u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'It ties closely to prompt engineering (spec quality), reasoning (what happens inside the loop), and security (what to check before shipping).']
       },
       rag: {
         title: 'RAG',
