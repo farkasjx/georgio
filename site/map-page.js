@@ -16,9 +16,10 @@ export function renderMapPage(ui) {
       <button class="map-btn" id="btn-zoom-out">${ui.mapZoomOut}</button>
       <button class="map-btn" id="btn-reset">${ui.mapReset}</button>
       <button class="map-btn map-chip chip-active" data-filter="all">${ui.mapFilterAll}</button>
+      <button class="map-btn map-chip" data-filter="practice">${ui.mapFilterPractice}</button>
       <button class="map-btn map-chip" data-filter="workflow">${ui.mapFilterWorkflow}</button>
-      <button class="map-btn map-chip" data-filter="knowledge">${ui.mapFilterKnowledge}</button>
       <button class="map-btn map-chip" data-filter="model">${ui.mapFilterModel}</button>
+      <button class="map-btn map-chip" data-filter="knowledge">${ui.mapFilterKnowledge}</button>
     </div>
 
     <div class="map-hint">${ui.mapHint}</div>

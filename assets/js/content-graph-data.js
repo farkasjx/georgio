@@ -14,36 +14,46 @@
    app.js használ.
    ═══════════════════════════════════════════════ */
 
-/* nyelvfüggetlen: pozíció, szín, klaszter-hovatartozás */
+/* nyelvfüggetlen: pozíció, szín, klaszter-hovatartozás
+   4 klaszter, mindegyik egy külön, egymást nem átfedő fizikai régióban
+   (2×2 elrendezés a canvasen — lásd app.js drawClusterRegions):
+     bal-fent:  practice   (Gyakorlat & eszközök)
+     jobb-fent: workflow   (Modell-belső működés)
+     bal-lent:  model      (Modell & hardver)
+     jobb-lent: knowledge  (Tudás & kontextus)             */
 const graphNodesBase = [
-  /* ── Alapok & munkafolyamat ── */
-  { id: 'tools',        cluster: 'workflow', color: '#4ecb8d', x: 260,  y: 160 },
-  { id: 'prompting',    cluster: 'workflow', color: '#e8a84a', x: 760,  y: 100 },
-  { id: 'mcp',          cluster: 'workflow', color: '#359a9c', x: 1260, y: 220 },
-  { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 1060, y: 540 },
-  { id: 'aiconfig',     cluster: 'workflow', color: '#f472b6', x: 560,  y: 540 },
-  { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 960,  y: 380 },
-  { id: 'vibecoding',   cluster: 'workflow', color: '#60a5fa', x: 660,  y: 320 },
-  { id: 'agentic-coding', cluster: 'workflow', color: '#34d399', x: 460,  y: 220 },
+  /* ── Gyakorlat & eszközök (bal-fent) ── */
+  { id: 'tools',          cluster: 'practice', color: '#4ecb8d', x: 140,  y: 140 },
+  { id: 'prompting',      cluster: 'practice', color: '#e8a84a', x: 620,  y: 100 },
+  { id: 'aiconfig',       cluster: 'practice', color: '#f472b6', x: 1000, y: 320 },
+  { id: 'vibecoding',     cluster: 'practice', color: '#60a5fa', x: 160,  y: 480 },
+  { id: 'agentic-coding', cluster: 'practice', color: '#34d399', x: 600,  y: 560 },
 
-  /* ── Tudás & kontextus ── */
-  { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1780, y: 420 },
-  { id: 'vectordb',         cluster: 'knowledge', color: '#17cb11', x: 1420, y: 580 },
-  { id: 'memory',           cluster: 'knowledge', color: '#e1c9cb', x: 2160, y: 580 },
-  { id: 'okf',              cluster: 'knowledge', color: '#a78bfa', x: 2160, y: 260 },
-  { id: 'hallucination',    cluster: 'knowledge', color: '#a3ce40', x: 1780, y: 760 },
-  { id: 'knowledge-cutoff', cluster: 'knowledge', color: '#896671', x: 2160, y: 920 },
-  { id: 'rlhf',             cluster: 'knowledge', color: '#c9a9ac', x: 1420, y: 940 },
+  /* ── Modell-belső működés (jobb-fent) ── */
+  { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 1620, y: 140 },
+  { id: 'mcp',          cluster: 'workflow', color: '#359a9c', x: 2140, y: 100 },
+  { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 2160, y: 420 },
+  { id: 'multimodal',   cluster: 'workflow', color: '#c084fc', x: 1660, y: 480 },
+  { id: 'diffusion',    cluster: 'workflow', color: '#facc15', x: 2000, y: 640 },
 
-  /* ── Modell & hardver ── */
-  { id: 'kv-cache',              cluster: 'model', color: '#8a5a2a', x: 120,  y: 880  },
-  { id: 'ollama',                cluster: 'model', color: '#4ec9c9', x: 520,  y: 940  },
-  { id: 'hardware',              cluster: 'model', color: '#f0edeb', x: 120,  y: 1220 },
-  { id: 'quantization-quality',  cluster: 'model', color: '#00ff55', x: 520,  y: 1280 },
-  { id: 'model-size',            cluster: 'model', color: '#98d016', x: 950,  y: 1180 },
-  { id: 'dense-moe',             cluster: 'model', color: '#6160a3', x: 950,  y: 1500 },
-  { id: 'model-routing',         cluster: 'model', color: '#496b8f', x: 1380, y: 1280 },
-  { id: 'latency',               cluster: 'model', color: '#523986', x: 1380, y: 1560 },
+  /* ── Modell & hardver (bal-lent) ── */
+  { id: 'kv-cache',              cluster: 'model', color: '#8a5a2a', x: 140,  y: 1020 },
+  { id: 'ollama',                cluster: 'model', color: '#4ec9c9', x: 560,  y: 980  },
+  { id: 'hardware',              cluster: 'model', color: '#f0edeb', x: 140,  y: 1340 },
+  { id: 'quantization-quality',  cluster: 'model', color: '#00ff55', x: 560,  y: 1360 },
+  { id: 'model-size',            cluster: 'model', color: '#98d016', x: 980,  y: 1140 },
+  { id: 'dense-moe',             cluster: 'model', color: '#6160a3', x: 980,  y: 1460 },
+  { id: 'model-routing',         cluster: 'model', color: '#496b8f', x: 620,  y: 1660 },
+  { id: 'latency',               cluster: 'model', color: '#523986', x: 1000, y: 1760 },
+
+  /* ── Tudás & kontextus (jobb-lent) ── */
+  { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1980, y: 1120 },
+  { id: 'vectordb',         cluster: 'knowledge', color: '#17cb11', x: 1620, y: 1280 },
+  { id: 'memory',           cluster: 'knowledge', color: '#e1c9cb', x: 2380, y: 1280 },
+  { id: 'okf',              cluster: 'knowledge', color: '#a78bfa', x: 2380, y: 1000 },
+  { id: 'hallucination',    cluster: 'knowledge', color: '#a3ce40', x: 1980, y: 1500 },
+  { id: 'knowledge-cutoff', cluster: 'knowledge', color: '#896671', x: 2380, y: 1580 },
+  { id: 'rlhf',             cluster: 'knowledge', color: '#c9a9ac', x: 1620, y: 1660 },
 ];
 
 const graphEdges = [
@@ -54,6 +64,8 @@ const graphEdges = [
   ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
   ['vibecoding','prompting'], ['vibecoding','reasoning'], ['vibecoding','tools'], ['vibecoding','security'], ['vibecoding','aiconfig'],
   ['agentic-coding','vibecoding'], ['agentic-coding','reasoning'], ['agentic-coding','mcp'], ['agentic-coding','aiconfig'], ['agentic-coding','tools'],
+  ['multimodal','reasoning'], ['multimodal','hallucination'], ['multimodal','rag'], ['multimodal','vectordb'], ['multimodal','mcp'],
+  ['diffusion','multimodal'], ['diffusion','reasoning'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
@@ -71,7 +83,8 @@ const graphEdges = [
 const graphText = {
   hu: {
     clusterLabels: {
-      workflow:  'Alapok & munkafolyamat',
+      practice:  'Gyakorlat & eszközök',
+      workflow:  'Modell-belső működés',
       knowledge: 'Tudás & kontextus',
       model:     'Modell & hardver'
     },
@@ -115,6 +128,16 @@ const graphText = {
         title: 'Agentic kódolás',
         short: 'Architektúra, nem testtartás: a kész-definíció ellenében ellenőrzött hurok, subagentek és multi-agent orkesztrálás.',
         desc: ['A vibe codingtól élesen elhatárolva: itt a modell eszközökbe van bekötve, hurokban fut, és valaki a kész-definíció ellenében nézi át — nem az számít, mennyire "vibe" a munkamód, hanem ki felel a helyességért.', 'Tárgyalja a nagy kódbázisokon jelentkező "80%-os falat", a git worktree-alapú multi-agent orkesztrálást és a SWE-bench körüli méréstani vitákat is.']
+      },
+      multimodal: {
+        title: 'Multimodális modellek',
+        short: 'Hogyan lát, hall és ért egy AI — natív vs. kaszkád architektúra, és miért hisz a modell inkább a szövegnek.',
+        desc: ['A vision encoder, a projection layer és az LLM hármasa alakítja számmá a képet — ugyanaz az attention dolgozza fel, mint a szöveges tokent, ezért öröklődnek bele a Reasoning tutorialban látott mechanizmusok és korlátok is.', 'Konkrét hibamódokat is tárgyal (számlálás, térbeli reláció, vizuális hallucináció) és egy döntési keretet OCR vs. vision LLM választáshoz dokumentum-feldolgozásnál.']
+      },
+      diffusion: {
+        title: 'Diffúziós modellek',
+        short: 'Rövid kitekintés: egy másik generálási elv — zajból bontás, nem szóról szóra jóslás — kép, videó és (meglepő módon) szöveg mögött.',
+        desc: ['A kép- és videógenerálás (Midjourney, Stable Diffusion, Sora) szinte mind ezt az elvet használja: a teljes kimenet egyszerre, zajból bontakozik ki, globálisan finomítva — nem szóról szóra, mint egy LLM.', '2025 óta léteznek diffúziós szöveggeneráló modellek (Mercury, Gemini Diffusion) is, 5–10× gyorsabbak rövid, strukturált kimeneteknél, de elmaradnak összetett következtetésben.']
       },
       rag: {
         title: 'RAG',
@@ -196,7 +219,8 @@ const graphText = {
 
   en: {
     clusterLabels: {
-      workflow:  'Foundations & Workflow',
+      practice:  'Practice & Tools',
+      workflow:  'How the Model Works',
       knowledge: 'Knowledge & Context',
       model:     'Model & Hardware'
     },
@@ -240,6 +264,16 @@ const graphText = {
         title: 'Agentic Coding',
         short: 'Architecture, not posture: a loop checked against a definition of done, subagents, and multi-agent orchestration.',
         desc: ['Sharply distinguished from vibe coding: here the model is wired into tools, runs in a loop, and someone reviews it against a definition of done \\u2014 what matters is who owns correctness, not how \\u201cvibe\\u201d the workflow feels.', 'Covers the \\u201c80% wall\\u201d on large codebases, git-worktree-based multi-agent orchestration, and the measurement debates around SWE-bench.']
+      },
+      multimodal: {
+        title: 'Multimodal Models',
+        short: 'How an AI sees, hears, and understands \\u2014 native vs. cascaded architecture, and why the model trusts text over pixels.',
+        desc: ['The vision encoder, projection layer, and LLM trio turn an image into numbers \\u2014 the same attention mechanism processes it as text tokens, so it inherits the mechanisms and limits covered in the Reasoning tutorial.', 'Also covers concrete failure modes (counting, spatial relations, visual hallucination) and a decision framework for OCR vs. vision LLM in document processing.']
+      },
+      diffusion: {
+        title: 'Diffusion Models',
+        short: 'A short detour: a different generation principle \\u2014 unfolding from noise, not predicting word by word \\u2014 behind image, video, and (surprisingly) text.',
+        desc: ['Image and video generation (Midjourney, Stable Diffusion, Sora) almost all use this principle: the entire output emerges from noise at once, refined globally \\u2014 not word by word like an LLM.', 'Since 2025, diffusion-based text generation models exist too (Mercury, Gemini Diffusion), 5\\u201310\\u00d7 faster on short, structured outputs, though still behind on complex reasoning.']
       },
       rag: {
         title: 'RAG',

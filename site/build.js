@@ -51,6 +51,8 @@ const PAGE_ORDER = [
   { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
   { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },
   { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
+  { key: 'multimodal',            label: 'Multimodális modellek',   labelEn: 'Multimodal Models',        dot: '#c084fc' },
+  { key: 'diffusion',             label: 'Diffúziós modellek',      labelEn: 'Diffusion Models',         dot: '#facc15' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
@@ -103,7 +105,8 @@ const LOCALES = [
       mapZoomOut: '－ Zoom',
       mapReset: '↺ Reset',
       mapFilterAll: 'Mind',
-      mapFilterWorkflow: 'Alapok & munkafolyamat',
+      mapFilterPractice: 'Gyakorlat & eszközök',
+      mapFilterWorkflow: 'Modell-belső működés',
       mapFilterKnowledge: 'Tudás & kontextus',
       mapFilterModel: 'Modell & hardver',
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
@@ -141,7 +144,8 @@ const LOCALES = [
       mapZoomOut: '－ Zoom',
       mapReset: '↺ Reset',
       mapFilterAll: 'All',
-      mapFilterWorkflow: 'Foundations & Workflow',
+      mapFilterPractice: 'Practice & Tools',
+      mapFilterWorkflow: 'How the Model Works',
       mapFilterKnowledge: 'Knowledge & Context',
       mapFilterModel: 'Model & Hardware',
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',

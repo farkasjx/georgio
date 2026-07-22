@@ -4,7 +4,7 @@
 
 /* ── PAGE NAVIGATION ── */
 const pages = [
-  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding',
+  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf'
@@ -258,6 +258,62 @@ const clusterLabels = graphClusterLabels;
 let mapInitialized = false;
 let activeFilter = 'all';
 
+/* Node-méret + a régió-padding, amivel a klaszter háttere körülveszi a hozzá
+   tartozó csomópontokat (lásd .map-node CSS: width 250px, min-height 150px). */
+const NODE_W = 250, NODE_H = 150, REGION_PAD = 70;
+
+/* A 4 klaszter fix sorrendje és a hozzá tartozó, halvány háttérszín — a node-ok
+   színesek maradnak, a régió csak egy nagyon finom, elkülönítő "buborék". */
+const CLUSTER_REGION_COLOR = {
+  practice:  '#60a5fa',
+  workflow:  '#fb923c',
+  model:     '#98d016',
+  knowledge: '#1613d4',
+};
+
+function drawClusterRegions(svgEl) {
+  const byCluster = {};
+  graphNodes.forEach(n => {
+    if (!byCluster[n.cluster]) byCluster[n.cluster] = [];
+    byCluster[n.cluster].push(n);
+  });
+
+  Object.keys(byCluster).forEach(cluster => {
+    const nodes = byCluster[cluster];
+    const minX = Math.min(...nodes.map(n => n.x)) - REGION_PAD;
+    const minY = Math.min(...nodes.map(n => n.y)) - REGION_PAD;
+    const maxX = Math.max(...nodes.map(n => n.x + NODE_W)) + REGION_PAD;
+    const maxY = Math.max(...nodes.map(n => n.y + NODE_H)) + REGION_PAD;
+    const color = CLUSTER_REGION_COLOR[cluster] || '#888';
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('class', 'cluster-region');
+    rect.dataset.cluster = cluster;
+    rect.setAttribute('x', minX);
+    rect.setAttribute('y', minY);
+    rect.setAttribute('width', maxX - minX);
+    rect.setAttribute('height', maxY - minY);
+    rect.setAttribute('rx', 36);
+    rect.setAttribute('fill', color);
+    rect.setAttribute('fill-opacity', '0.05');
+    rect.setAttribute('stroke', color);
+    rect.setAttribute('stroke-opacity', '0.28');
+    rect.setAttribute('stroke-width', '2');
+    rect.setAttribute('stroke-dasharray', '10 8');
+    svgEl.appendChild(rect);
+
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('class', 'cluster-region-label');
+    label.dataset.cluster = cluster;
+    label.setAttribute('x', minX + 28);
+    label.setAttribute('y', minY + 46);
+    label.setAttribute('fill', color);
+    label.textContent = (clusterLabels[cluster] || '').toUpperCase();
+    svgEl.appendChild(label);
+  });
+}
+
+
 function initMap() {
   if (mapInitialized) return;
   mapInitialized = true;
@@ -267,16 +323,20 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 2500, H = 1850;
+  const W = 2900, H = 2000;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svgEl.style.width  = W + 'px';
   svgEl.style.height = H + 'px';
 
-  // draw edges (a pontos 'd' útvonalat az updateAllEdges() számolja ki)
+  // draw cluster background regions (a node-ok és élek MÖGÖTT, hogy a 4 klaszter
+  // vizuálisan is elkülönüljön, ne csak a szűrőgombokkal lehessen szétválasztani)
   const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   svgEl.appendChild(defs);
+  drawClusterRegions(svgEl);
+
+  // draw edges (a pontos 'd' útvonalat az updateAllEdges() számolja ki)
   graphEdges.forEach(([a,b]) => {
     const na = graphNodes.find(n=>n.id===a), nb = graphNodes.find(n=>n.id===b);
     if (!na || !nb) return;
@@ -454,6 +514,11 @@ function filterNodes(filter) {
     const b = graphNodes.find(n => n.id === p.dataset.b);
     const show = filter === 'all' || (a && a.cluster === filter) || (b && b.cluster === filter);
     p.style.opacity = show ? '1' : '0.08';
+  });
+
+  document.querySelectorAll('.cluster-region, .cluster-region-label').forEach(el => {
+    const show = filter === 'all' || el.dataset.cluster === filter;
+    el.style.opacity = show ? '1' : '0.12';
   });
 }
 

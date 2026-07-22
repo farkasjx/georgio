@@ -839,6 +839,20 @@ svg.connections {
   opacity: 1;
 }
 
+.cluster-region {
+  transition: opacity .25s ease;
+}
+
+.cluster-region-label {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  opacity: 0.55;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+
 .map-node {
   position: absolute;
   width: 250px;
