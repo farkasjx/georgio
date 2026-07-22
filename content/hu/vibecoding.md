@@ -152,6 +152,10 @@ A gyakorlatban egyre inkább strukturált, ellenőrzött ügynök-orkesztrálás
 Több kommentátor élesen fogalmazott: az agentic engineering **aránytalanul a szenior mérnököknek kedvez**. Ha érted a rendszertervezést, a biztonsági mintázatokat és a teljesítmény-kompromisszumokat, az AI erő-sokszorozóvá válik — mert tudod, milyen a jó kód, és hatékonyan tudod ellenőrizni és javítani. Ha nem érted, az ügynök gyors, de megbízhatatlan marad — és te nem veszed észre, mikor téved.
 :::::
 
+::::: callout label="Bővebben"
+Az "agentic engineering" (más néven agentic kódolás) mint önálló architektúra — a loop belső felépítése, a nagy kódbázisokon jelentkező korlátok, és a több-ügynökös csapatmunka — a külön <em>Agentic kódolás</em> tutorial témája.
+:::::
+
 ::::: callout label="Egy mondatban"
 A "vibe coding" mint kifejezés 2026 elejére saját magát élte túl — Karpathy szerint az, ami utána jön (agentic engineering), ugyanazt az AI-eszköztárat használja, de **tanulható szakértelmet és felügyeletet** követel, nem "ráhagyatkozást".
 :::::

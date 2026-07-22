@@ -4,7 +4,7 @@
 
 /* ── PAGE NAVIGATION ── */
 const pages = [
-  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding',
+  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf'

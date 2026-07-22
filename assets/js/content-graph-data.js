@@ -24,6 +24,7 @@ const graphNodesBase = [
   { id: 'aiconfig',     cluster: 'workflow', color: '#f472b6', x: 560,  y: 540 },
   { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 960,  y: 380 },
   { id: 'vibecoding',   cluster: 'workflow', color: '#60a5fa', x: 660,  y: 320 },
+  { id: 'agentic-coding', cluster: 'workflow', color: '#34d399', x: 460,  y: 220 },
 
   /* ── Tudás & kontextus ── */
   { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1780, y: 420 },
@@ -52,6 +53,7 @@ const graphEdges = [
   ['security','mcp'],
   ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
   ['vibecoding','prompting'], ['vibecoding','reasoning'], ['vibecoding','tools'], ['vibecoding','security'], ['vibecoding','aiconfig'],
+  ['agentic-coding','vibecoding'], ['agentic-coding','reasoning'], ['agentic-coding','mcp'], ['agentic-coding','aiconfig'], ['agentic-coding','tools'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
@@ -108,6 +110,11 @@ const graphText = {
         title: 'Vibe coding',
         short: 'Karpathy 2025-ös tweetjétől az "agentic engineering" fordulatig — hatások, kockázatok, és gyakorlati technikák.',
         desc: ['A szűk értelemben vett vibe coding — felügyelet nélküli, "Accept All" munkamód — hasznos alacsony tétű prototípusoknál, de dokumentált biztonsági incidensek sora köthető a felügyelet nélküli productionba engedéséhez.', 'Konkrét gyakorlati eszközöket is ad: config fájlokkal (AGENTS.md, CLAUDE.md), eszközválasztási döntési táblával és bemásolható biztonsági promptokkal.']
+      },
+      'agentic-coding': {
+        title: 'Agentic kódolás',
+        short: 'Architektúra, nem testtartás: a kész-definíció ellenében ellenőrzött hurok, subagentek és multi-agent orkesztrálás.',
+        desc: ['A vibe codingtól élesen elhatárolva: itt a modell eszközökbe van bekötve, hurokban fut, és valaki a kész-definíció ellenében nézi át — nem az számít, mennyire "vibe" a munkamód, hanem ki felel a helyességért.', 'Tárgyalja a nagy kódbázisokon jelentkező "80%-os falat", a git worktree-alapú multi-agent orkesztrálást és a SWE-bench körüli méréstani vitákat is.']
       },
       rag: {
         title: 'RAG',
@@ -228,6 +235,11 @@ const graphText = {
         title: 'Vibe Coding',
         short: 'From Karpathy\\u2019s 2025 tweet to the \\u201cagentic engineering\\u201d turn — impact, risks, and practical techniques.',
         desc: ['Vibe coding in the narrow sense \\u2014 unreviewed, \\u201cAccept All\\u201d development \\u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'Also covers practical tools: rule files (AGENTS.md, CLAUDE.md), a tool-choice decision table, and copy-pasteable security prompts.']
+      },
+      'agentic-coding': {
+        title: 'Agentic Coding',
+        short: 'Architecture, not posture: a loop checked against a definition of done, subagents, and multi-agent orchestration.',
+        desc: ['Sharply distinguished from vibe coding: here the model is wired into tools, runs in a loop, and someone reviews it against a definition of done \\u2014 what matters is who owns correctness, not how \\u201cvibe\\u201d the workflow feels.', 'Covers the \\u201c80% wall\\u201d on large codebases, git-worktree-based multi-agent orchestration, and the measurement debates around SWE-bench.']
       },
       rag: {
         title: 'RAG',
