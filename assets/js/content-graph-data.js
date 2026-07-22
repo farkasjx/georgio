@@ -35,6 +35,7 @@ const graphNodesBase = [
   { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 2160, y: 420 },
   { id: 'multimodal',   cluster: 'workflow', color: '#c084fc', x: 1660, y: 480 },
   { id: 'diffusion',    cluster: 'workflow', color: '#facc15', x: 2000, y: 640 },
+  { id: 'base-vs-instruct', cluster: 'workflow', color: '#f87171', x: 1610, y: 700 },
 
   /* ── Modell & hardver (bal-lent) ── */
   { id: 'kv-cache',              cluster: 'model', color: '#8a5a2a', x: 140,  y: 1020 },
@@ -45,6 +46,8 @@ const graphNodesBase = [
   { id: 'dense-moe',             cluster: 'model', color: '#6160a3', x: 980,  y: 1460 },
   { id: 'model-routing',         cluster: 'model', color: '#496b8f', x: 620,  y: 1660 },
   { id: 'latency',               cluster: 'model', color: '#523986', x: 1000, y: 1760 },
+  { id: 'model-training',        cluster: 'model', color: '#d97706', x: 140,  y: 2000 },
+  { id: 'fine-tuning',           cluster: 'model', color: '#0ea5e9', x: 560,  y: 2040 },
 
   /* ── Tudás & kontextus (jobb-lent) ── */
   { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1980, y: 1120 },
@@ -66,6 +69,7 @@ const graphEdges = [
   ['agentic-coding','vibecoding'], ['agentic-coding','reasoning'], ['agentic-coding','mcp'], ['agentic-coding','aiconfig'], ['agentic-coding','tools'],
   ['multimodal','reasoning'], ['multimodal','hallucination'], ['multimodal','rag'], ['multimodal','vectordb'], ['multimodal','mcp'],
   ['diffusion','multimodal'], ['diffusion','reasoning'],
+  ['base-vs-instruct','rlhf'], ['base-vs-instruct','reasoning'], ['base-vs-instruct','model-size'], ['base-vs-instruct','ollama'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
@@ -76,7 +80,9 @@ const graphEdges = [
   ['ollama','quantization-quality'], ['ollama','model-size'], ['ollama','model-routing'],
   ['quantization-quality','model-size'], ['quantization-quality','dense-moe'],
   ['dense-moe','model-size'], ['dense-moe','model-routing'],
-  ['model-routing','latency']
+  ['model-routing','latency'],
+  ['model-training','model-size'], ['model-training','dense-moe'], ['model-training','diffusion'], ['model-training','base-vs-instruct'],
+  ['fine-tuning','model-training'], ['fine-tuning','quantization-quality'], ['fine-tuning','ollama'], ['fine-tuning','knowledge-cutoff'], ['fine-tuning','base-vs-instruct'],
 ];
 
 /* nyelvfüggő szövegek */
@@ -138,6 +144,11 @@ const graphText = {
         title: 'Diffúziós modellek',
         short: 'Rövid kitekintés: egy másik generálási elv — zajból bontás, nem szóról szóra jóslás — kép, videó és (meglepő módon) szöveg mögött.',
         desc: ['A kép- és videógenerálás (Midjourney, Stable Diffusion, Sora) szinte mind ezt az elvet használja: a teljes kimenet egyszerre, zajból bontakozik ki, globálisan finomítva — nem szóról szóra, mint egy LLM.', '2025 óta léteznek diffúziós szöveggeneráló modellek (Mercury, Gemini Diffusion) is, 5–10× gyorsabbak rövid, strukturált kimeneteknél, de elmaradnak összetett következtetésben.']
+      },
+      'base-vs-instruct': {
+        title: 'Base vs. Instruct modell',
+        short: 'Hogyan lesz a nyers, "csak folytató" szövegjósolóból segítőkész asszisztens — pretraining, instruction tuning, és ami utána jön.',
+        desc: ['A base modell csak statisztikailag folytatja a szöveget; az instruction tuning speciális jelölő-tokenekkel tanítja meg, hogy egy kérdésre válaszoljon, ne folytassa azt — ez a lépés, ami sokszor nagyobb gyakorlati különbséget jelent, mint a nyers modellméret.', 'Összeköti a RLHF (a harmadik, finomító lépés) és a Reasoning (a negyedik, "gondolkodó" réteg) tutorialokat egyetlen, áttekinthető képbe.']
       },
       rag: {
         title: 'RAG',
@@ -213,6 +224,16 @@ const graphText = {
         title: 'Latency',
         short: 'Miből áll össze a válaszidő, és hol lehet ténylegesen gyorsítani.',
         desc: ['A látencia nagy részét a KV cache mérete, a hardver és a modellméret adja — ezek együtt szabják meg a felhasználói élményt.', 'RAG rendszereknél a retrieval lépés is jelentősen hozzáadhat a teljes válaszidőhöz.']
+      },
+      'model-training': {
+        title: 'Modelltanítás',
+        short: 'Hogyan tanul egy modell a nulláról: a "jósolj, mérd a hibát, korrigálj" hurok, ami a súlyokból vektorteret épít.',
+        desc: ['Ugyanaz a gradiens-alapú hurok — forward pass, loss, backward pass, súlyfrissítés — áll egy LLM és egy diffúziós modell tanítása mögött is, csak más a jóslási cél.', 'Konkrét adat- és költségnagyságrendekkel, kis vs. nagy modell tanítási filozófiájával és a distillation/szintetikus adat technikákkal.']
+      },
+      'fine-tuning': {
+        title: 'Fine-tuning technikák',
+        short: 'LoRA, QLoRA és a specializáció: hogyan hangolj egy már betanított modellt a pretraining költségének töredékéért.',
+        desc: ['A LoRA "kis mátrix" trükkje fagyva hagyja a bázis-súlyokat, és csak egy apró, tanítható javítást ad hozzá — ez teszi lehetővé, hogy nagy modelleket is fogyasztói GPU-n finomhangolj.', 'A QLoRA ezt kvantálással kombinálja, ami akár 65 milliárd paraméteres modellek finomhangolását is lehetővé teszi egyetlen GPU-n.']
       }
     }
   },
@@ -274,6 +295,11 @@ const graphText = {
         title: 'Diffusion Models',
         short: 'A short detour: a different generation principle \\u2014 unfolding from noise, not predicting word by word \\u2014 behind image, video, and (surprisingly) text.',
         desc: ['Image and video generation (Midjourney, Stable Diffusion, Sora) almost all use this principle: the entire output emerges from noise at once, refined globally \\u2014 not word by word like an LLM.', 'Since 2025, diffusion-based text generation models exist too (Mercury, Gemini Diffusion), 5\\u201310\\u00d7 faster on short, structured outputs, though still behind on complex reasoning.']
+      },
+      'base-vs-instruct': {
+        title: 'Base vs. Instruct Models',
+        short: 'How a raw, \\u201cjust keeps completing\\u201d text predictor becomes a helpful assistant \\u2014 pretraining, instruction tuning, and what comes after.',
+        desc: ['A base model just statistically continues text; instruction tuning uses special marker tokens to teach it to answer a question instead of continuing it \\u2014 a step that often matters more in practice than raw model size.', 'Ties together the RLHF (the third, refining step) and Reasoning (the fourth, \\u201cthinking\\u201d layer) tutorials into one coherent picture.']
       },
       rag: {
         title: 'RAG',
@@ -349,6 +375,16 @@ const graphText = {
         title: 'Latency',
         short: 'What makes up response time, and where you can actually speed things up.',
         desc: ['Most of latency comes from KV cache size, hardware, and model size together — these shape the user experience.', 'In RAG systems, the retrieval step can add significantly to total response time.']
+      },
+      'model-training': {
+        title: 'Model Training',
+        short: 'How a model learns from scratch: the \\u201cpredict, measure the error, correct\\u201d loop that builds a vector space out of raw weights.',
+        desc: ['The same gradient-based loop \\u2014 forward pass, loss, backward pass, weight update \\u2014 sits behind training both an LLM and a diffusion model; only the prediction target differs.', 'Covers concrete data and cost figures, the training philosophy for small vs. large models, and distillation/synthetic data techniques.']
+      },
+      'fine-tuning': {
+        title: 'Fine-Tuning Techniques',
+        short: 'LoRA, QLoRA, and specialization: how to adapt an already-trained model for a fraction of the pretraining cost.',
+        desc: ['LoRA\\u2019s \\u201csmall matrix\\u201d trick freezes the base weights and adds only a tiny, trainable correction \\u2014 this is what makes fine-tuning large models on consumer GPUs possible.', 'QLoRA combines this with quantization, enabling fine-tuning of models with up to 65 billion parameters on a single GPU.']
       }
     }
   }

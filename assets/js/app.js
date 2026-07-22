@@ -4,9 +4,9 @@
 
 /* ── PAGE NAVIGATION ── */
 const pages = [
-  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion',
+  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
-  'latency', 'model-routing',
+  'latency', 'model-routing', 'model-training', 'fine-tuning',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf'
 ];
 
@@ -323,7 +323,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 2900, H = 2000;
+  const W = 2900, H = 2400;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);

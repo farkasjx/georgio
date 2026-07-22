@@ -53,6 +53,7 @@ const PAGE_ORDER = [
   { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
   { key: 'multimodal',            label: 'Multimodális modellek',   labelEn: 'Multimodal Models',        dot: '#c084fc' },
   { key: 'diffusion',             label: 'Diffúziós modellek',      labelEn: 'Diffusion Models',         dot: '#facc15' },
+  { key: 'base-vs-instruct',      label: 'Base vs. Instruct',       labelEn: 'Base vs. Instruct',        dot: '#f87171' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
@@ -63,6 +64,8 @@ const PAGE_ORDER = [
   { key: 'kv-cache',              label: 'KV cache',                labelEn: 'KV cache',                 dot: '#432604' },
   { key: 'latency',               label: 'Latency',                 labelEn: 'Latency',                  dot: '#523986' },
   { key: 'model-routing',         label: 'Model routing',           labelEn: 'Model routing',            dot: '#496b8f' },
+  { key: 'model-training',        label: 'Modelltanítás',           labelEn: 'Model Training',           dot: '#d97706' },
+  { key: 'fine-tuning',           label: 'Fine-tuning technikák',   labelEn: 'Fine-Tuning Techniques',  dot: '#0ea5e9' },
 
   /* ── Tudás & kontextus ── */
   { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
