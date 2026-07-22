@@ -51,7 +51,7 @@ const graphEdges = [
   ['aiconfig','security'],
   ['security','mcp'],
   ['reasoning','prompting'], ['reasoning','tools'], ['reasoning','mcp'], ['reasoning','hallucination'], ['reasoning','rag'],
-  ['vibecoding','prompting'], ['vibecoding','reasoning'], ['vibecoding','tools'], ['vibecoding','security'],
+  ['vibecoding','prompting'], ['vibecoding','reasoning'], ['vibecoding','tools'], ['vibecoding','security'], ['vibecoding','aiconfig'],
   ['rag','vectordb'], ['rag','memory'], ['rag','hallucination'], ['rag','latency'], ['rag','knowledge-cutoff'],
   ['vectordb','memory'],
   ['okf','rag'], ['okf','memory'], ['okf','vectordb'], ['okf','aiconfig'], ['okf','mcp'],
@@ -106,8 +106,8 @@ const graphText = {
       },
       vibecoding: {
         title: 'Vibe coding',
-        short: 'Karpathy 2025-ös tweetjétől az "agentic engineering" fordulatig — hatások, kockázatok, határok.',
-        desc: ['A szűk értelemben vett vibe coding — felügyelet nélküli, "Accept All" munkamód — hasznos alacsony tétű prototípusoknál, de dokumentált biztonsági incidensek sora köthető a felügyelet nélküli productionba engedéséhez.', 'Szorosan kapcsolódik a prompt engineeringhez (a specifikáció minősége), a reasoninghoz (mi történik a hurokban) és a biztonsághoz (mit kell ellenőrizni, mielőtt élesítesz).']
+        short: 'Karpathy 2025-ös tweetjétől az "agentic engineering" fordulatig — hatások, kockázatok, és gyakorlati technikák.',
+        desc: ['A szűk értelemben vett vibe coding — felügyelet nélküli, "Accept All" munkamód — hasznos alacsony tétű prototípusoknál, de dokumentált biztonsági incidensek sora köthető a felügyelet nélküli productionba engedéséhez.', 'Konkrét gyakorlati eszközöket is ad: config fájlokkal (AGENTS.md, CLAUDE.md), eszközválasztási döntési táblával és bemásolható biztonsági promptokkal.']
       },
       rag: {
         title: 'RAG',
@@ -226,8 +226,8 @@ const graphText = {
       },
       vibecoding: {
         title: 'Vibe Coding',
-        short: 'From Karpathy\\u2019s 2025 tweet to the \\u201cagentic engineering\\u201d turn — impact, risks, and limits.',
-        desc: ['Vibe coding in the narrow sense \\u2014 unreviewed, \\u201cAccept All\\u201d development \\u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'It ties closely to prompt engineering (spec quality), reasoning (what happens inside the loop), and security (what to check before shipping).']
+        short: 'From Karpathy\\u2019s 2025 tweet to the \\u201cagentic engineering\\u201d turn — impact, risks, and practical techniques.',
+        desc: ['Vibe coding in the narrow sense \\u2014 unreviewed, \\u201cAccept All\\u201d development \\u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'Also covers practical tools: rule files (AGENTS.md, CLAUDE.md), a tool-choice decision table, and copy-pasteable security prompts.']
       },
       rag: {
         title: 'RAG',

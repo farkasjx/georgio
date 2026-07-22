@@ -14,8 +14,8 @@ hero:
   lead: "2025 februárjában Karpathy egy tweetben nevet adott valaminek, amit már sokan csináltak: leírod, mit akarsz, elfogadod, amit a modell ír, és a hibaüzenetet visszamásolod, amíg működik. Egy év alatt szótári címszó, vállalati rémálom és — magának Karpathynak a szavaival — saját maga temetése lett belőle. Ez a cikk végigveszi, mi történt valójában, mit mutatnak az adatok, és hol húzódik a határ afölött, hogy ez a módszer még működik."
   stats:
     - { val: "2025.02", lbl: "Karpathy-tweet" }
-    - { val: "45%", lbl: "sérülékeny AI-kód*" }
-    - { val: "2.74×", lbl: "több biztonsági hiba*" }
+    - { val: "12", lbl: "Szakasz" }
+    - { val: "7", lbl: "Biztonsági prompt" }
     - { val: "2026.02", lbl: "\"agentic engineering\"" }
 footer:
   left: "AI Hub · Vibe coding"
@@ -32,6 +32,10 @@ footer:
   <a class="toc-card" href="#vibecoding-5"><div class="tc-num">5. rész</div><div class="tc-name">Hol a határa?</div><div class="tc-desc">A kontextusablak fala — mekkora projektig működik jól.</div></a>
   <a class="toc-card" href="#vibecoding-6"><div class="tc-num">6. rész</div><div class="tc-name">Hogyan csináld jól</div><div class="tc-desc">Spec-driven development, EARS jelölés, a gyakorlati szintézis.</div></a>
   <a class="toc-card" href="#vibecoding-7"><div class="tc-num">7. rész</div><div class="tc-name">Milyen szoftverre való</div><div class="tc-desc">Mikor jó ötlet, és mikor kockázatos vállalás.</div></a>
+  <a class="toc-card" href="#vibecoding-8"><div class="tc-num">8. rész</div><div class="tc-name">Config fájlok kapcsolata</div><div class="tc-desc">AGENTS.md, CLAUDE.md — a vibe coding "memóriája".</div></a>
+  <a class="toc-card" href="#vibecoding-9"><div class="tc-num">9. rész</div><div class="tc-name">Melyik eszközt mikor</div><div class="tc-desc">Cursor, Replit, Lovable, Claude Code — döntési tábla.</div></a>
+  <a class="toc-card" href="#vibecoding-10"><div class="tc-num">10. rész</div><div class="tc-name">Biztonsági promptok</div><div class="tc-desc">Hét, azonnal bemásolható ellenőrzés ship előtt.</div></a>
+  <a class="toc-card" href="#vibecoding-11"><div class="tc-num">11. rész</div><div class="tc-name">Egy teljes példa</div><div class="tc-desc">Az összes technika egyetlen munkamenetben, végigvíve.</div></a>
 </div>
 ::::::
 
@@ -353,6 +357,148 @@ Ha a hiba ára **"egy kínos képernyőkép"**, a vibe coding felügyelet nélk�
 :::::
 ::::::
 
+:::::: section id=vibecoding-8 num="08" heading="8. rész — Config fájlok: a vibe coding memóriája" nav="Config fájlok kapcsolata" group="Gyakorlat"
+
+<p class="topic-tagline">Cél: kösd össze a vibe codingot egy konkrét, azonnal használható technikával — a projekt-szintű szabályfájlokkal.</p>
+
+### Az alapprobléma, amit ez megold
+
+A vibe coding egyik láthatatlan súrlódása, hogy **minden munkamenet nulláról indul**: a modell nem emlékszik, milyen stacket használsz, milyen konvenciókat követsz, mit nem szabad csinálnia. Ha ezt minden alkalommal újra elmondod, az fárasztó és eszközönként más — pontosan ezt a problémát oldja meg egy **projekt-szintű szabályfájl**, amit a repóba teszel, és minden agent automatikusan beolvas.
+
+::::: callout label="Adatpont, ami mutatja a tétet"
+2026 áprilisában Karpathy egyetlen feltöltött **CLAUDE.md** fájlja 48 900 GitHub-csillagot kapott — ebből 7 900-at egyetlen nap alatt. A dokumentált állítás szerint egy jól megírt szabályfájl a pontosságot **65%-ról 94%-ra** emelheti ugyanazon a projekten, ugyanazzal a modellel.
+:::::
+
+### A formátumok, amikkel find találkozol
+
+::::: stack-grid
+:::: card label="AGENTS.md"
+A nyíltan szabványosított, eszközfüggetlen formátum — a Linux Foundation, OpenAI, Google, Anthropic, Cursor és Sourcegraph is támogatja. Ha csak egyet vezetnél be, ezt válaszd.
+::::
+:::: card label="CLAUDE.md"
+A Claude Code saját konvenciója — gazdagabb, réteges memóriamodellel (projekt-szintű + könyvtár-szintű fájlok konkatenálva). **Nem** olvassa be automatikusan az AGENTS.md-t.
+::::
+:::: card label=".cursor/rules/*.mdc"
+Cursor rendszere — YAML frontmatterrel, glob-mintázat alapú aktiválással (pl. csak a `*.tsx` fájloknál él egy szabály). A régi, egyetlen `.cursorrules` fájl elavult.
+::::
+:::::
+
+::::: callout warning label="Amit érdemes tudni, mielőtt csapatban bevezeted"
+A formátumok **nem cserélhetők fel automatikusan**: a Claude Code nem olvassa be natívan az AGENTS.md-t, a Cursor pedig nem olvassa be a CLAUDE.md-t. Ha vegyes eszközparkot használ a csapat, egy bevett megoldás egyetlen kanonikus fájl írása, amit szimlinkekkel vagy egy build-lépéssel szinkronizálnak a többi elnevezésre (`CLAUDE.md`, `.cursorrules`, `.windsurfrules` stb.).
+:::::
+
+### Hogyan kapcsolódik ez szorosan a vibe codinghoz
+
+Egy jól megírt szabályfájl pontosan azt a kockázatot csökkenti, amit az 5. részben (Context Rot) és a 4. részben (dokumentált incidensek) tárgyaltunk: ha a fájlban rögzítve van, hogy *"minden adatbázis-táblán kötelező a Row Level Security"* vagy *"soha ne írj hardcode-olt API-kulcsot"*, az agent ezt **minden egyes munkamenet elején**, magától figyelembe veszi — nem azon múlik, hogy éppen eszedbe jutott-e leírni.
+
+::::: callout label="Bővebben"
+A konfigurációs fájlok teljes felépítését, a rétegzés logikáját (always-on szabályok vs. igény szerinti skillek) és egy konkrét mappaszerkezetet az <em>AI Config fájlok</em> tutorial tárgyalja részletesen — ez a cikk itt csak a vibe codinghoz való kapcsolódási pontra fókuszált.
+:::::
+::::::
+
+:::::: section id=vibecoding-9 num="09" heading="9. rész — Melyik eszközt mikor: egy gyakorlati döntési tábla" nav="Melyik eszközt mikor" group="Gyakorlat"
+
+<p class="topic-tagline">Cél: konkrét támpontot adj, melyik eszköz melyik helyzethez illik — nem "a legjobb", hanem "a hozzád illő".</p>
+
+### A négy alapkérdés
+
+::::: stack-grid
+:::: card label="Hol dolgozol?"
+Helyi szerkesztőben → Cursor / Windsurf. Terminálban → Claude Code / Codex. Böngészőben → Bolt / Lovable / Replit Agent.
+::::
+:::: card label="Mennyi autonómiát akarsz?"
+Szoros, felügyelt scope → Claude Code vagy Cursor. Maximális önállóság → Codex vagy Windsurf agent-mód.
+::::
+:::: card label="Tudsz kódot olvasni?"
+Igen → szerkesztő- vagy terminál-alapú eszköz, ahol átlátod a diffet. Nem (még) → Lovable vagy Bolt, ahol a felület elvégzi helyetted az első kört.
+::::
+:::: card label="Mi a végcél?"
+Gyors demó / stakeholder-bemutató → Lovable / Bolt. Hosszú távon karbantartott production → Cursor + Claude Code kombináció, exportált, tiszta kóddal.
+::::
+:::::
+
+### Egy tipikus, bevált kombináció
+
+::::: callout label="A \"Lovable → Cursor\" munkafolyamat"
+Sok gyakorló csapat a **Lovable**-t vagy **Bolt**-ot használja a kezdeti UI-váz és az alapstruktúra felhúzására (mert ez ment gyorsan, vizuálisan), majd **GitHub-szinkronon** keresztül áthozza a kódot **Cursorba** vagy **Claude Code**-ba a komplex backend-logikához, egyedi integrációkhoz és a hosszabb távú karbantartáshoz. Ez a váltás maga a **6. részben** leírt "vibe-old fel a felfedezést, specifikáld a productiont" elv gyakorlati megvalósítása.
+:::::
+
+### Amire figyelj a kilépési pontnál ("mi van, ha kinövöd?")
+
+::::: compare
+::: good label="✓ Alacsony migrációs kockázat"
+Lovable és Bolt tiszta, idiomatikus React/TypeScript-kódot generál — nincs zárt, proprietary absztrakció, GitHub-szinkronnal bármikor átvihető más szerkesztőbe.
+:::
+::: bad label="✗ Magasabb migrációs kockázat"
+Egy teljes, beépített infrastruktúrával rendelkező platform (pl. Replit hosting-integrációval) elhagyása valódi mérnöki munkát igényel — érdemes ezt már a projekt elején mérlegelni, ha várhatóan növekedni fog.
+:::
+:::::
+
+::::: callout label="Egy mondatban"
+Nincs egyetlen "legjobb" eszköz — a legtöbb tapasztalt fejlesztő 2–3 eszközt kombinál (egy szerkesztő-alapút a napi munkához, egy terminál-alapút a nagyobb refaktorokhoz, esetenként egy böngésző-alapút gyors demókhoz), és tudatosan vált köztük a feladat jellege szerint.
+:::::
+::::::
+
+:::::: section id=vibecoding-10 num="10" heading="10. rész — Másolható biztonsági promptok ship előtt" nav="Biztonsági promptok" group="Gyakorlat"
+
+<p class="topic-tagline">Cél: adj kézzelfogható, azonnal bemásolható eszközt — ne csak elvet.</p>
+
+### A minta, ami mögötte áll
+
+A 4–5. részben tárgyalt incidensek (Tea app, Moltbook, CVE-2025-48757) mind ugyanabba a néhány kategóriába esnek: hiányzó jogosultság-ellenőrzés, hardcode-olt kulcsok, hiányzó adatbázis-szintű hozzáférés-vezérlés. Ezek **automatizálható, promptolható ellenőrzések** — nem kell hozzá külön biztonsági szakértő ahhoz, hogy a legdurvább hibákat kiszűrd, mielőtt élesítenél.
+
+::::: callout label="Hét, bemásolható ellenőrző prompt"
+Ugyanabba az eszközbe másold be, amivel a kódot építetted (Cursor, Claude Code, Lovable, Replit Agent) — mindegyik kb. 30–60 másodperc alatt fut le:
+
+1. *"Nézd át az autentikációs implementációmat biztonsági szempontból — hiányzó jelszó-hashing, session-kezelési hiba, brute-force elleni védelem hiánya."*
+2. *"Ellenőrizd minden API-végpontomat: van-e mindegyiken jogosultság-ellenőrzés (authorization check), vagy csak autentikáció (authentication)?"*
+3. *"Keress hardcode-olt API-kulcsot, jelszót, tokent vagy adatbázis-hitelesítő adatot a kódban — soronként, fájlnévvel."*
+4. *"Van-e SQL injection kockázat bármelyik adatbázis-lekérdezésemben? Használok-e paraméterezett query-t mindenhol?"*
+5. *"Minden adatbázis-táblámon be van-e kapcsolva a Row Level Security (RLS), vagy csak kliens-oldali szűrésre támaszkodom?"*
+6. *"Van-e olyan admin-felület vagy -végpont, ami nyilvánosan elérhető hitelesítés nélkül?"*
+7. *"Nézd át a hibakezelésemet — szivárogtatok-e ki stack trace-t, belső elérési utat vagy adatbázis-hibaüzenetet a felhasználó felé?"*
+:::::
+
+::::: callout warning label="Amit ez NEM helyettesít"
+Ezek a promptok a **leggyakoribb, dokumentáltan visszatérő** hibákat szűrik ki — nem helyettesítik a professzionális biztonsági auditot komolyabb, valós felhasználói adatot kezelő rendszereknél (lásd a 7. rész "kockázatos terep" listáját). A cél, hogy a **10 perc, amit a legtöbben kihagynak**, ne maradjon ki.
+:::::
+
+::::: callout label="Egy mondatban"
+Ugyanaz az AI, ami megírta a kódot, néhány célzott kérdéssel meg is tudja mondani, hol a leggyakoribb hibái — ezt a lépést a "ship it" előtt sosem érdemes kihagyni, függetlenül attól, mennyire kicsinek tűnik a projekt.
+:::::
+::::::
+
+:::::: section id=vibecoding-11 num="11" heading="11. rész — Egy teljes példa végigvíve" nav="Egy teljes példa" group="Gyakorlat"
+
+<p class="topic-tagline">Cél: lásd, hogyan áll össze a cikkben tárgyalt összes technika egyetlen, realisztikus munkamenetben.</p>
+
+### A feladat
+
+Tegyük fel, egy hétvégi projektként egy egyszerű, belső feladatkövető alkalmazást építesz csapatod számára — pontosan az a "jó terep" eset, amit a 7. részben azonosítottunk.
+
+::::: stack-grid
+:::: card label="1 · Kezdd a szabályfájllal (8. rész)"
+Mielőtt bármit generáltatnál, írj egy rövid `AGENTS.md`-et: *"Next.js + Supabase stacket használunk. Minden adatbázis-táblán RLS kötelező. TypeScript, named exportok, nincs `any` típus."* Ez minden további promptnál automatikusan érvényesül.
+::::
+:::: card label="2 · Specifikálj EARS-szerűen (6. rész)"
+A homályos *"legyen egy feladatkövető"* helyett: *"WHEN egy felhasználó feladatot hoz létre, THE system SHALL azt csak a saját csapatához rendelni, és mást nem engedélyezni a megtekintésére."*
+::::
+:::: card label="3 · Vibe-old fel a UI-t"
+Egy Lovable- vagy Bolt-szerű eszközben gyorsan felhúzod a felületet — itt tudatosan elfogadható a "Accept All" munkamód, mert a tét alacsony és a specifikáció már rögzítve van.
+::::
+:::: card label="4 · Futtasd a biztonsági promptokat (10. rész)"
+Mielőtt csapattársaid hozzáférnek, lefuttatod a 3., 5. és 6. ellenőrző promptot — pont a hardcode-olt kulcs és a hiányzó RLS a két leggyakoribb hiba ebben a méretben.
+::::
+:::: card label="5 · Ellenőrizd a méretet (5. rész)"
+Ha a projekt egy hónap után 15 000 sor fölé nő, és az agent elkezd inkonzisztens mintázatokat generálni, az a jel, hogy itt az idő egy strukturáltabb, spec-driven fázisra váltani — nem a "rosszabb lett a modell" jel, hanem a kontextusablak-korlát jelentkezik.
+::::
+:::::
+
+::::: callout label="Egy mondatban"
+Egyetlen technika önmagában sem old meg mindent — a szabályfájl, a specifikáció, a tudatos eszközválasztás és a ship előtti ellenőrzés **együtt** adják azt a munkafolyamatot, amivel a vibe coding sebessége megmarad, a 4. részben tárgyalt kockázatok pedig jelentősen csökkennek.
+:::::
+::::::
+
 :::::: section id=vibecoding-summary num=SUMMARY nav="Összefoglalás" sub=true group="Referencia"
 ## A cikk végére <em>ezt tudod</em>
 
@@ -372,9 +518,15 @@ A vibe coding technikai határa: a kontextusablak mérete — kódbázis, csapat
 :::: card label="6–7. rész"
 A gyakorlati válasz: spec-driven development és EARS-jelölés · konkrét döntési szempontok, milyen szoftverre való és milyenre nem
 ::::
+:::: card label="8–9. rész"
+Config fájlok (AGENTS.md, CLAUDE.md) mint a vibe coding "memóriája" · gyakorlati döntési tábla, melyik eszközt (Cursor, Replit, Lovable, Claude Code) mikor érdemes választani
+::::
+:::: card label="10–11. rész"
+Hét, azonnal bemásolható biztonsági ellenőrző prompt ship előtt · egy teljes, végigvitt példa, ami az összes technikát egyetlen munkamenetbe fűzi össze
+::::
 :::::
 
-<p class="topic-tagline">Kapcsolódó: a <em>Reasoning</em> (mi történik a modell "fejében" egy feladat közben), a <em>Prompt Engineering</em> (hogyan írd le pontosan a szándékod) és a <em>Biztonság &amp; OWASP</em> (mire figyelj, mielőtt AI-generált kódot élesítesz) tutorialok.</p>
+<p class="topic-tagline">Kapcsolódó: a <em>Reasoning</em> (mi történik a modell "fejében" egy feladat közben), a <em>Prompt Engineering</em> (hogyan írd le pontosan a szándékod), az <em>AI Config fájlok</em> (a szabályfájlok teljes felépítése) és a <em>Biztonság &amp; OWASP</em> (mire figyelj, mielőtt AI-generált kódot élesítesz) tutorialok.</p>
 
 <p class="topic-tagline" style="margin-top:12px;font-size:0.85em;opacity:0.75">* A 45%-os és 2,74×-es adat a Veracode 2025-ös GenAI Code Security Reportjából, illetve a CodeRabbit 2025 decemberi, 470 nyílt forráskódú pull requestet vizsgáló elemzéséből származik — lásd a 4. részt a további forrásokért.</p>
 ::::::
