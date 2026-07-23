@@ -8,14 +8,15 @@ sidebar_groups:
   - Modalitás és biztonság
   - Agentic és eszközök
   - Tudás és kontextus
+  - Gyakorlati és technikai
 hero:
   eyebrow: "Fogalomtár · Fejlesztői Tanulási Terv"
   title: "Fogalomtár — <em>az AI Hub kifejezései egy helyen</em>"
   lead: "Nem egy száraz, ábécé-sorrendes lista — minden fogalomhoz egy-két mondatos, érthető magyarázat és egy link a részletes tárgyaláshoz. Ha egy kifejezésbe futsz valamelyik cikkben, és csak gyorsan tudni akarod, mit jelent, itt a helye. Ha a teljes mechanizmust is érteni akarod, a link elvisz a megfelelő szakaszhoz."
   stats:
-    - { val: "80+", lbl: "Fogalom" }
-    - { val: "6", lbl: "Kategória" }
-    - { val: "35", lbl: "Kapcsolódó cikk" }
+    - { val: "60+", lbl: "Fogalom" }
+    - { val: "7", lbl: "Kategória" }
+    - { val: "46", lbl: "Kapcsolódó cikk" }
     - { val: "0", lbl: "Száraz definíció" }
 footer:
   left: "AI Hub · Fogalomtár"
@@ -30,6 +31,7 @@ footer:
   <a class="toc-card" href="#glossary-3"><div class="tc-num">4</div><div class="tc-name">Modalitás és biztonság</div><div class="tc-desc">Multimodalitás, diffúzió, alignment, jailbreak.</div></a>
   <a class="toc-card" href="#glossary-4"><div class="tc-num">5</div><div class="tc-name">Agentic és eszközök</div><div class="tc-desc">MCP, ReAct, vibe coding — hogyan dolgozol AI-jal.</div></a>
   <a class="toc-card" href="#glossary-5"><div class="tc-num">6</div><div class="tc-name">Tudás és kontextus</div><div class="tc-desc">RAG, vektor-DB, halucináció — honnan tudja, amit tud.</div></a>
+  <a class="toc-card" href="#glossary-6"><div class="tc-num">7</div><div class="tc-name">Gyakorlati és technikai</div><div class="tc-desc">Top-k, top-p, harness, LAM/SLM/VLM — kicsit mélyebb kifejezések.</div></a>
 </div>
 ::::::
 
@@ -221,6 +223,50 @@ Az az időpont, ameddig egy modell tanítóadata terjed — az utána történt 
 ::::
 :::: card label="MMLU / benchmark"
 Szabványosított tesztek, amik egy modell teljesítményét mérik egy adott feladattípuson — hasznos durva összehasonlításra, de sosem helyettesítik a saját tesztedet. → <a href="#evaluation-1" data-goto-page="evaluation">Evaluation, 1. rész</a>
+::::
+:::::
+::::::
+
+:::::: section id=glossary-6 num="07" heading="7. rész — Gyakorlati és technikai fogalmak" nav="Gyakorlati és technikai fogalmak" group="Gyakorlati és technikai"
+
+<p class="topic-tagline">Kicsit mélyebb, technikaibb kifejezések, amikkel gyakran találkozol kód vagy paraméter-beállítás közben.</p>
+
+::::: stack-grid
+:::: card label="Top-k"
+Két, kontextustól függő jelentése van. Mintavételezésnél: a modell csak a **k legvalószínűbb** tokenből választ, a többit figyelmen kívül hagyja. MoE-routernél (lásd a <em>Dense vs. MoE</em> tutorialt): a **k legmagasabb pontszámú** szakértőt (expertet) aktiválja egy adott tokenre, a többit nullázza. → <a href="#dm-3" data-goto-page="dense-moe">Dense vs. MoE, 3. rész</a>
+::::
+:::: card label="Top-p (nucleus sampling)"
+A modell csak azt a **legszűkebb tokenhalmazt** veszi figyelembe, aminek együttes valószínűsége elér egy küszöböt (pl. 0,9) — a nagyon valószínűtlen tokenek eleve ki vannak zárva. → <a href="#randomness-2" data-goto-page="randomness">Véletlenszerűség, 2. rész</a>
+::::
+:::: card label="Greedy decoding"
+A mintavételezés szélsőséges esete (temperature = 0): a modell mindig a **legvalószínűbb** tokent választja — teljesen determinisztikus, ugyanarra a promptra mindig ugyanaz a válasz. → <a href="#randomness-2" data-goto-page="randomness">Véletlenszerűség, 2. rész</a>
+::::
+:::: card label="Logit"
+Egy nyers, még nem valószínűséggé alakított pontszám, amit a modell minden lehetséges token(vagy MoE-routernél minden expert) kimenetére számol — softmax alakítja végül valószínűséggé. → <a href="#dm-3" data-goto-page="dense-moe">Dense vs. MoE, 3. rész</a>
+::::
+:::: card label="Guardrails"
+Explicit, kikényszerített korlátok egy agent-rendszerben, amik megakadályozzák a nem kívánt vagy veszélyes cselekvéseket — a harness egyik rétege. → <a href="#harness-engineering-2" data-goto-page="harness-engineering">Harness engineering, 2. rész</a>
+::::
+:::: card label="Harness"
+A modell köré épített futtató szoftver-infrastruktúra, ami mindent kezel, ami nem maga a modell reasoningje — eszközök, memória, ellenőrzés. Agent = Model + Harness. → <a href="#harness-engineering-0" data-goto-page="harness-engineering">Harness engineering, 0. rész</a>
+::::
+:::: card label="SLM (Small Language Model)"
+Tipikusan 10 milliárd paraméter alatti modell, ami hatékonyságra, magánéletre és edge-eszközön futtatásra van optimalizálva. → <a href="#model-types-1" data-goto-page="model-types">Modelltípusok térképe, 1. rész</a>
+::::
+:::: card label="LAM (Large Action Model)"
+Egy modelltípus, ami a tervezett lépéseket ténylegesen végrehajtható cselekvés-sorozattá fordítja, nem csak szöveges választ ad. → <a href="#model-types-3" data-goto-page="model-types">Modelltípusok térképe, 3. rész</a>
+::::
+:::: card label="VLM (Vision-Language Model)"
+Egy modell, ami képet és szöveget együtt dolgoz fel — lásd a <em>Multimodális modellek</em> tutorial vision encoder részét. → <a href="#model-types-2" data-goto-page="model-types">Modelltípusok térképe, 2. rész</a>
+::::
+:::: card label="Open weight"
+Egy modell, aminek a betanított paraméterei (súlyai) letölthetők, de a tanítóadat és a kód nem feltétlenül nyilvános — nem ugyanaz, mint "open source". → <a href="#open-weight-0" data-goto-page="open-weight">Nyílt súlyú modellek, 0. rész</a>
+::::
+:::: card label="GraphRAG"
+A vektor-alapú RAG kiegészítése egy tudásgráffal, ami az entitások kapcsolatait rögzíti — multi-hop kérdésekhez erős, de a megvalósítás minőségén múlik a haszna. → <a href="#graphrag-0" data-goto-page="graphrag">GraphRAG, 0. rész</a>
+::::
+:::: card label="LLMOps"
+A DevOps/MLOps kiterjesztése LLM-alkalmazásokra — prompt-verziózás, eval-kapuk, production-monitorozás, mert a prompt is kódnak számít. → <a href="#llmops-1" data-goto-page="llmops">LLMOps, 1. rész</a>
 ::::
 :::::
 ::::::

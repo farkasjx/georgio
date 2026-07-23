@@ -43,6 +43,10 @@ const PAGE_ORDER = [
   { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
   { key: 'glossary',              label: 'Fogalomtár',              labelEn: 'Glossary',                 dot: '#eab308' },
 
+  /* ── Kontextus & áttekintés ── */
+  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
+  { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
+
   /* ── Gyakorlat & eszközök ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
   { key: 'prompting',             label: 'Prompt Engineering',      labelEn: 'Prompt Engineering',       dot: '#e8a84a' },
@@ -52,7 +56,6 @@ const PAGE_ORDER = [
   { key: 'ai-safety',             label: 'Alignment és red teaming', labelEn: 'Alignment and Red Teaming', dot: '#ef4444' },
   { key: 'agent-architecture',    label: 'Agent architektúra',      labelEn: 'Agent Architecture',       dot: '#22d3ee' },
   { key: 'huggingface',           label: 'Hugging Face',            labelEn: 'Hugging Face',             dot: '#fdba74' },
-  { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
   { key: 'harness-engineering',   label: 'Harness engineering',     labelEn: 'Harness Engineering',      dot: '#0d9488' },
   { key: 'ai-code-review',        label: 'AI code review',          labelEn: 'AI Code Review',           dot: '#8b5cf6' },
   { key: 'ai-workflow-automation', label: 'Workflow automatizáció', labelEn: 'Workflow Automation',      dot: '#f43f5e' },
@@ -67,7 +70,6 @@ const PAGE_ORDER = [
   { key: 'architecture',          label: 'Egy modell anatómiája',   labelEn: 'Anatomy of a Model',       dot: '#818cf8' },
   { key: 'tokenization',          label: 'Tokenizáció',             labelEn: 'Tokenization',             dot: '#2dd4bf' },
   { key: 'randomness',            label: 'Véletlenszerűség',        labelEn: 'Randomness',               dot: '#fb7185' },
-  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
@@ -110,6 +112,8 @@ const LOCALES = [
       title: 'AI Hub — Tudástérkép, Eszközök, Prompt Engineering',
       tag: '2026 · Magyar',
       searchLabel: 'Keresés',
+      glossaryLabel: 'Fogalomtár',
+      glossaryTitle: 'Fogalomtár — kifejezések gyors magyarázattal',
       searchPlaceholder: 'Keress a teljes tartalomban…',
       searchHint: 'Kezdj el gépelni a kereséshez…',
       searchNoResults: 'Nincs találat.',
@@ -117,13 +121,14 @@ const LOCALES = [
       searchTitle: 'Keresés (Ctrl+K)',
       pagesLabel: 'Oldalak',
       versionPopupTitleIntro: 'Új funkció: tartalom-frissítés jelzés',
-      versionPopupBodyIntro: 'Ha bármilyen tartalom változott az előző látogatáso óta, felugró ablakban megjelenik a változás mely taralmat érintette.',
+      versionPopupBodyIntro: 'Ha bármilyen tartalom változott az előző látogatásod óta, felugró ablakban megjelenik, mely tartalmat érintette a változás.',
       versionPopupTitleUpdate: 'Frissült tartalom',
       versionPopupBodyUpdate: 'Az előző látogatásod óta az alábbi anyagok változtak:',
       versionPopupNewTag: 'új',
       versionPopupUpdatedTag: 'frissült',
       versionPopupOpenLabel: 'Megnyitás',
       versionPopupGotIt: 'Rendben',
+      backToTopLabel: 'Vissza a tetejére',
       mapZoomIn: '＋ Zoom',
       mapZoomOut: '－ Zoom',
       mapReset: '↺ Reset',
@@ -131,6 +136,7 @@ const LOCALES = [
       mapFilterPractice: 'Gyakorlat & eszközök',
       mapFilterWorkflow: 'Modell-belső működés',
       mapFilterKnowledge: 'Tudás & kontextus',
+      mapFilterContext: 'Kontextus & áttekintés',
       mapFilterModel: 'Modell & hardver',
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
       mapRelatedTopics: 'Kapcsolódó témák',
@@ -149,6 +155,8 @@ const LOCALES = [
       title: 'AI Hub — Knowledge Map, Tools, Prompt Engineering',
       tag: '2026 · English',
       searchLabel: 'Search',
+      glossaryLabel: 'Glossary',
+      glossaryTitle: 'Glossary — quick term explanations',
       searchPlaceholder: 'Search all content…',
       searchHint: 'Start typing to search…',
       searchNoResults: 'No results.',
@@ -163,6 +171,7 @@ const LOCALES = [
       versionPopupUpdatedTag: 'updated',
       versionPopupOpenLabel: 'Open',
       versionPopupGotIt: 'Got it',
+      backToTopLabel: 'Back to top',
       mapZoomIn: '＋ Zoom',
       mapZoomOut: '－ Zoom',
       mapReset: '↺ Reset',
@@ -170,6 +179,7 @@ const LOCALES = [
       mapFilterPractice: 'Practice & Tools',
       mapFilterWorkflow: 'How the Model Works',
       mapFilterKnowledge: 'Knowledge & Context',
+      mapFilterContext: 'Context & Overview',
       mapFilterModel: 'Model & Hardware',
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',
       mapRelatedTopics: 'Related topics',
@@ -293,6 +303,7 @@ function buildHtml(pages, locale) {
   </a>
   <div class="topbar-spacer"></div>
   <div class="topbar-right">
+    <a class="glossary-link" href="#" onclick="showPage('glossary');return false;" title="${ui.glossaryTitle}">${ui.glossaryLabel}</a>
     <a class="lang-switch" href="${locale.otherHref}" onclick="event.preventDefault(); location.href='${locale.otherHref}'+location.hash;" title="${otherLangLabel === 'EN' ? 'Switch to English' : 'Váltás magyarra'}">${otherLangLabel}</a>
     <button class="search-trigger" onclick="openSearch()" aria-label="${ui.searchLabel}" title="${ui.searchTitle}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -362,6 +373,10 @@ ${pagesHtml}
 
   </main>
 </div><!-- /shell -->
+
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="${ui.backToTopLabel}" title="${ui.backToTopLabel}">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
 
 <!-- Generált adat: sidebar-navigáció, keresés, i18n UI-szövegek -->
 <script>

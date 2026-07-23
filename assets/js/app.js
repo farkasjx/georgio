@@ -65,6 +65,10 @@ function showPage(id) {
     // update sidebar
     sidebar.innerHTML = buildSidebar(id);
     attachSidebarLinks();
+
+    // új témára váltáskor mindig a cikk tetejéről induljunk, ne ott
+    // maradjunk, ahol az előző oldalon görgetve voltunk
+    window.scrollTo(0, 0);
   }
 
   window.location.hash = id;
@@ -291,6 +295,7 @@ const CLUSTER_REGION_COLOR = {
   workflow:  '#fb923c',
   model:     '#98d016',
   knowledge: '#1613d4',
+  context:   '#eab308',
 };
 
 function drawClusterRegions(svgEl) {
@@ -345,7 +350,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 3450, H = 2400;
+  const W = 3150, H = 2900;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -385,28 +390,40 @@ function initMap() {
     canvas.appendChild(el);
   });
 
-  /* ── node mozgatás egérrel — mousedown-tól figyeljük, elmozdult-e,
+  /* ── egységes koordináta-kinyerés egér- és touch-eseményekhez, hogy a
+     pan/zoom/drag logikát ne kelljen duplikálni mobil és desktop között ── */
+  function pointFromEvent(e) {
+    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    if (e.changedTouches && e.changedTouches.length) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+    return { x: e.clientX, y: e.clientY };
+  }
+
+  /* ── node mozgatás egérrel/érintéssel — mousedown-tól figyeljük, elmozdult-e,
      hogy meg tudjuk különböztetni a kattintást (panel nyitás) a húzástól ── */
   let draggingNode = null, nodeMoved = false;
   let nodeDragStartX, nodeDragStartY, nodeOrigX, nodeOrigY;
 
+  function startNodeDrag(node, el, e) {
+    draggingNode = node;
+    nodeMoved = false;
+    const p = pointFromEvent(e);
+    nodeDragStartX = p.x;
+    nodeDragStartY = p.y;
+    nodeOrigX = node.x;
+    nodeOrigY = node.y;
+    el.classList.add('dragging');
+  }
+
   graphNodes.forEach(node => {
     const el = document.getElementById(`node-${node.id}`);
-    el.addEventListener('mousedown', e => {
-      e.preventDefault();
-      draggingNode = node;
-      nodeMoved = false;
-      nodeDragStartX = e.clientX;
-      nodeDragStartY = e.clientY;
-      nodeOrigX = node.x;
-      nodeOrigY = node.y;
-      el.classList.add('dragging');
-    });
+    el.addEventListener('mousedown', e => { e.preventDefault(); startNodeDrag(node, el, e); });
+    el.addEventListener('touchstart', e => { startNodeDrag(node, el, e); }, { passive: true });
   });
 
   // pan & zoom
   let tx = -100, ty = -100, scale = 0.5;
   let dragging = false, startX, startY, startTx, startTy;
+  let pinchStartDist = null, pinchStartScale = null;
 
   function applyTransform(animate) {
     canvas.style.transition = animate ? 'transform 0.4s cubic-bezier(.18,.89,.32,1.08)' : 'none';
@@ -414,17 +431,19 @@ function initMap() {
   }
   applyTransform(false);
 
-  shell.addEventListener('mousedown', e => {
+  function startPan(e) {
     if (e.target.closest('.map-node')) return;
     dragging = true; shell.classList.add('dragging');
-    startX = e.clientX; startY = e.clientY;
+    const p = pointFromEvent(e);
+    startX = p.x; startY = p.y;
     startTx = tx; startTy = ty;
-  });
+  }
 
-  window.addEventListener('mousemove', e => {
+  function movePan(e) {
     if (draggingNode) {
-      const dx = (e.clientX - nodeDragStartX) / scale;
-      const dy = (e.clientY - nodeDragStartY) / scale;
+      const p = pointFromEvent(e);
+      const dx = (p.x - nodeDragStartX) / scale;
+      const dy = (p.y - nodeDragStartY) / scale;
       if (Math.abs(dx) > 3 || Math.abs(dy) > 3) nodeMoved = true;
       draggingNode.x = nodeOrigX + dx;
       draggingNode.y = nodeOrigY + dy;
@@ -435,12 +454,13 @@ function initMap() {
       return;
     }
     if (!dragging) return;
-    tx = startTx + (e.clientX - startX);
-    ty = startTy + (e.clientY - startY);
+    const p = pointFromEvent(e);
+    tx = startTx + (p.x - startX);
+    ty = startTy + (p.y - startY);
     applyTransform(false);
-  });
+  }
 
-  window.addEventListener('mouseup', () => {
+  function endPan() {
     if (draggingNode) {
       const el = document.getElementById(`node-${draggingNode.id}`);
       if (el) el.classList.remove('dragging');
@@ -448,7 +468,44 @@ function initMap() {
       draggingNode = null;
     }
     dragging = false; shell.classList.remove('dragging');
-  });
+    pinchStartDist = null;
+  }
+
+  function touchDist(e) {
+    const [a, b] = e.touches;
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  }
+
+  shell.addEventListener('mousedown', startPan);
+  window.addEventListener('mousemove', movePan);
+  window.addEventListener('mouseup', endPan);
+
+  /* mobil: egyujjas érintés = pan/node-mozgatás (ugyanaz a logika, mint egérrel),
+     kétujjas csippentés = zoom. passive:false kell a preventDefault-hoz, hogy az
+     oldal ne görgessen/zoomoljon a böngésző natív gesztusával egyszerre. */
+  shell.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      pinchStartDist = touchDist(e);
+      pinchStartScale = scale;
+      return;
+    }
+    startPan(e);
+  }, { passive: true });
+
+  window.addEventListener('touchmove', e => {
+    if (e.touches.length === 2 && pinchStartDist) {
+      e.preventDefault();
+      const factor = touchDist(e) / pinchStartDist;
+      scale = Math.max(0.25, Math.min(2, pinchStartScale * factor));
+      applyTransform(false);
+      return;
+    }
+    if (dragging || draggingNode) e.preventDefault();
+    movePan(e);
+  }, { passive: false });
+
+  window.addEventListener('touchend', endPan);
+  window.addEventListener('touchcancel', endPan);
 
   shell.addEventListener('wheel', e => {
     e.preventDefault();
@@ -460,7 +517,11 @@ function initMap() {
   // zoom buttons
   document.getElementById('btn-zoom-in').addEventListener('click',  () => { scale = Math.min(2, scale*1.2); applyTransform(true); });
   document.getElementById('btn-zoom-out').addEventListener('click', () => { scale = Math.max(0.25, scale*0.83); applyTransform(true); });
-  document.getElementById('btn-reset').addEventListener('click',    () => { tx=-100; ty=-100; scale=0.5; applyTransform(true); });
+  document.getElementById('btn-reset').addEventListener('click',    () => {
+    tx=-100; ty=-100; scale=0.5; applyTransform(true);
+    clearHighlight();
+    panel.classList.remove('open');
+  });
 
   // filter chips
   document.querySelectorAll('.map-chip').forEach(chip => {
@@ -697,6 +758,17 @@ function initCookieConsent() {
   if (declineBtn) declineBtn.addEventListener('click', () => setConsent('denied'));
 }
 
+/* ── VISSZA A TETEJÉRE gomb — csak akkor látszik, ha van mit görgetni vissza,
+   és nem a teljes képernyős map oldalon (ott nincs window-scroll) ── */
+function initBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    const onMap = document.getElementById('page-map')?.classList.contains('active');
+    btn.classList.toggle('visible', !onMap && window.scrollY > 400);
+  });
+}
+
 /* ─────────────────────────────────────────────
    INIT
 ───────────────────────────────────────────── */
@@ -713,6 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTermPreviews();
   initCrossPageSectionLinks();
   initCookieConsent();
+  initBackToTop();
 
   // panel bezárása kattintásra kívülre, vagy Escape-re
   document.addEventListener('click', (e) => {

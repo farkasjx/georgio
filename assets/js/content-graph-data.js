@@ -22,58 +22,60 @@
      bal-lent:  model      (Modell & hardver)
      jobb-lent: knowledge  (Tudás & kontextus)             */
 const graphNodesBase = [
+  /* ── Kontextus és áttekintés (fent, középen) ── */
+  { id: 'ai-history',              cluster: 'context', color: '#fcd34d', x: 1550,  y: 100 },
+  { id: 'enterprise-ai',           cluster: 'context', color: '#dc2626', x: 1890,  y: 100 },
+
   /* ── Gyakorlat & eszközök (bal-fent) ── */
-  { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 100,  y: 100 },
-  { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 440,  y: 100 },
-  { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 780,  y: 100 },
-  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 1120,  y: 100 },
-  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 100,  y: 340 },
-  { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 440,  y: 340 },
-  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 780,  y: 340 },
-  { id: 'huggingface',             cluster: 'practice', color: '#fdba74', x: 1120,  y: 340 },
-  { id: 'enterprise-ai',           cluster: 'practice', color: '#dc2626', x: 100,  y: 580 },
-  { id: 'harness-engineering',     cluster: 'practice', color: '#0d9488', x: 440,  y: 580 },
-  { id: 'ai-code-review',          cluster: 'practice', color: '#8b5cf6', x: 780,  y: 580 },
-  { id: 'ai-workflow-automation',  cluster: 'practice', color: '#f43f5e', x: 1120,  y: 580 },
+  { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 100,  y: 550 },
+  { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 440,  y: 550 },
+  { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 780,  y: 550 },
+  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 1120,  y: 550 },
+  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 100,  y: 790 },
+  { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 440,  y: 790 },
+  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 780,  y: 790 },
+  { id: 'huggingface',             cluster: 'practice', color: '#fdba74', x: 1120,  y: 790 },
+  { id: 'harness-engineering',     cluster: 'practice', color: '#0d9488', x: 100,  y: 1030 },
+  { id: 'ai-code-review',          cluster: 'practice', color: '#8b5cf6', x: 440,  y: 1030 },
+  { id: 'ai-workflow-automation',  cluster: 'practice', color: '#f43f5e', x: 780,  y: 1030 },
 
   /* ── Modell-belső működés (jobb-fent) ── */
-  { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 2050,  y: 100 },
-  { id: 'mcp',                     cluster: 'workflow', color: '#359a9c', x: 2390,  y: 100 },
-  { id: 'security',                cluster: 'workflow', color: '#e06c75', x: 2730,  y: 100 },
-  { id: 'multimodal',              cluster: 'workflow', color: '#c084fc', x: 3070,  y: 100 },
-  { id: 'diffusion',               cluster: 'workflow', color: '#facc15', x: 2050,  y: 340 },
-  { id: 'base-vs-instruct',        cluster: 'workflow', color: '#f87171', x: 2390,  y: 340 },
-  { id: 'architecture',            cluster: 'workflow', color: '#818cf8', x: 2730,  y: 340 },
-  { id: 'tokenization',            cluster: 'workflow', color: '#2dd4bf', x: 3070,  y: 340 },
-  { id: 'randomness',              cluster: 'workflow', color: '#fb7185', x: 2050,  y: 580 },
-  { id: 'ai-history',              cluster: 'workflow', color: '#fcd34d', x: 2390,  y: 580 },
+  { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 2050,  y: 550 },
+  { id: 'mcp',                     cluster: 'workflow', color: '#359a9c', x: 2390,  y: 550 },
+  { id: 'security',                cluster: 'workflow', color: '#e06c75', x: 2730,  y: 550 },
+  { id: 'multimodal',              cluster: 'workflow', color: '#c084fc', x: 2050,  y: 790 },
+  { id: 'diffusion',               cluster: 'workflow', color: '#facc15', x: 2390,  y: 790 },
+  { id: 'base-vs-instruct',        cluster: 'workflow', color: '#f87171', x: 2730,  y: 790 },
+  { id: 'architecture',            cluster: 'workflow', color: '#818cf8', x: 2050,  y: 1030 },
+  { id: 'tokenization',            cluster: 'workflow', color: '#2dd4bf', x: 2390,  y: 1030 },
+  { id: 'randomness',              cluster: 'workflow', color: '#fb7185', x: 2730,  y: 1030 },
 
   /* ── Modell & hardver (bal-lent) ── */
-  { id: 'kv-cache',                cluster: 'model', color: '#8a5a2a', x: 100,  y: 1400 },
-  { id: 'ollama',                  cluster: 'model', color: '#4ec9c9', x: 440,  y: 1400 },
-  { id: 'hardware',                cluster: 'model', color: '#f0edeb', x: 780,  y: 1400 },
-  { id: 'quantization-quality',    cluster: 'model', color: '#00ff55', x: 1120,  y: 1400 },
-  { id: 'model-size',              cluster: 'model', color: '#98d016', x: 100,  y: 1640 },
-  { id: 'dense-moe',               cluster: 'model', color: '#6160a3', x: 440,  y: 1640 },
-  { id: 'model-routing',           cluster: 'model', color: '#496b8f', x: 780,  y: 1640 },
-  { id: 'latency',                 cluster: 'model', color: '#523986', x: 1120,  y: 1640 },
-  { id: 'model-training',          cluster: 'model', color: '#d97706', x: 100,  y: 1880 },
-  { id: 'fine-tuning',             cluster: 'model', color: '#0ea5e9', x: 440,  y: 1880 },
-  { id: 'evaluation',              cluster: 'model', color: '#84cc16', x: 780,  y: 1880 },
-  { id: 'model-types',             cluster: 'model', color: '#a3e635', x: 1120,  y: 1880 },
-  { id: 'open-weight',             cluster: 'model', color: '#38bdf8', x: 100,  y: 2120 },
-  { id: 'llmops',                  cluster: 'model', color: '#65a30d', x: 440,  y: 2120 },
+  { id: 'kv-cache',                cluster: 'model', color: '#8a5a2a', x: 100,  y: 1850 },
+  { id: 'ollama',                  cluster: 'model', color: '#4ec9c9', x: 440,  y: 1850 },
+  { id: 'hardware',                cluster: 'model', color: '#f0edeb', x: 780,  y: 1850 },
+  { id: 'quantization-quality',    cluster: 'model', color: '#00ff55', x: 1120,  y: 1850 },
+  { id: 'model-size',              cluster: 'model', color: '#98d016', x: 100,  y: 2090 },
+  { id: 'dense-moe',               cluster: 'model', color: '#6160a3', x: 440,  y: 2090 },
+  { id: 'model-routing',           cluster: 'model', color: '#496b8f', x: 780,  y: 2090 },
+  { id: 'latency',                 cluster: 'model', color: '#523986', x: 1120,  y: 2090 },
+  { id: 'model-training',          cluster: 'model', color: '#d97706', x: 100,  y: 2330 },
+  { id: 'fine-tuning',             cluster: 'model', color: '#0ea5e9', x: 440,  y: 2330 },
+  { id: 'evaluation',              cluster: 'model', color: '#84cc16', x: 780,  y: 2330 },
+  { id: 'model-types',             cluster: 'model', color: '#a3e635', x: 1120,  y: 2330 },
+  { id: 'open-weight',             cluster: 'model', color: '#38bdf8', x: 100,  y: 2570 },
+  { id: 'llmops',                  cluster: 'model', color: '#65a30d', x: 440,  y: 2570 },
 
   /* ── Tudás & kontextus (jobb-lent) ── */
-  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 2050,  y: 1400 },
-  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 2390,  y: 1400 },
-  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2730,  y: 1400 },
-  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 2050,  y: 1640 },
-  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 2390,  y: 1640 },
-  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2730,  y: 1640 },
-  { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 2050,  y: 1880 },
-  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 2390,  y: 1880 },
-  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 2730,  y: 1880 },
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 2050,  y: 1850 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 2390,  y: 1850 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2730,  y: 1850 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 2050,  y: 2090 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 2390,  y: 2090 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2730,  y: 2090 },
+  { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 2050,  y: 2330 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 2390,  y: 2330 },
+  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 2730,  y: 2330 },
 ];
 
 const graphEdges = [
@@ -126,7 +128,8 @@ const graphText = {
       practice:  'Gyakorlat & eszközök',
       workflow:  'Modell-belső működés',
       knowledge: 'Tudás & kontextus',
-      model:     'Modell & hardver'
+      model:     'Modell & hardver',
+      context:   'Kontextus & áttekintés'
     },
     nodes: {
       tools: {
@@ -362,7 +365,8 @@ const graphText = {
       practice:  'Practice & Tools',
       workflow:  'How the Model Works',
       knowledge: 'Knowledge & Context',
-      model:     'Model & Hardware'
+      model:     'Model & Hardware',
+      context:   'Context & Overview'
     },
     nodes: {
       tools: {

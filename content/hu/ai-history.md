@@ -251,7 +251,7 @@ Turing (1950) és Dartmouth (1956) mint formális kezdet · két AI-tél (percep
 A 2012 körüli fellendülés három együttes feltétele (hardver, adat, algoritmus) · a 2017-es transformer-cikk, ami szinte minden mai modell alapja
 ::::
 :::: card label="5–6. rész"
-A ChatGPT nem technikai, hanem termékesítési áttörés volt (100M felhasználó 2 hónap alatt) · a mai reasoning és agentic korszak, ahova a legtöbb más tutoriaod kapcsolódik
+A ChatGPT nem technikai, hanem termékesítési áttörés volt (100M felhasználó 2 hónap alatt) · a mai reasoning és agentic korszak
 ::::
 :::: card label="7. rész"
 A történelmi minta (túlígéret → csalódottság → megvonás), és miért gondolják sokan, hogy ma inkább "AI-őszök", nem teljes tél várható
