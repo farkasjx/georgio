@@ -524,13 +524,24 @@ function initMap() {
   });
 
   // filter chips
+  const chipGroup = document.getElementById('map-chip-group');
+  const filterToggle = document.getElementById('map-filter-toggle');
+  if (filterToggle && chipGroup) {
+    filterToggle.addEventListener('click', () => chipGroup.classList.toggle('open'));
+  }
   document.querySelectorAll('.map-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const f = chip.dataset.filter;
       activeFilter = f;
       document.querySelectorAll('.map-chip').forEach(c => c.classList.toggle('chip-active', c.dataset.filter === f));
       filterNodes(f);
+      if (chipGroup) chipGroup.classList.remove('open'); // mobilon: válaszd ki és csukódjon be
     });
+  });
+  shell.addEventListener('mousedown', e => {
+    if (chipGroup && chipGroup.classList.contains('open') && !e.target.closest('.map-chip-group') && !e.target.closest('#map-filter-toggle')) {
+      chipGroup.classList.remove('open');
+    }
   });
 
   document.getElementById('panel-close').addEventListener('click', () => {
@@ -553,6 +564,29 @@ function initMap() {
       overlapPanel.classList.remove('open');
     }
   });
+
+  // haszálati hint popup: "?" gombbal bármikor megnyitható, "Értem"-mel
+  // vagy háttérre kattintva zárható; az automatikus, első-látogatásos
+  // megnyitást az initMapHint() intézi (lásd lejjebb)
+  const hintPopup = document.getElementById('map-hint-popup');
+  const hintBtn = document.getElementById('map-hint-btn');
+  const hintClose = document.getElementById('map-hint-popup-close');
+  const hintGotIt = document.getElementById('map-hint-popup-gotit');
+  if (hintBtn && hintPopup) {
+    hintBtn.addEventListener('click', () => hintPopup.classList.toggle('open'));
+  }
+  if (hintClose && hintPopup) {
+    hintClose.addEventListener('click', () => hintPopup.classList.remove('open'));
+  }
+  if (hintGotIt && hintPopup) {
+    hintGotIt.addEventListener('click', () => hintPopup.classList.remove('open'));
+  }
+  shell.addEventListener('mousedown', e => {
+    if (hintPopup && hintPopup.classList.contains('open') && !e.target.closest('.map-hint-popup') && !e.target.closest('#map-hint-btn')) {
+      hintPopup.classList.remove('open');
+    }
+  });
+  initMapHint(hintPopup);
 }
 
 /* ── él-útvonalak kiszámítása a node középpontjai alapján (mozgatható node-ok miatt dinamikus) ── */
@@ -580,6 +614,21 @@ function updateEdgesForNode(id) {
 }
 
 /* ── kijelölés: kiszínezi a csomóponthoz tartozó éleket és a szomszédos node-okat ── */
+/* ── térkép haszálati hint: első alkalommal automatikusan megjelenik,
+   utána csak a "?" gombbal — ugyanaz a localStorage-mintás, egyszeri
+   megjelenítési elv, mint a tartalom-frissítés popupnál (initVersionTracking) ── */
+const MAP_HINT_SEEN_KEY = 'aihub-map-hint-seen';
+
+function initMapHint(hintPopup) {
+  if (!hintPopup) return;
+  let seen = null;
+  try { seen = localStorage.getItem(MAP_HINT_SEEN_KEY); } catch (e) { seen = null; }
+  if (!seen) {
+    hintPopup.classList.add('open');
+    try { localStorage.setItem(MAP_HINT_SEEN_KEY, '1'); } catch (e) {}
+  }
+}
+
 function clearHighlight() {
   document.querySelectorAll('.path').forEach(p => p.classList.remove('highlight'));
   document.querySelectorAll('.map-node').forEach(n => n.classList.remove('node-active', 'node-related'));

@@ -16,15 +16,26 @@ export function renderMapPage(ui) {
       <button class="map-btn" id="btn-zoom-out">${ui.mapZoomOut}</button>
       <button class="map-btn" id="btn-reset">${ui.mapReset}</button>
       <button class="map-btn" id="btn-overlap">${ui.mapOverlapButton}</button>
-      <button class="map-btn map-chip chip-active" data-filter="all">${ui.mapFilterAll}</button>
-      <button class="map-btn map-chip" data-filter="context">${ui.mapFilterContext}</button>
-      <button class="map-btn map-chip" data-filter="practice">${ui.mapFilterPractice}</button>
-      <button class="map-btn map-chip" data-filter="workflow">${ui.mapFilterWorkflow}</button>
-      <button class="map-btn map-chip" data-filter="model">${ui.mapFilterModel}</button>
-      <button class="map-btn map-chip" data-filter="knowledge">${ui.mapFilterKnowledge}</button>
+      <button class="map-btn map-filter-toggle" id="map-filter-toggle">${ui.mapFilterToggleLabel}</button>
+      <div class="map-chip-group" id="map-chip-group">
+        <button class="map-btn map-chip chip-active" data-filter="all">${ui.mapFilterAll}</button>
+        <button class="map-btn map-chip" data-filter="context">${ui.mapFilterContext}</button>
+        <button class="map-btn map-chip" data-filter="practice">${ui.mapFilterPractice}</button>
+        <button class="map-btn map-chip" data-filter="workflow">${ui.mapFilterWorkflow}</button>
+        <button class="map-btn map-chip" data-filter="model">${ui.mapFilterModel}</button>
+        <button class="map-btn map-chip" data-filter="knowledge">${ui.mapFilterKnowledge}</button>
+      </div>
     </div>
 
-    <div class="map-hint">${ui.mapHint}</div>
+    <button class="map-hint-btn" id="map-hint-btn" aria-label="${ui.mapHintButtonLabel}" title="${ui.mapHintButtonLabel}">?</button>
+
+    <!-- haszálati hint popup: első látogatáskor automatikusan megjelenik,
+         utána csak a "?" gombbal nyitható meg újra (lásd initMapHint) -->
+    <div class="map-hint-popup" id="map-hint-popup">
+      <button class="panel-close" id="map-hint-popup-close">✕</button>
+      <p class="map-hint-popup-text">${ui.mapHint}</p>
+      <button class="map-btn map-hint-popup-gotit" id="map-hint-popup-gotit">${ui.mapHintGotIt}</button>
+    </div>
 
     <!-- detail panel -->
     <div class="map-panel" id="map-panel">

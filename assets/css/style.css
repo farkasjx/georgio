@@ -769,20 +769,56 @@ td {
 
 .map-shell.dragging { cursor: grabbing; }
 
-.map-hint {
+.map-hint-btn {
   position: absolute;
   right: 18px; bottom: 18px;
   z-index: 10;
-  padding: 8px 14px;
-  border-radius: 999px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
   background: rgba(0,0,0,0.4);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  font-size: 11px;
   font-family: var(--mono);
-  pointer-events: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
   backdrop-filter: blur(12px);
+  transition: color .15s, border-color .15s;
 }
+.map-hint-btn:hover { color: var(--text); border-color: var(--text-dim); }
+
+/* ── haszálati hint popup: ugyanaz a középre igazított, modal-szerű minta,
+   mint az .overlap-panel — első látogatáskor automatikusan nyílik (lásd
+   initMapHint), utána csak a "?" gombbal ── */
+.map-hint-popup {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.95);
+  width: min(360px, calc(100vw - 48px));
+  background: rgba(7,8,12,0.97);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s, visibility .25s;
+  z-index: 35;
+  padding: 24px;
+}
+.map-hint-popup.open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%,-50%) scale(1);
+}
+.map-hint-popup-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 4px 0 16px;
+  padding-right: 20px;
+}
+.map-hint-popup-gotit { width: 100%; text-align: center; }
 
 .map-toolbar {
   position: absolute;
@@ -817,6 +853,9 @@ td {
   color: var(--amber);
   background: var(--amber-dim);
 }
+
+.map-filter-toggle { display: none; }
+.map-chip-group { display: contents; }
 
 .canvas {
   position: absolute;
@@ -1252,6 +1291,28 @@ section[id], .tech[id] {
   }
   .sidebar #sidebar-nav { display: none; }
   .content { padding: 28px 24px 60px; max-width: 100%; }
+
+  /* ── Térkép szűrő-chipek mobilon: a chip-sor kis képernyőn túl sok
+     helyet foglalna a toolbar-ban (flex-wrap miatt több sorba törne,
+     és átfedésbe kerülhetne a jobb alsó hint-gombbal) — ehelyett egy
+     "☰ Szűrő" gomb mögé rejtjük, és csak rákattintva nyílik le, a
+     toolbar alatt, önálló sorban. ── */
+  .map-filter-toggle { display: inline-flex; }
+  .map-chip-group {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(12,14,20,0.92);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    backdrop-filter: blur(14px);
+  }
+  .map-chip-group.open { display: flex; }
+  .map-chip-group .map-btn { width: 100%; text-align: left; }
 
   /* ── Oldalváltó mobilon: nem dropdown, hanem alulról felcsúszó
      bottom-sheet — position:fixed-del, hogy semmilyen szülő overflow-ja
