@@ -44,6 +44,7 @@ const PAGE_ORDER = [
 
   /* ── Gyakorlat & eszközök ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
+  { key: 'glossary',              label: 'Fogalomtár',              labelEn: 'Glossary',                 dot: '#eab308' },
   { key: 'prompting',             label: 'Prompt Engineering',      labelEn: 'Prompt Engineering',       dot: '#e8a84a' },
   { key: 'aiconfig',              label: 'AI Config fájlok',        labelEn: 'AI Config Files',          dot: '#f472b6' },
   { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },

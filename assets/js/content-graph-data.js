@@ -30,6 +30,7 @@ const graphNodesBase = [
   { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 440,  y: 340 },
   { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 780,  y: 340 },
   { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 100,  y: 580 },
+  { id: 'glossary',                cluster: 'practice', color: '#eab308', x: 440,  y: 580 },
 
   /* ── Modell-belső működés (jobb-fent) ── */
   { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 1650,  y: 100 },
@@ -97,6 +98,7 @@ const graphEdges = [
   ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
+  ['glossary','tools'], ['glossary','architecture'], ['glossary','reasoning'], ['glossary','rag'],
 ];
 
 /* nyelvfüggő szövegek */
@@ -283,6 +285,11 @@ const graphText = {
         title: 'Hogyan dönt egy AI agent',
         short: 'A ReAct hurok: gondolkodj, cselekedj, figyeld meg, ismételd — és a "mikor van vége" probléma.',
         desc: ['Hogyan dönti el a modell, melyik eszközt hívja (tool-definíció alapú választás), és miért nincs beépített "kész" fogalma egy agentnek.', 'Három eszköz-kategória (data, action, orchestration) mint gyakorlati tervezési szempont a kockázat-kezeléshez.']
+      },
+      glossary: {
+        title: 'Fogalomtár',
+        short: 'Több mint 80 fogalom egy helyen, rövid magyarázattal és linkkel a részletes tárgyaláshoz — nem száraz lista.',
+        desc: ['Ha egy cikkben ismeretlen kifejezésbe futsz, itt egy-két mondat elég a gyors megértéshez — a link pedig elvisz a teljes mechanizmushoz, ha mélyebbre mennél.', 'Ugyanaz az adatforrás táplálja az automatikus linkelést is a cikkek szövegében, szóval a fogalmak a saját olvasás közben is felbukkannak, összekapcsolva.']
       }
     }
   },
@@ -469,6 +476,11 @@ const graphText = {
         title: 'How an AI Agent Decides',
         short: 'The ReAct loop: reason, act, observe, repeat \u2014 and the \u201cwhen is it done\u201d problem.',
         desc: ['How the model decides which tool to call (tool-definition-based selection), and why an agent has no built-in sense of \u201cdone.\u201d', 'Three tool categories (data, action, orchestration) as a practical design lens for risk management.']
+      },
+      glossary: {
+        title: 'Glossary',
+        short: 'Over 80 terms in one place, each with a short explanation and a link to the full discussion \u2014 not a dry list.',
+        desc: ['If you run into an unfamiliar term in an article, a sentence or two here is enough to get you back on track \u2014 the link takes you to the full mechanism if you want to go deeper.', 'The same data source powers the automatic linking inside the articles themselves, so terms surface naturally as you read, already connected.']
       }
     }
   }

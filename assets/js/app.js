@@ -4,12 +4,32 @@
 
 /* ── PAGE NAVIGATION ── */
 const pages = [
-  'map', 'tools', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
+  'map', 'tools', 'glossary', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
   'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models'
 ];
+
+/* ── Kereszthivatkozás más oldal egy adott szekciójára (pl. Fogalomtár linkjei) ──
+   Egy <a href="#szekcio-id" data-goto-page="oldal-kulcs"> előbb átvált a
+   megfelelő oldalra (showPage), majd a DOM-frissülés után az adott
+   szekcióhoz görget — sima horgony-linkkel ez nem működne, mert a showPage()
+   csak a hash induláskori (DOMContentLoaded) értékét olvassa ki oldal-kulcsként. */
+function initCrossPageSectionLinks() {
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-goto-page]');
+    if (!link || link.classList.contains('auto-link')) return; // az .auto-link linkeknek saját, preview-first kattintás-logikájuk van (lásd initTermPreviews)
+    e.preventDefault();
+    const targetPage = link.dataset.gotoPage;
+    const targetId = link.dataset.gotoId || link.getAttribute('href').replace('#', '');
+    showPage(targetPage);
+    requestAnimationFrame(() => {
+      const el = document.getElementById(targetId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
 
 function showPage(id) {
   // oldalváltó gomb frissítése (dot + felirat) a kattintott elem adataiból
@@ -690,6 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initVersionTracking();
   initTermPreviews();
+  initCrossPageSectionLinks();
   initCookieConsent();
 
   // panel bezárása kattintásra kívülre, vagy Escape-re
