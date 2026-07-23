@@ -9,12 +9,12 @@ sidebar_groups:
 hero:
   eyebrow: "Véletlenszerűség · Fejlesztői Tanulási Terv"
   title: "Miért mond a modell mindig <em>73-at?</em>"
-  lead: "Kérj meg egy AI-t, hogy gondoljon egy számot 1 és 100 között — jó eséllyel 73-at, 37-et vagy 7-et fogsz kapni. Ez nem hiba, és nem is \"rossz véletlenszám-generátor\" — ez egy pontosan megérthető mechanizmus, ami a token-valószínűségekből és az emberi torzításokból áll össze. Épít az <em>Egy modell anatómiája</em> és a <em>Halucináció</em> tutorialokra."
+  lead: "Kérj meg egy AI-t, hogy gondoljon egy számot 1 és 100 között — jó eséllyel 73-at, 37-et vagy 7-et fogsz kapni. Ez csak a legkönnyebben demonstrálható példája egy sokkal általánosabb jelenségnek: amikor egy modelltől \"szabad\" választást vársz sok lehetőség közül, a valóságban egy szűk, torzított eloszlásból mintázik — legyen szó számról, névről, színről vagy szintetikus adatról. Épít az <em>Egy modell anatómiája</em> és a <em>Halucináció</em> tutorialokra."
   stats:
     - { val: "90%", lbl: "választja a \"7\"-et tartalmazó számot*" }
     - { val: "28%", lbl: "ugyanez emberi arány*" }
-    - { val: "200 000", lbl: "résztvevős emberi kísérlet*" }
-    - { val: "5", lbl: "Szakasz" }
+    - { val: "∞", lbl: "más eset (név, szín, adat)" }
+    - { val: "6", lbl: "Szakasz" }
 footer:
   left: "AI Hub · Véletlenszerűség"
   right: "Véletlenszerűség · Összeállítva 2026 júliusában"
@@ -26,7 +26,8 @@ footer:
   <a class="toc-card" href="#randomness-1"><div class="tc-num">1. rész</div><div class="tc-name">A mechanizmus: nincs "gondolj egy számra"</div><div class="tc-desc">A modell nem gondol — valószínűségi eloszlásból választ.</div></a>
   <a class="toc-card" href="#randomness-2"><div class="tc-num">2. rész</div><div class="tc-name">Temperature és top-p: a "csavarok"</div><div class="tc-desc">Mit állítanak ezek valójában — és mit NEM.</div></a>
   <a class="toc-card" href="#randomness-3"><div class="tc-num">3. rész</div><div class="tc-name">A meglepetés: emberek sem véletlenszerűek</div><div class="tc-desc">A modell nem torzít — felerősíti a mi torzításunkat.</div></a>
-  <a class="toc-card" href="#randomness-4"><div class="tc-num">4. rész</div><div class="tc-name">Gyakorlat: hogyan kérj tényleg véletlent</div><div class="tc-desc">Amikor ez ténylegesen számít, mit tegyél.</div></a>
+  <a class="toc-card" href="#randomness-4"><div class="tc-num">4. rész</div><div class="tc-name">Nem csak számokról van szó</div><div class="tc-desc">Név, szín, szintetikus adat — ugyanaz a mechanizmus mindenhol.</div></a>
+  <a class="toc-card" href="#randomness-5"><div class="tc-num">5. rész</div><div class="tc-name">Gyakorlat: hogyan kérj tényleg véletlent</div><div class="tc-desc">Amikor ez ténylegesen számít, mit tegyél.</div></a>
 </div>
 ::::::
 
@@ -104,30 +105,53 @@ A temperature és a top-p a **meglévő** torzított eloszlás "élességét" sz
 
 <p class="topic-tagline">Cél: érd el a cikk legfontosabb, legmeglepőbb pontját — a modell nem a saját torzítását adja, hanem a miénket erősíti fel.</p>
 
-### Egy 200 000 fős emberi kísérlet
+### Az emberek is torzítottan "véletlenkednek"
 
-A Veritasium tudományos YouTube-csatorna egy **200 000 résztvevős** kísérletet futtatott, amiben egyszerűen megkérték az embereket, gondoljanak egy véletlen számra. Az eredmény: az emberek is feltűnően gyakran választották a **37, 73, 77** és **7**-et tartalmazó számokat — **ugyanazt** a számkészletet, amit ma a modellek is preferálnak.
-
-::::: callout label="Miért pont ezek a számok"
-Amikor a résztvevőket arra kérték, találják ki, melyik számot választanák **a legkevesebben** "véletlenszerűnek", sokan pont a **73-at és 37-et** nevezték meg — miközben a valóságban a **kerek, tízes végződésű** számokat (30, 40, 50) választották a legritkábban, mert azok "túl rendezettnek" tűnnek ahhoz, hogy véletlennek érezzük őket. Az emberek egyszerre **kerülik a kerek számokat** és **túlreprezentálják a 7-es számjegyet** tartalmazó, "esetlegesnek ható" számokat.
-:::::
-
-### A modell nem torzít — felerősíti a torzításunkat
+Egy nagy létszámú emberi kísérlet (a Veritasium tudományos csatorna kutatása) megmutatta: ha embereket kérünk meg, gondoljanak egy véletlen számra, ők sem egyenletesen választanak — bizonyos számok (a **7-es számjegyet** tartalmazók, illetve a **kerek, tízes végződésűek elkerülése**) szisztematikusan felül-, illetve alulreprezentáltak. Ugyanezt a mintázatot reprodukálják a modellek is.
 
 ::::: callout danger label="A legfontosabb, dokumentált adatpont"
 Egy kutatás szerint az emberek kb. **28%-ban** választanak 7-es számjegyet tartalmazó számot — a vizsgált LLM-ek ugyanezt **90%-ban** teszik. A modell tehát nem egyszerűen **átvette** az emberi torzítást, hanem **jelentősen felerősítette** azt — mert a tanítóadatban a "7-es" választások felülreprezentáltak lehettek a valós eloszláshoz képest, és a modell ezt a felülreprezentáltságot tanulta meg statisztikaként.
 :::::
 
 ::::: callout label="Kapcsolat a Halucináció tutorialhoz"
-Ez ugyanaz a alapjelenség, amit a <em>Halucináció</em> tutorial 1. részében a "statisztikai eredetről" olvashattál: a modell nem "tudja", mi a véletlen — a **leggyakoribb, tanult mintázatot** reprodukálja magabiztosan, akár tényekről, akár egy "véletlen" számról van szó.
+Ez ugyanaz az alapjelenség, amit a <em>Halucináció</em> tutorial 1. részében a "statisztikai eredetről" olvashattál: a modell nem "tudja", mi a véletlen — a **leggyakoribb, tanult mintázatot** reprodukálja magabiztosan, akár tényekről, akár egy "véletlen" számról van szó.
 :::::
 
 ::::: callout label="Egy mondatban"
-Amikor egy modell 73-at mond, nem hibázik, és nem is "hazudik" — pontosan azt teszi, amire tanították: megismétli, mit **mondanának** emberek egy ilyen helyzetben, csak még **erősebb, tisztább formában**, mint ahogy azt maguk az emberek tennék.
+Amikor egy modell torzítottan "választ" valamit, nem hibázik, és nem is "hazudik" — pontosan azt teszi, amire tanították: megismétli, mit **mondanának** emberek egy ilyen helyzetben, csak még **erősebb, tisztább formában**, mint ahogy azt maguk az emberek tennék.
 :::::
 ::::::
 
-:::::: section id=randomness-4 num="04" heading="4. rész — Gyakorlat: hogyan kérj tényleg véletlent" nav="Gyakorlat: hogyan kérj tényleg véletlent" group="Gyakorlat"
+:::::: section id=randomness-4 num="04" heading="4. rész — Nem csak számokról van szó: a jelenség általánosan" nav="Nem csak számokról van szó" group="A meglepetés"
+
+<p class="topic-tagline">Cél: lásd, hogy ez nem egy szám-specifikus kuriózum — bármilyen "válassz valamit sok lehetőség közül" feladatnál ugyanez a mechanizmus jelentkezik.</p>
+
+### Ugyanaz a torzított mintavételezés, más felszín alatt
+
+A 0–3. részben leírt mechanizmus — torzított token-valószínűség, amit a temperature csak "élesít vagy lapít", nem tesz egyenletessé — **nem korlátozódik számokra**. Bármilyen feladatnál jelentkezik, ahol a modellnek sok, egyenrangú lehetőség közül kellene "szabadon" választania:
+
+::::: stack-grid
+:::: card label="Névválasztás"
+Kérj egy modellt, adjon nevet egy kitalált karakternek — egyes nevek (pl. "Aria", "Kai", "Luna") drámaian felülreprezentáltak lesznek sok generáció során, ugyanúgy, ahogy a 73 a számoknál.
+::::
+:::: card label="Szín- vagy tárgyválasztás"
+"Melyik a kedvenc színed?", "válassz egy gyümölcsöt" — ezek is egy szűk, néhány elemből álló válaszkészletbe konvergálnak, nem a teljes lehetséges térbe.
+::::
+:::: card label="Szintetikus adatgenerálás"
+Ha egy modellel generáltatsz "változatos" mintaadatot (pl. teszteléshez vagy demóhoz), ugyanez a torzítás **rejtett módon rontja el a változatosságot** — a kimenet kevésbé sokszínű, mint amit egyenletes mintavételezéssel kapnál, még ha ez elsőre nem is tűnik fel.
+::::
+:::::
+
+::::: callout warning label="Miért fontos ez gyakorlati szempontból"
+Ha egy alkalmazásodban a modellt **változatosság** generálására használod (teszteset-generálás, demó-adat, kreatív brainstorming), és azt tapasztalod, hogy a kimenetek "gyanúsan hasonlóak" egymáshoz nagy mennyiségben generálva, ez ugyanaz a jelenség — nem a promptod hibája, hanem a mögöttes torzított eloszlás.
+:::::
+
+::::: callout label="Egy mondatban"
+A "73-as szám" csak a legkönnyebben demonstrálható példája egy sokkal általánosabb jelenségnek — bármikor, amikor egy modelltől "szabad", egyenletes választást vársz sok lehetőség közül, számíts rá, hogy a valóságban egy szűkebb, a tanítóadat torzításait tükröző alhalmazba fog konvergálni.
+:::::
+::::::
+
+:::::: section id=randomness-5 num="05" heading="5. rész — Gyakorlat: hogyan kérj tényleg véletlent" nav="Gyakorlat: hogyan kérj tényleg véletlent" group="Gyakorlat"
 
 <p class="topic-tagline">Cél: adj konkrét, működő megoldást, ha ez a jelenség ténylegesen problémát okoz a munkádban.</p>
 
@@ -165,14 +189,17 @@ A "73, 37, 7" jelenség dokumentált, sokszor megismételt kísérletekkel alát
 A modell valószínűségi eloszlásból választ, nem "gondolkodik" · a temperature/top-p csak az eloszlás élességét szabályozza, nem teszi egyenletessé
 ::::
 :::: card label="3. rész"
-A legfontosabb fordulat: a Veritasium-kísérlet szerint az emberek is torzítottan választanak (37, 73, 77, 7) — a modell ezt a torzítást **felerősíti** (28% → 90%), nem magától találja ki
+A legfontosabb fordulat: az emberek is torzítottan választanak — a modell ezt a torzítást **felerősíti** (28% → 90%), nem magától találja ki
 ::::
 :::: card label="4. rész"
+Ez nem szám-specifikus: névválasztás, színválasztás és szintetikus adatgenerálás során is ugyanez a torzított mintavételezés jelentkezik
+::::
+:::: card label="5. rész"
 Ha valódi véletlen kell, ne a modelltől kérdezd — kérd meg, hogy írjon és futtasson kódot egy tényleges véletlenszám-generátorral
 ::::
 :::::
 
 <p class="topic-tagline">Kapcsolódó: az <em>Egy modell anatómiája</em> (a token-valószínűség kiszámításának helye a teljes folyamatban), a <em>Halucináció</em> (ugyanaz a "statisztikailag valószínű, nem feltétlenül igaz" alapelv) és az <em>Agentic kódolás</em> (hogyan érd el, hogy a modell kódot futtasson helyetted) tutorialok.</p>
 
-<p class="topic-tagline" style="margin-top:12px;font-size:0.85em;opacity:0.75">* A Veritasium-kísérlet 200 000 résztvevős, a 28%/90%-os emberi/modell összehasonlítás egy 2025-ös elemzésből származik — lásd a 3. részt a kontextusért.</p>
+<p class="topic-tagline" style="margin-top:12px;font-size:0.85em;opacity:0.75">* A 28%/90%-os emberi/modell összehasonlítás egy 2025-ös elemzésből származik, egy nagy létszámú emberi kísérletre (Veritasium) alapozva — lásd a 3. részt a kontextusért.</p>
 ::::::
