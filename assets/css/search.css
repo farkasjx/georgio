@@ -34,6 +34,23 @@
   transition: color .15s, border-color .15s;
 }
 .lang-switch:hover { color: var(--text); border-color: var(--text-dim); }
+
+.glossary-link {
+  display: flex; align-items: center; justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-3);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-right: 10px;
+  transition: color .15s, border-color .15s;
+}
+.glossary-link:hover { color: var(--text); border-color: var(--text-dim); }
 .search-trigger:hover { color: var(--text); border-color: var(--text-dim); }
 .search-trigger svg { width: 15px; height: 15px; flex-shrink: 0; }
 .search-trigger-label { white-space: nowrap; }
@@ -49,6 +66,7 @@
 @media (max-width: 900px) {
   .search-trigger-label, .search-trigger-kbd { display: none; }
   .search-trigger { padding: 6px; margin-right: 6px; }
+  .glossary-link { display: none; }
 }
 
 /* ── Overlay + modal ── */
