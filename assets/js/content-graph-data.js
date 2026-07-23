@@ -23,40 +23,47 @@
      jobb-lent: knowledge  (Tudás & kontextus)             */
 const graphNodesBase = [
   /* ── Gyakorlat & eszközök (bal-fent) ── */
-  { id: 'tools',          cluster: 'practice', color: '#4ecb8d', x: 140,  y: 140 },
-  { id: 'prompting',      cluster: 'practice', color: '#e8a84a', x: 620,  y: 100 },
-  { id: 'aiconfig',       cluster: 'practice', color: '#f472b6', x: 1000, y: 320 },
-  { id: 'vibecoding',     cluster: 'practice', color: '#60a5fa', x: 160,  y: 480 },
-  { id: 'agentic-coding', cluster: 'practice', color: '#34d399', x: 600,  y: 560 },
+  { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 100,  y: 100 },
+  { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 440,  y: 100 },
+  { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 780,  y: 100 },
+  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 100,  y: 340 },
+  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 440,  y: 340 },
+  { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 780,  y: 340 },
+  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 100,  y: 580 },
 
   /* ── Modell-belső működés (jobb-fent) ── */
-  { id: 'reasoning',    cluster: 'workflow', color: '#fb923c', x: 1620, y: 140 },
-  { id: 'mcp',          cluster: 'workflow', color: '#359a9c', x: 2140, y: 100 },
-  { id: 'security',     cluster: 'workflow', color: '#e06c75', x: 2160, y: 420 },
-  { id: 'multimodal',   cluster: 'workflow', color: '#c084fc', x: 1660, y: 480 },
-  { id: 'diffusion',    cluster: 'workflow', color: '#facc15', x: 2000, y: 640 },
-  { id: 'base-vs-instruct', cluster: 'workflow', color: '#f87171', x: 1610, y: 700 },
+  { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 1650,  y: 100 },
+  { id: 'mcp',                     cluster: 'workflow', color: '#359a9c', x: 1990,  y: 100 },
+  { id: 'security',                cluster: 'workflow', color: '#e06c75', x: 2330,  y: 100 },
+  { id: 'multimodal',              cluster: 'workflow', color: '#c084fc', x: 1650,  y: 340 },
+  { id: 'diffusion',               cluster: 'workflow', color: '#facc15', x: 1990,  y: 340 },
+  { id: 'base-vs-instruct',        cluster: 'workflow', color: '#f87171', x: 2330,  y: 340 },
+  { id: 'architecture',            cluster: 'workflow', color: '#818cf8', x: 1650,  y: 580 },
+  { id: 'tokenization',            cluster: 'workflow', color: '#2dd4bf', x: 1990,  y: 580 },
+  { id: 'randomness',              cluster: 'workflow', color: '#fb7185', x: 2330,  y: 580 },
 
   /* ── Modell & hardver (bal-lent) ── */
-  { id: 'kv-cache',              cluster: 'model', color: '#8a5a2a', x: 140,  y: 1020 },
-  { id: 'ollama',                cluster: 'model', color: '#4ec9c9', x: 560,  y: 980  },
-  { id: 'hardware',              cluster: 'model', color: '#f0edeb', x: 140,  y: 1340 },
-  { id: 'quantization-quality',  cluster: 'model', color: '#00ff55', x: 560,  y: 1360 },
-  { id: 'model-size',            cluster: 'model', color: '#98d016', x: 980,  y: 1140 },
-  { id: 'dense-moe',             cluster: 'model', color: '#6160a3', x: 980,  y: 1460 },
-  { id: 'model-routing',         cluster: 'model', color: '#496b8f', x: 620,  y: 1660 },
-  { id: 'latency',               cluster: 'model', color: '#523986', x: 1000, y: 1760 },
-  { id: 'model-training',        cluster: 'model', color: '#d97706', x: 140,  y: 2000 },
-  { id: 'fine-tuning',           cluster: 'model', color: '#0ea5e9', x: 560,  y: 2040 },
+  { id: 'kv-cache',                cluster: 'model', color: '#8a5a2a', x: 100,  y: 1250 },
+  { id: 'ollama',                  cluster: 'model', color: '#4ec9c9', x: 440,  y: 1250 },
+  { id: 'hardware',                cluster: 'model', color: '#f0edeb', x: 780,  y: 1250 },
+  { id: 'quantization-quality',    cluster: 'model', color: '#00ff55', x: 1120,  y: 1250 },
+  { id: 'model-size',              cluster: 'model', color: '#98d016', x: 100,  y: 1490 },
+  { id: 'dense-moe',               cluster: 'model', color: '#6160a3', x: 440,  y: 1490 },
+  { id: 'model-routing',           cluster: 'model', color: '#496b8f', x: 780,  y: 1490 },
+  { id: 'latency',                 cluster: 'model', color: '#523986', x: 1120,  y: 1490 },
+  { id: 'model-training',          cluster: 'model', color: '#d97706', x: 100,  y: 1730 },
+  { id: 'fine-tuning',             cluster: 'model', color: '#0ea5e9', x: 440,  y: 1730 },
+  { id: 'evaluation',              cluster: 'model', color: '#84cc16', x: 780,  y: 1730 },
 
   /* ── Tudás & kontextus (jobb-lent) ── */
-  { id: 'rag',              cluster: 'knowledge', color: '#1613d4', x: 1980, y: 1120 },
-  { id: 'vectordb',         cluster: 'knowledge', color: '#17cb11', x: 1620, y: 1280 },
-  { id: 'memory',           cluster: 'knowledge', color: '#e1c9cb', x: 2380, y: 1280 },
-  { id: 'okf',              cluster: 'knowledge', color: '#a78bfa', x: 2380, y: 1000 },
-  { id: 'hallucination',    cluster: 'knowledge', color: '#a3ce40', x: 1980, y: 1500 },
-  { id: 'knowledge-cutoff', cluster: 'knowledge', color: '#896671', x: 2380, y: 1580 },
-  { id: 'rlhf',             cluster: 'knowledge', color: '#c9a9ac', x: 1620, y: 1660 },
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 1650,  y: 1250 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 1990,  y: 1250 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2330,  y: 1250 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 1650,  y: 1490 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 1990,  y: 1490 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2330,  y: 1490 },
+  { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 1650,  y: 1730 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 1990,  y: 1730 },
 ];
 
 const graphEdges = [
@@ -83,6 +90,13 @@ const graphEdges = [
   ['model-routing','latency'],
   ['model-training','model-size'], ['model-training','dense-moe'], ['model-training','diffusion'], ['model-training','base-vs-instruct'],
   ['fine-tuning','model-training'], ['fine-tuning','quantization-quality'], ['fine-tuning','ollama'], ['fine-tuning','knowledge-cutoff'], ['fine-tuning','base-vs-instruct'],
+  ['architecture','reasoning'], ['architecture','tokenization'], ['architecture','model-training'], ['architecture','dense-moe'], ['architecture','model-size'],
+  ['tokenization','architecture'], ['tokenization','knowledge-cutoff'], ['tokenization','model-training'],
+  ['randomness','reasoning'], ['randomness','hallucination'], ['randomness','agentic-coding'],
+  ['evaluation','agentic-coding'], ['evaluation','model-size'], ['evaluation','randomness'],
+  ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
+  ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
+  ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
 ];
 
 /* nyelvfüggő szövegek */
@@ -234,6 +248,41 @@ const graphText = {
         title: 'Fine-tuning technikák',
         short: 'LoRA, QLoRA és a specializáció: hogyan hangolj egy már betanított modellt a pretraining költségének töredékéért.',
         desc: ['A LoRA "kis mátrix" trükkje fagyva hagyja a bázis-súlyokat, és csak egy apró, tanítható javítást ad hozzá — ez teszi lehetővé, hogy nagy modelleket is fogyasztói GPU-n finomhangolj.', 'A QLoRA ezt kvantálással kombinálja, ami akár 65 milliárd paraméteres modellek finomhangolását is lehetővé teszi egyetlen GPU-n.']
+      },
+      architecture: {
+        title: 'Egy modell anatómiája',
+        short: 'Rétegről rétegre: embedding, attention, feed-forward — a teljes út bemenettől kimenetig, matek nélkül.',
+        desc: ['Egy térkép, ami összeköti a Reasoning (attention), a Hogyan tanul egy modell (súlyok) és a Dense vs. MoE (feed-forward) tutorialokat egyetlen, koherens áttekintésbe.', 'Konkrét réteg- és dimenziószámokkal valós modelleknél (GPT-3: 96 réteg, Llama 3 405B: 126 réteg).']
+      },
+      tokenization: {
+        title: 'Tokenizáció',
+        short: 'Hogyan vágja szét a modell a szöveget — és miért kerül ez többe magyarul, mint angolul.',
+        desc: ['A BPE-algoritmus lépésről lépésre, konkrét szótárméret-adatokkal és a modern modellek trendjeivel (30K → 200K).', 'A magyar és hasonló, toldalékoló nyelvek dokumentált "nyelvi adója" — konkrét szorzókkal és a valós költség-/kontextusablak-következményekkel.']
+      },
+      randomness: {
+        title: 'Véletlenszerűség és mintavételezés',
+        short: 'Miért mond a modell mindig 73-at — a token-valószínűség, a temperature és az emberi torzítás felerősítése.',
+        desc: ['A modell nem "gondol" egy számra — egy erősen torzított valószínűségi eloszlásból választ, amit a tanítóadatban látott emberi mintázatok alakítottak ki.', 'A meglepő fordulat: az emberek is torzítottan választanak (Veritasium-kísérlet), a modell ezt a torzítást felerősíti, nem magától találja ki.']
+      },
+      evaluation: {
+        title: 'Hogyan mérjük egy modell tudását',
+        short: 'Benchmarkok és korlátaik: MMLU, GPQA, SWE-bench — mit mérnek valójában, és miért nem szabad túl komolyan venni egy leaderboard-helyezést.',
+        desc: ['A szaturáció (MMLU 88%+ a csúcson) és a kontamináció problémája — amikor egy teszt már nem különböztet meg semmit, vagy a modell "megjegyezte" a vizsgát.', 'Gyakorlati eljárás modellválasztáshoz: durva szűrés benchmarkkal, majd saját, releváns tesztkészlettel való megerősítés.']
+      },
+      'embedding-models': {
+        title: 'Embedding modellek',
+        short: 'Hogyan készül a vektortér, amit a RAG és a keresés használ — kontrasztív tanulás, pozitív/negatív párok.',
+        desc: ['Egy külön tanítási cél (hasonlóság szerinti rendezés), ami nem következik automatikusan a szöveggenerálásra optimalizált pretrainingből.', 'Két fejlesztési út: dedikált, kisebb encoder vs. egy nagy LLM átalakítása embedding-generátorrá, plusz az MTEB benchmark mint mérőeszköz.']
+      },
+      'ai-safety': {
+        title: 'Alignment és red teaming',
+        short: 'Mi az alignment probléma fogalmilag, és hogyan teszteli a szakma egy modell megbízhatóságát red teaminggel.',
+        desc: ['Az alignment (építő) és a red teaming (romboló) megközelítés — miért dolgozik a kettő együtt, és mit mutatnak a 2026-os kutatási számok a jailbreak-ellenállóságról.', 'A realisztikus cél nem a nulla jailbreak, hanem a szűk, drága, detektálható sikeres támadás — kapcsolódva a gyakorlati Biztonság & OWASP tutorialhoz.']
+      },
+      'agent-architecture': {
+        title: 'Hogyan dönt egy AI agent',
+        short: 'A ReAct hurok: gondolkodj, cselekedj, figyeld meg, ismételd — és a "mikor van vége" probléma.',
+        desc: ['Hogyan dönti el a modell, melyik eszközt hívja (tool-definíció alapú választás), és miért nincs beépített "kész" fogalma egy agentnek.', 'Három eszköz-kategória (data, action, orchestration) mint gyakorlati tervezési szempont a kockázat-kezeléshez.']
       }
     }
   },
@@ -278,28 +327,28 @@ const graphText = {
       },
       vibecoding: {
         title: 'Vibe Coding',
-        short: 'From Karpathy\\u2019s 2025 tweet to the \\u201cagentic engineering\\u201d turn — impact, risks, and practical techniques.',
-        desc: ['Vibe coding in the narrow sense \\u2014 unreviewed, \\u201cAccept All\\u201d development \\u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'Also covers practical tools: rule files (AGENTS.md, CLAUDE.md), a tool-choice decision table, and copy-pasteable security prompts.']
+        short: 'From Karpathy\u2019s 2025 tweet to the \u201cagentic engineering\u201d turn — impact, risks, and practical techniques.',
+        desc: ['Vibe coding in the narrow sense \u2014 unreviewed, \u201cAccept All\u201d development \u2014 is useful for low-stakes prototypes, but a string of documented security incidents traces back to letting it into production unsupervised.', 'Also covers practical tools: rule files (AGENTS.md, CLAUDE.md), a tool-choice decision table, and copy-pasteable security prompts.']
       },
       'agentic-coding': {
         title: 'Agentic Coding',
         short: 'Architecture, not posture: a loop checked against a definition of done, subagents, and multi-agent orchestration.',
-        desc: ['Sharply distinguished from vibe coding: here the model is wired into tools, runs in a loop, and someone reviews it against a definition of done \\u2014 what matters is who owns correctness, not how \\u201cvibe\\u201d the workflow feels.', 'Covers the \\u201c80% wall\\u201d on large codebases, git-worktree-based multi-agent orchestration, and the measurement debates around SWE-bench.']
+        desc: ['Sharply distinguished from vibe coding: here the model is wired into tools, runs in a loop, and someone reviews it against a definition of done \u2014 what matters is who owns correctness, not how \u201cvibe\u201d the workflow feels.', 'Covers the \u201c80% wall\u201d on large codebases, git-worktree-based multi-agent orchestration, and the measurement debates around SWE-bench.']
       },
       multimodal: {
         title: 'Multimodal Models',
-        short: 'How an AI sees, hears, and understands \\u2014 native vs. cascaded architecture, and why the model trusts text over pixels.',
-        desc: ['The vision encoder, projection layer, and LLM trio turn an image into numbers \\u2014 the same attention mechanism processes it as text tokens, so it inherits the mechanisms and limits covered in the Reasoning tutorial.', 'Also covers concrete failure modes (counting, spatial relations, visual hallucination) and a decision framework for OCR vs. vision LLM in document processing.']
+        short: 'How an AI sees, hears, and understands \u2014 native vs. cascaded architecture, and why the model trusts text over pixels.',
+        desc: ['The vision encoder, projection layer, and LLM trio turn an image into numbers \u2014 the same attention mechanism processes it as text tokens, so it inherits the mechanisms and limits covered in the Reasoning tutorial.', 'Also covers concrete failure modes (counting, spatial relations, visual hallucination) and a decision framework for OCR vs. vision LLM in document processing.']
       },
       diffusion: {
         title: 'Diffusion Models',
-        short: 'A short detour: a different generation principle \\u2014 unfolding from noise, not predicting word by word \\u2014 behind image, video, and (surprisingly) text.',
-        desc: ['Image and video generation (Midjourney, Stable Diffusion, Sora) almost all use this principle: the entire output emerges from noise at once, refined globally \\u2014 not word by word like an LLM.', 'Since 2025, diffusion-based text generation models exist too (Mercury, Gemini Diffusion), 5\\u201310\\u00d7 faster on short, structured outputs, though still behind on complex reasoning.']
+        short: 'A short detour: a different generation principle \u2014 unfolding from noise, not predicting word by word \u2014 behind image, video, and (surprisingly) text.',
+        desc: ['Image and video generation (Midjourney, Stable Diffusion, Sora) almost all use this principle: the entire output emerges from noise at once, refined globally \u2014 not word by word like an LLM.', 'Since 2025, diffusion-based text generation models exist too (Mercury, Gemini Diffusion), 5\u201310\u00d7 faster on short, structured outputs, though still behind on complex reasoning.']
       },
       'base-vs-instruct': {
         title: 'Base vs. Instruct Models',
-        short: 'How a raw, \\u201cjust keeps completing\\u201d text predictor becomes a helpful assistant \\u2014 pretraining, instruction tuning, and what comes after.',
-        desc: ['A base model just statistically continues text; instruction tuning uses special marker tokens to teach it to answer a question instead of continuing it \\u2014 a step that often matters more in practice than raw model size.', 'Ties together the RLHF (the third, refining step) and Reasoning (the fourth, \\u201cthinking\\u201d layer) tutorials into one coherent picture.']
+        short: 'How a raw, \u201cjust keeps completing\u201d text predictor becomes a helpful assistant \u2014 pretraining, instruction tuning, and what comes after.',
+        desc: ['A base model just statistically continues text; instruction tuning uses special marker tokens to teach it to answer a question instead of continuing it \u2014 a step that often matters more in practice than raw model size.', 'Ties together the RLHF (the third, refining step) and Reasoning (the fourth, \u201cthinking\u201d layer) tutorials into one coherent picture.']
       },
       rag: {
         title: 'RAG',
@@ -378,13 +427,48 @@ const graphText = {
       },
       'model-training': {
         title: 'Model Training',
-        short: 'How a model learns from scratch: the \\u201cpredict, measure the error, correct\\u201d loop that builds a vector space out of raw weights.',
-        desc: ['The same gradient-based loop \\u2014 forward pass, loss, backward pass, weight update \\u2014 sits behind training both an LLM and a diffusion model; only the prediction target differs.', 'Covers concrete data and cost figures, the training philosophy for small vs. large models, and distillation/synthetic data techniques.']
+        short: 'How a model learns from scratch: the \u201cpredict, measure the error, correct\u201d loop that builds a vector space out of raw weights.',
+        desc: ['The same gradient-based loop \u2014 forward pass, loss, backward pass, weight update \u2014 sits behind training both an LLM and a diffusion model; only the prediction target differs.', 'Covers concrete data and cost figures, the training philosophy for small vs. large models, and distillation/synthetic data techniques.']
       },
       'fine-tuning': {
         title: 'Fine-Tuning Techniques',
         short: 'LoRA, QLoRA, and specialization: how to adapt an already-trained model for a fraction of the pretraining cost.',
-        desc: ['LoRA\\u2019s \\u201csmall matrix\\u201d trick freezes the base weights and adds only a tiny, trainable correction \\u2014 this is what makes fine-tuning large models on consumer GPUs possible.', 'QLoRA combines this with quantization, enabling fine-tuning of models with up to 65 billion parameters on a single GPU.']
+        desc: ['LoRA\u2019s \u201csmall matrix\u201d trick freezes the base weights and adds only a tiny, trainable correction \u2014 this is what makes fine-tuning large models on consumer GPUs possible.', 'QLoRA combines this with quantization, enabling fine-tuning of models with up to 65 billion parameters on a single GPU.']
+      },
+      architecture: {
+        title: 'Anatomy of a Model',
+        short: 'Layer by layer: embedding, attention, feed-forward \u2014 the full path from input to output, no math required.',
+        desc: ['A map that ties together Reasoning (attention), How a Model Learns (weights), and Dense vs. MoE (feed-forward) into one coherent overview.', 'Concrete layer and dimension counts for real models (GPT-3: 96 layers, Llama 3 405B: 126 layers).']
+      },
+      tokenization: {
+        title: 'Tokenization',
+        short: 'How a model cuts up text \u2014 and why that costs more in Hungarian than in English.',
+        desc: ['The BPE algorithm step by step, with concrete vocabulary-size figures and the trend across model generations (30K \u2192 200K).', 'The documented \u201clanguage tax\u201d for Hungarian and similar agglutinative languages \u2014 concrete multipliers and the real cost/context-window consequences.']
+      },
+      randomness: {
+        title: 'Randomness and Sampling',
+        short: 'Why the model always says 73 \u2014 token probability, temperature, and the amplification of human bias.',
+        desc: ['The model doesn\u2019t \u201cthink of\u201d a number \u2014 it samples from a heavily skewed probability distribution shaped by human patterns seen in training data.', 'The twist: humans are biased too (the Veritasium experiment) \u2014 the model amplifies that bias rather than inventing it.']
+      },
+      evaluation: {
+        title: 'How We Measure a Model\u2019s Knowledge',
+        short: 'Benchmarks and their limits: MMLU, GPQA, SWE-bench \u2014 what they actually measure, and why a leaderboard rank shouldn\u2019t be taken too seriously.',
+        desc: ['The saturation problem (MMLU 88%+ at the top) and contamination \u2014 when a test stops discriminating, or the model has \u201cmemorized\u201d the exam.', 'A practical model-selection method: coarse filtering with benchmarks, then confirmation with your own relevant test set.']
+      },
+      'embedding-models': {
+        title: 'Embedding Models',
+        short: 'How the vector space behind RAG and search gets built \u2014 contrastive learning, positive/negative pairs.',
+        desc: ['A separate training objective (similarity-based ordering) that doesn\u2019t follow automatically from a generation-focused pretraining run.', 'Two development paths: a dedicated, smaller encoder vs. turning a large LLM into an embedding generator, plus MTEB as the measuring stick.']
+      },
+      'ai-safety': {
+        title: 'Alignment and Red Teaming',
+        short: 'What the alignment problem means conceptually, and how the field tests a model\u2019s reliability through red teaming.',
+        desc: ['Alignment (constructive) vs. red teaming (adversarial) \u2014 why both are needed, and what 2026 research shows about jailbreak resistance.', 'The realistic goal isn\u2019t zero jailbreaks \u2014 it\u2019s narrow, expensive, detectable ones \u2014 tying into the practical Security & OWASP tutorial.']
+      },
+      'agent-architecture': {
+        title: 'How an AI Agent Decides',
+        short: 'The ReAct loop: reason, act, observe, repeat \u2014 and the \u201cwhen is it done\u201d problem.',
+        desc: ['How the model decides which tool to call (tool-definition-based selection), and why an agent has no built-in sense of \u201cdone.\u201d', 'Three tool categories (data, action, orchestration) as a practical design lens for risk management.']
       }
     }
   }

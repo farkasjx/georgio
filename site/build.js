@@ -42,18 +42,25 @@ const GA_MEASUREMENT_ID = 'G-HLRPY0MH9C';
 const PAGE_ORDER = [
   { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
 
-  /* ── Alapok & munkafolyamat ── */
+  /* ── Gyakorlat & eszközök ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
   { key: 'prompting',             label: 'Prompt Engineering',      labelEn: 'Prompt Engineering',       dot: '#e8a84a' },
   { key: 'aiconfig',              label: 'AI Config fájlok',        labelEn: 'AI Config Files',          dot: '#f472b6' },
+  { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },
+  { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
+  { key: 'ai-safety',             label: 'Alignment és red teaming', labelEn: 'Alignment and Red Teaming', dot: '#ef4444' },
+  { key: 'agent-architecture',    label: 'Agent architektúra',      labelEn: 'Agent Architecture',       dot: '#22d3ee' },
+
+  /* ── Modell-belső működés ── */
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
   { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
-  { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },
-  { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
   { key: 'multimodal',            label: 'Multimodális modellek',   labelEn: 'Multimodal Models',        dot: '#c084fc' },
   { key: 'diffusion',             label: 'Diffúziós modellek',      labelEn: 'Diffusion Models',         dot: '#facc15' },
   { key: 'base-vs-instruct',      label: 'Base vs. Instruct',       labelEn: 'Base vs. Instruct',        dot: '#f87171' },
+  { key: 'architecture',          label: 'Egy modell anatómiája',   labelEn: 'Anatomy of a Model',       dot: '#818cf8' },
+  { key: 'tokenization',          label: 'Tokenizáció',             labelEn: 'Tokenization',             dot: '#2dd4bf' },
+  { key: 'randomness',            label: 'Véletlenszerűség',        labelEn: 'Randomness',               dot: '#fb7185' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
@@ -66,6 +73,7 @@ const PAGE_ORDER = [
   { key: 'model-routing',         label: 'Model routing',           labelEn: 'Model routing',            dot: '#496b8f' },
   { key: 'model-training',        label: 'Modelltanítás',           labelEn: 'Model Training',           dot: '#d97706' },
   { key: 'fine-tuning',           label: 'Fine-tuning technikák',   labelEn: 'Fine-Tuning Techniques',  dot: '#0ea5e9' },
+  { key: 'evaluation',            label: 'Evaluation & benchmarkok', labelEn: 'Evaluation & Benchmarks',  dot: '#84cc16' },
 
   /* ── Tudás & kontextus ── */
   { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
@@ -75,6 +83,7 @@ const PAGE_ORDER = [
   { key: 'hallucination',         label: 'Halucináció',             labelEn: 'Hallucination',            dot: '#a3ce40' },
   { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
   { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },
+  { key: 'embedding-models',      label: 'Embedding modellek',      labelEn: 'Embedding Models',          dot: '#f59e0b' },
 ];
 
 /* ── NYELVEK ──
