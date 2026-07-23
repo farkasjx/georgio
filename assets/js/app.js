@@ -357,6 +357,11 @@ function initMap() {
   if (mapInitialized) return;
   mapInitialized = true;
 
+  // gyors, O(1) id -> node kikeresés — korábban minden egyes él-újraszámoláskor
+  // (ami drag közben másodpercenként 60x is lefuthat) graphNodes.find()-ot
+  // hívtunk, ami a teljes 46 elemű tömböt végigmenné minden egyes híváskor
+  const nodeById = new Map(graphNodes.map(n => [n.id, n]));
+
   const shell  = document.getElementById('map-shell');
   const canvas = document.getElementById('map-canvas');
   const svgEl  = document.getElementById('map-svg');
@@ -376,14 +381,22 @@ function initMap() {
   drawClusterRegions(svgEl);
 
   // draw edges (a pontos 'd' útvonalat az updateAllEdges() számolja ki)
+  // él-DOM-elemek létrehozása, közben egy node-id -> érintett <path>-elemek
+  // index felépítése (edgesByNode), hogy drag közben ne kelljen a teljes
+  // édge-listát (querySelectorAll('.path')) újra és újra átfésülni
+  const edgesByNode = new Map();
   graphEdges.forEach(([a,b]) => {
-    const na = graphNodes.find(n=>n.id===a), nb = graphNodes.find(n=>n.id===b);
+    const na = nodeById.get(a), nb = nodeById.get(b);
     if (!na || !nb) return;
     const path = document.createElementNS('http://www.w3.org/2000/svg','path');
     path.setAttribute('class','path');
     path.dataset.a = a;
     path.dataset.b = b;
     svgEl.appendChild(path);
+    if (!edgesByNode.has(a)) edgesByNode.set(a, []);
+    if (!edgesByNode.has(b)) edgesByNode.set(b, []);
+    edgesByNode.get(a).push(path);
+    edgesByNode.get(b).push(path);
   });
   updateAllEdges();
 
@@ -462,7 +475,15 @@ function initMap() {
       const el = document.getElementById(`node-${draggingNode.id}`);
       el.style.left = draggingNode.x + 'px';
       el.style.top  = draggingNode.y + 'px';
-      updateEdgesForNode(draggingNode.id);
+      // csak a ténylegesen érintett (előre indexelt) éleket frissítjük —
+      // nem a teljes .path-listát fésüljük át minden mozgás-eseménynél
+      const touched = edgesByNode.get(draggingNode.id);
+      if (touched) {
+        touched.forEach(p => {
+          const na = nodeById.get(p.dataset.a), nb = nodeById.get(p.dataset.b);
+          if (na && nb) p.setAttribute('d', edgePathD(na, nb));
+        });
+      }
       return;
     }
     if (!dragging) return;
@@ -610,15 +631,6 @@ function edgePathD(na, nb) {
 
 function updateAllEdges() {
   document.querySelectorAll('.path').forEach(p => {
-    const na = graphNodes.find(n => n.id === p.dataset.a);
-    const nb = graphNodes.find(n => n.id === p.dataset.b);
-    if (na && nb) p.setAttribute('d', edgePathD(na, nb));
-  });
-}
-
-function updateEdgesForNode(id) {
-  document.querySelectorAll('.path').forEach(p => {
-    if (p.dataset.a !== id && p.dataset.b !== id) return;
     const na = graphNodes.find(n => n.id === p.dataset.a);
     const nb = graphNodes.find(n => n.id === p.dataset.b);
     if (na && nb) p.setAttribute('d', edgePathD(na, nb));
