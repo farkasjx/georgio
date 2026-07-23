@@ -291,11 +291,12 @@ const NODE_W = 250, NODE_H = 150, REGION_PAD = 70;
 /* A 4 klaszter fix sorrendje és a hozzá tartozó, halvány háttérszín — a node-ok
    színesek maradnak, a régió csak egy nagyon finom, elkülönítő "buborék". */
 const CLUSTER_REGION_COLOR = {
-  practice:  '#60a5fa',
-  workflow:  '#fb923c',
-  model:     '#98d016',
-  knowledge: '#1613d4',
-  context:   '#eab308',
+  fundamentals: '#60a5fa',
+  training:     '#f472b6',
+  infra:        '#98d016',
+  knowledge:    '#1613d4',
+  safety:       '#e06c75',
+  practice:     '#fb923c',
 };
 
 function drawClusterRegions(svgEl) {
@@ -304,6 +305,20 @@ function drawClusterRegions(svgEl) {
     if (!byCluster[n.cluster]) byCluster[n.cluster] = [];
     byCluster[n.cluster].push(n);
   });
+
+  // Gaussian blur szűrő a régiók puha, "felhő-szerű" szélei­hez — a klaszterek
+  // a valóságban erősen összefonódnak (56%-uk kereszthivatkozás más
+  // klaszterekbe), egy éles, szaggatott körvonal ezt a valóságnál
+  // mesterségesen szigorúbb elhatárolásnak mutatná.
+  const defs = svgEl.querySelector('defs') || svgEl.insertBefore(document.createElementNS('http://www.w3.org/2000/svg','defs'), svgEl.firstChild);
+  const filter = document.createElementNS('http://www.w3.org/2000/svg','filter');
+  filter.setAttribute('id', 'cluster-region-blur');
+  filter.setAttribute('x', '-30%'); filter.setAttribute('y', '-30%');
+  filter.setAttribute('width', '160%'); filter.setAttribute('height', '160%');
+  const blur = document.createElementNS('http://www.w3.org/2000/svg','feGaussianBlur');
+  blur.setAttribute('stdDeviation', '40');
+  filter.appendChild(blur);
+  defs.appendChild(filter);
 
   Object.keys(byCluster).forEach(cluster => {
     const nodes = byCluster[cluster];
@@ -320,13 +335,10 @@ function drawClusterRegions(svgEl) {
     rect.setAttribute('y', minY);
     rect.setAttribute('width', maxX - minX);
     rect.setAttribute('height', maxY - minY);
-    rect.setAttribute('rx', 36);
+    rect.setAttribute('rx', 80);
     rect.setAttribute('fill', color);
-    rect.setAttribute('fill-opacity', '0.05');
-    rect.setAttribute('stroke', color);
-    rect.setAttribute('stroke-opacity', '0.28');
-    rect.setAttribute('stroke-width', '2');
-    rect.setAttribute('stroke-dasharray', '10 8');
+    rect.setAttribute('fill-opacity', '0.12');
+    rect.setAttribute('filter', 'url(#cluster-region-blur)');
     svgEl.appendChild(rect);
 
     const label = document.createElementNS('http://www.w3.org/2000/svg','text');
@@ -350,14 +362,14 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 3150, H = 2900;
+  const W = 3500, H = 2050;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svgEl.style.width  = W + 'px';
   svgEl.style.height = H + 'px';
 
-  // draw cluster background regions (a node-ok és élek MÖGÖTT, hogy a 4 klaszter
+  // draw cluster background regions (a node-ok és élek MÖGÖTT, hogy a 6 klaszter
   // vizuálisan is elkülönüljön, ne csak a szűrőgombokkal lehessen szétválasztani)
   const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
   svgEl.appendChild(defs);

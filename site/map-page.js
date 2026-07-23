@@ -19,11 +19,12 @@ export function renderMapPage(ui) {
       <button class="map-btn map-filter-toggle" id="map-filter-toggle">${ui.mapFilterToggleLabel}</button>
       <div class="map-chip-group" id="map-chip-group">
         <button class="map-btn map-chip chip-active" data-filter="all">${ui.mapFilterAll}</button>
-        <button class="map-btn map-chip" data-filter="context">${ui.mapFilterContext}</button>
-        <button class="map-btn map-chip" data-filter="practice">${ui.mapFilterPractice}</button>
-        <button class="map-btn map-chip" data-filter="workflow">${ui.mapFilterWorkflow}</button>
-        <button class="map-btn map-chip" data-filter="model">${ui.mapFilterModel}</button>
+        <button class="map-btn map-chip" data-filter="fundamentals">${ui.mapFilterFundamentals}</button>
+        <button class="map-btn map-chip" data-filter="training">${ui.mapFilterTraining}</button>
+        <button class="map-btn map-chip" data-filter="infra">${ui.mapFilterInfra}</button>
         <button class="map-btn map-chip" data-filter="knowledge">${ui.mapFilterKnowledge}</button>
+        <button class="map-btn map-chip" data-filter="safety">${ui.mapFilterSafety}</button>
+        <button class="map-btn map-chip" data-filter="practice">${ui.mapFilterPractice}</button>
       </div>
     </div>
 
@@ -55,30 +56,35 @@ export function renderMapPage(ui) {
       <button class="panel-close" id="overlap-panel-close">✕</button>
       <div class="panel-title">${ui.mapOverlapTitle}</div>
       <p class="overlap-panel-intro">${ui.mapOverlapIntro}</p>
-      <svg viewBox="0 0 460 430" class="overlap-diagram" role="img" aria-label="${ui.mapOverlapTitle}">
-        <line x1="230" y1="70" x2="120" y2="220" stroke="#7F77DD" stroke-width="7" opacity="0.55"/>
-        <line x1="230" y1="70" x2="340" y2="220" stroke="#7F77DD" stroke-width="5" opacity="0.5"/>
-        <line x1="120" y1="220" x2="340" y2="220" stroke="#7F77DD" stroke-width="4.5" opacity="0.5"/>
-        <line x1="340" y1="220" x2="340" y2="350" stroke="#7F77DD" stroke-width="4" opacity="0.45"/>
-        <line x1="120" y1="220" x2="340" y2="350" stroke="#7F77DD" stroke-width="3" opacity="0.4"/>
-        <line x1="230" y1="70" x2="120" y2="350" stroke="#7F77DD" stroke-width="2.5" opacity="0.35"/>
-        <line x1="230" y1="70" x2="340" y2="350" stroke="#7F77DD" stroke-width="2" opacity="0.3"/>
-        <line x1="120" y1="350" x2="340" y2="220" stroke="#7F77DD" stroke-width="2" opacity="0.3"/>
-        <rect x="155" y="46" width="150" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
-        <text x="230" y="66" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapContext}</text>
-        <text x="230" y="82" text-anchor="middle" class="overlap-node-sub">2</text>
-        <rect x="20" y="196" width="180" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
-        <text x="110" y="216" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapPractice}</text>
-        <text x="110" y="232" text-anchor="middle" class="overlap-node-sub">11</text>
-        <rect x="255" y="196" width="180" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
-        <text x="345" y="216" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapWorkflow}</text>
-        <text x="345" y="232" text-anchor="middle" class="overlap-node-sub">9</text>
-        <rect x="20" y="326" width="180" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
-        <text x="110" y="346" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapModel}</text>
-        <text x="110" y="362" text-anchor="middle" class="overlap-node-sub">14</text>
-        <rect x="255" y="326" width="180" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
-        <text x="345" y="346" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapKnowledge}</text>
-        <text x="345" y="362" text-anchor="middle" class="overlap-node-sub">10</text>
+      <svg viewBox="0 0 460 460" class="overlap-diagram" role="img" aria-label="${ui.mapOverlapTitle}">
+        <line x1="230" y1="60" x2="360" y2="150" stroke="#7F77DD" stroke-width="6.5" opacity="0.55"/>
+        <line x1="360" y1="150" x2="230" y2="400" stroke="#7F77DD" stroke-width="5" opacity="0.5"/>
+        <line x1="230" y1="60" x2="100" y2="150" stroke="#7F77DD" stroke-width="4.5" opacity="0.45"/>
+        <line x1="230" y1="60" x2="360" y2="310" stroke="#7F77DD" stroke-width="4" opacity="0.42"/>
+        <line x1="100" y1="150" x2="360" y2="310" stroke="#7F77DD" stroke-width="2.5" opacity="0.35"/>
+        <line x1="360" y1="310" x2="230" y2="400" stroke="#7F77DD" stroke-width="2.5" opacity="0.35"/>
+        <line x1="100" y1="310" x2="360" y2="310" stroke="#7F77DD" stroke-width="2" opacity="0.32"/>
+        <line x1="100" y1="150" x2="230" y2="400" stroke="#7F77DD" stroke-width="2" opacity="0.3"/>
+        <line x1="100" y1="310" x2="360" y2="150" stroke="#7F77DD" stroke-width="2" opacity="0.3"/>
+        <line x1="100" y1="150" x2="100" y2="310" stroke="#7F77DD" stroke-width="1.5" opacity="0.25"/>
+        <rect x="150" y="34" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="230" y="54" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapFundamentals}</text>
+        <text x="230" y="70" text-anchor="middle" class="overlap-node-sub">10</text>
+        <rect x="280" y="126" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="360" y="146" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapPractice}</text>
+        <text x="360" y="162" text-anchor="middle" class="overlap-node-sub">14</text>
+        <rect x="20" y="126" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="100" y="146" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapTraining}</text>
+        <text x="100" y="162" text-anchor="middle" class="overlap-node-sub">5</text>
+        <rect x="280" y="286" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="360" y="306" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapKnowledge}</text>
+        <text x="360" y="322" text-anchor="middle" class="overlap-node-sub">9</text>
+        <rect x="20" y="286" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="100" y="306" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapInfra}</text>
+        <text x="100" y="322" text-anchor="middle" class="overlap-node-sub">5</text>
+        <rect x="150" y="376" width="160" height="48" rx="10" fill="var(--bg-3)" stroke="#7F77DD" stroke-width="1"/>
+        <text x="230" y="396" text-anchor="middle" class="overlap-node-title">${ui.mapOverlapSafety}</text>
+        <text x="230" y="412" text-anchor="middle" class="overlap-node-sub">3</text>
       </svg>
       <p class="overlap-panel-foot">${ui.mapOverlapFoot}</p>
     </div>
