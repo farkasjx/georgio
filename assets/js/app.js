@@ -9,7 +9,7 @@ const pages = [
   'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops',
-  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag'
+  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures'
 ];
 
 /* ── Kereszthivatkozás más oldal egy adott szekciójára (pl. Fogalomtár linkjei) ──
@@ -536,6 +536,22 @@ function initMap() {
   document.getElementById('panel-close').addEventListener('click', () => {
     panel.classList.remove('open');
     clearHighlight();
+  });
+
+  // klaszter-átfedés panel: nyitás/zárás gombbal, háttérre kattintva, vagy Escape-re
+  const overlapPanel = document.getElementById('overlap-panel');
+  const overlapBtn = document.getElementById('btn-overlap');
+  const overlapClose = document.getElementById('overlap-panel-close');
+  if (overlapBtn && overlapPanel) {
+    overlapBtn.addEventListener('click', () => overlapPanel.classList.toggle('open'));
+  }
+  if (overlapClose && overlapPanel) {
+    overlapClose.addEventListener('click', () => overlapPanel.classList.remove('open'));
+  }
+  shell.addEventListener('mousedown', e => {
+    if (overlapPanel && overlapPanel.classList.contains('open') && !e.target.closest('.overlap-panel') && !e.target.closest('#btn-overlap')) {
+      overlapPanel.classList.remove('open');
+    }
   });
 }
 

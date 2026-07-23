@@ -76,6 +76,7 @@ const graphNodesBase = [
   { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 2050,  y: 2330 },
   { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 2390,  y: 2330 },
   { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 2730,  y: 2330 },
+  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 2050,  y: 2570 },
 ];
 
 const graphEdges = [
@@ -113,6 +114,7 @@ const graphEdges = [
   ['model-types','architecture'], ['model-types','multimodal'], ['model-types','agent-architecture'], ['model-types','dense-moe'],
   ['open-weight','ollama'], ['open-weight','fine-tuning'], ['open-weight','quantization-quality'], ['open-weight','hardware'],
   ['graphrag','rag'], ['graphrag','vectordb'],
+  ['rag-architectures','rag'], ['rag-architectures','graphrag'], ['rag-architectures','agent-architecture'],
   ['huggingface','open-weight'], ['huggingface','fine-tuning'], ['huggingface','tokenization'], ['huggingface','quantization-quality'],
   ['enterprise-ai','security'], ['enterprise-ai','mcp'], ['enterprise-ai','ai-safety'],
   ['harness-engineering','agentic-coding'], ['harness-engineering','agent-architecture'], ['harness-engineering','aiconfig'], ['harness-engineering','security'],
@@ -326,6 +328,11 @@ const graphText = {
         title: 'GraphRAG',
         short: 'Amikor a kapcsolatok számítanak, nem csak a hasonlóság — és miért szkeptikus a RAG egyik feltalálója magával a megközelítéssel.',
         desc: ['Entitás-kinyerés, kapcsolat-kinyerés, közösség-detektálás és -összefoglalás — hogyan épül fel a nyers szövegből egy tudásgráf.', 'Egy fontos kritikai szempont: sok GraphRAG-implementáció valójában csak "adat-augmentáció", nem valódi gráf-bejárás.']
+      },
+      'rag-architectures': {
+        title: 'RAG architektúrák',
+        short: 'Naiv, advanced, modular, agentic — négy generáció egy komplexitási létrán, konkrét latencia- és költségszámokkal.',
+        desc: ['Nem "melyik a legjobb", hanem "melyik illik a feladathoz" — a naiv RAG legitim végállapot, az agentic RAG 10x drágább, de 62%-kal csökkentheti a hallucinációt.', 'Az adaptive routing minta: egy osztályozó irányítja a kérdéseket a hozzájuk illő architektúrához, ez adja az optimális költség-minőség egyensúlyt.']
       },
       huggingface: {
         title: 'Hugging Face',
@@ -563,6 +570,11 @@ const graphText = {
         title: 'GraphRAG',
         short: 'When relationships matter, not just similarity — and why one of RAG’s inventors is skeptical of the approach itself.',
         desc: ['Entity extraction, relationship extraction, community detection and summarization — how a knowledge graph gets built from raw text.', 'An important critical point: many GraphRAG implementations are really just “data augmentation,” not true graph traversal.']
+      },
+      'rag-architectures': {
+        title: 'RAG Architectures',
+        short: 'Naive, advanced, modular, agentic — four generations on a complexity ladder, with concrete latency and cost figures.',
+        desc: ['Not “which is best” but “which fits the task” — naive RAG is a legitimate end state, agentic RAG costs 10x more but can cut hallucination by 62%.', 'The adaptive routing pattern: a classifier directs queries to the architecture that fits them, giving the optimal cost-quality balance.']
       },
       huggingface: {
         title: 'Hugging Face',
