@@ -5,10 +5,11 @@
 /* ── PAGE NAVIGATION ── */
 const pages = [
   'map', 'tools', 'glossary', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
-  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture',
+  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history',
+  'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
-  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation',
-  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models'
+  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops',
+  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag'
 ];
 
 /* ── Kereszthivatkozás más oldal egy adott szekciójára (pl. Fogalomtár linkjei) ──
@@ -344,7 +345,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 2750, H = 2050;
+  const W = 3450, H = 2400;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);

@@ -26,44 +26,54 @@ const graphNodesBase = [
   { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 100,  y: 100 },
   { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 440,  y: 100 },
   { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 780,  y: 100 },
-  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 100,  y: 340 },
-  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 440,  y: 340 },
-  { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 780,  y: 340 },
-  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 100,  y: 580 },
+  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 1120,  y: 100 },
+  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 100,  y: 340 },
+  { id: 'ai-safety',               cluster: 'practice', color: '#ef4444', x: 440,  y: 340 },
+  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 780,  y: 340 },
+  { id: 'huggingface',             cluster: 'practice', color: '#fdba74', x: 1120,  y: 340 },
+  { id: 'enterprise-ai',           cluster: 'practice', color: '#dc2626', x: 100,  y: 580 },
+  { id: 'harness-engineering',     cluster: 'practice', color: '#0d9488', x: 440,  y: 580 },
+  { id: 'ai-code-review',          cluster: 'practice', color: '#8b5cf6', x: 780,  y: 580 },
+  { id: 'ai-workflow-automation',  cluster: 'practice', color: '#f43f5e', x: 1120,  y: 580 },
 
   /* ── Modell-belső működés (jobb-fent) ── */
-  { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 1650,  y: 100 },
-  { id: 'mcp',                     cluster: 'workflow', color: '#359a9c', x: 1990,  y: 100 },
-  { id: 'security',                cluster: 'workflow', color: '#e06c75', x: 2330,  y: 100 },
-  { id: 'multimodal',              cluster: 'workflow', color: '#c084fc', x: 1650,  y: 340 },
-  { id: 'diffusion',               cluster: 'workflow', color: '#facc15', x: 1990,  y: 340 },
-  { id: 'base-vs-instruct',        cluster: 'workflow', color: '#f87171', x: 2330,  y: 340 },
-  { id: 'architecture',            cluster: 'workflow', color: '#818cf8', x: 1650,  y: 580 },
-  { id: 'tokenization',            cluster: 'workflow', color: '#2dd4bf', x: 1990,  y: 580 },
-  { id: 'randomness',              cluster: 'workflow', color: '#fb7185', x: 2330,  y: 580 },
+  { id: 'reasoning',               cluster: 'workflow', color: '#fb923c', x: 2050,  y: 100 },
+  { id: 'mcp',                     cluster: 'workflow', color: '#359a9c', x: 2390,  y: 100 },
+  { id: 'security',                cluster: 'workflow', color: '#e06c75', x: 2730,  y: 100 },
+  { id: 'multimodal',              cluster: 'workflow', color: '#c084fc', x: 3070,  y: 100 },
+  { id: 'diffusion',               cluster: 'workflow', color: '#facc15', x: 2050,  y: 340 },
+  { id: 'base-vs-instruct',        cluster: 'workflow', color: '#f87171', x: 2390,  y: 340 },
+  { id: 'architecture',            cluster: 'workflow', color: '#818cf8', x: 2730,  y: 340 },
+  { id: 'tokenization',            cluster: 'workflow', color: '#2dd4bf', x: 3070,  y: 340 },
+  { id: 'randomness',              cluster: 'workflow', color: '#fb7185', x: 2050,  y: 580 },
+  { id: 'ai-history',              cluster: 'workflow', color: '#fcd34d', x: 2390,  y: 580 },
 
   /* ── Modell & hardver (bal-lent) ── */
-  { id: 'kv-cache',                cluster: 'model', color: '#8a5a2a', x: 100,  y: 1250 },
-  { id: 'ollama',                  cluster: 'model', color: '#4ec9c9', x: 440,  y: 1250 },
-  { id: 'hardware',                cluster: 'model', color: '#f0edeb', x: 780,  y: 1250 },
-  { id: 'quantization-quality',    cluster: 'model', color: '#00ff55', x: 1120,  y: 1250 },
-  { id: 'model-size',              cluster: 'model', color: '#98d016', x: 100,  y: 1490 },
-  { id: 'dense-moe',               cluster: 'model', color: '#6160a3', x: 440,  y: 1490 },
-  { id: 'model-routing',           cluster: 'model', color: '#496b8f', x: 780,  y: 1490 },
-  { id: 'latency',                 cluster: 'model', color: '#523986', x: 1120,  y: 1490 },
-  { id: 'model-training',          cluster: 'model', color: '#d97706', x: 100,  y: 1730 },
-  { id: 'fine-tuning',             cluster: 'model', color: '#0ea5e9', x: 440,  y: 1730 },
-  { id: 'evaluation',              cluster: 'model', color: '#84cc16', x: 780,  y: 1730 },
+  { id: 'kv-cache',                cluster: 'model', color: '#8a5a2a', x: 100,  y: 1400 },
+  { id: 'ollama',                  cluster: 'model', color: '#4ec9c9', x: 440,  y: 1400 },
+  { id: 'hardware',                cluster: 'model', color: '#f0edeb', x: 780,  y: 1400 },
+  { id: 'quantization-quality',    cluster: 'model', color: '#00ff55', x: 1120,  y: 1400 },
+  { id: 'model-size',              cluster: 'model', color: '#98d016', x: 100,  y: 1640 },
+  { id: 'dense-moe',               cluster: 'model', color: '#6160a3', x: 440,  y: 1640 },
+  { id: 'model-routing',           cluster: 'model', color: '#496b8f', x: 780,  y: 1640 },
+  { id: 'latency',                 cluster: 'model', color: '#523986', x: 1120,  y: 1640 },
+  { id: 'model-training',          cluster: 'model', color: '#d97706', x: 100,  y: 1880 },
+  { id: 'fine-tuning',             cluster: 'model', color: '#0ea5e9', x: 440,  y: 1880 },
+  { id: 'evaluation',              cluster: 'model', color: '#84cc16', x: 780,  y: 1880 },
+  { id: 'model-types',             cluster: 'model', color: '#a3e635', x: 1120,  y: 1880 },
+  { id: 'open-weight',             cluster: 'model', color: '#38bdf8', x: 100,  y: 2120 },
+  { id: 'llmops',                  cluster: 'model', color: '#65a30d', x: 440,  y: 2120 },
 
   /* ── Tudás & kontextus (jobb-lent) ── */
-  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 1650,  y: 1250 },
-  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 1990,  y: 1250 },
-  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2330,  y: 1250 },
-  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 1650,  y: 1490 },
-  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 1990,  y: 1490 },
-  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2330,  y: 1490 },
-  { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 1650,  y: 1730 },
-  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 1990,  y: 1730 },
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 2050,  y: 1400 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 2390,  y: 1400 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2730,  y: 1400 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 2050,  y: 1640 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 2390,  y: 1640 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2730,  y: 1640 },
+  { id: 'rlhf',                    cluster: 'knowledge', color: '#c9a9ac', x: 2050,  y: 1880 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 2390,  y: 1880 },
+  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 2730,  y: 1880 },
 ];
 
 const graphEdges = [
@@ -97,6 +107,16 @@ const graphEdges = [
   ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
+  ['ai-history','reasoning'], ['ai-history','base-vs-instruct'], ['ai-history','architecture'],
+  ['model-types','architecture'], ['model-types','multimodal'], ['model-types','agent-architecture'], ['model-types','dense-moe'],
+  ['open-weight','ollama'], ['open-weight','fine-tuning'], ['open-weight','quantization-quality'], ['open-weight','hardware'],
+  ['graphrag','rag'], ['graphrag','vectordb'],
+  ['huggingface','open-weight'], ['huggingface','fine-tuning'], ['huggingface','tokenization'], ['huggingface','quantization-quality'],
+  ['enterprise-ai','security'], ['enterprise-ai','mcp'], ['enterprise-ai','ai-safety'],
+  ['harness-engineering','agentic-coding'], ['harness-engineering','agent-architecture'], ['harness-engineering','aiconfig'], ['harness-engineering','security'],
+  ['ai-code-review','agentic-coding'], ['ai-code-review','evaluation'], ['ai-code-review','enterprise-ai'],
+  ['ai-workflow-automation','agent-architecture'], ['ai-workflow-automation','mcp'], ['ai-workflow-automation','open-weight'],
+  ['llmops','evaluation'], ['llmops','model-routing'], ['llmops','harness-engineering'], ['llmops','rag'],
 ];
 
 /* nyelvfüggő szövegek */
@@ -283,6 +303,56 @@ const graphText = {
         title: 'Hogyan dönt egy AI agent',
         short: 'A ReAct hurok: gondolkodj, cselekedj, figyeld meg, ismételd — és a "mikor van vége" probléma.',
         desc: ['Hogyan dönti el a modell, melyik eszközt hívja (tool-definíció alapú választás), és miért nincs beépített "kész" fogalma egy agentnek.', 'Három eszköz-kategória (data, action, orchestration) mint gyakorlati tervezési szempont a kockázat-kezeléshez.']
+      },
+      'ai-history': {
+        title: 'AI történelem',
+        short: 'A ciklusok, amik idáig vezettek — Turingtól a mai reasoning és agentic korszakig, két AI-téllel a történetben.',
+        desc: ['Két nagy AI-tél (perceptron/XOR és szakértői rendszerek összeomlása) ugyanazt a mintát mutatja: túlígéret, csalódottság, finanszírozás-megvonás.', 'A 2017-es transformer-cikktől a ChatGPT-pillanaton át a mai reasoning és agentic korszakig — és mit tanulhatunk a ciklusokból a mai hype megítéléséhez.']
+      },
+      'model-types': {
+        title: 'Modelltípusok térképe',
+        short: 'LLM, SLM, LAM, VLM, LCM és a többi betűszó — mind ugyanarra a transformer-alapra épül, más specializációval.',
+        desc: ['Három tengely rendezi a térképet: méret (LLM vs. SLM), modalitás (VLM, MLM, SAM) és cselekvés (LAM) — nem külön technológiák, hanem specializációk.', 'A 2026-os valóság: hierarchikus, hibrid rendszerek, ahol több modelltípus dolgozik együtt, nem egyetlen "mindenre jó" modell.']
+      },
+      'open-weight': {
+        title: 'Nyílt súlyú modellek',
+        short: '"Open weight" ≠ "open source" — a licenc gyakran fontosabb döntési szempont, mint a benchmark-pontszám.',
+        desc: ['A legtöbb "nyílt" modell (Llama, Qwen, Mistral, Gemma, DeepSeek) csak a súlyokat publikálja, nem a tanítóadatot vagy a kódot — ez a különbség üzletileg is számít.', 'Hat nagy labor versenyez 2026-ban, eltérő licenc-feltételekkel (Apache 2.0 vs. egyedi közösségi licencek) és erősségekkel.']
+      },
+      graphrag: {
+        title: 'GraphRAG',
+        short: 'Amikor a kapcsolatok számítanak, nem csak a hasonlóság — és miért szkeptikus a RAG egyik feltalálója magával a megközelítéssel.',
+        desc: ['Entitás-kinyerés, kapcsolat-kinyerés, közösség-detektálás és -összefoglalás — hogyan épül fel a nyers szövegből egy tudásgráf.', 'Egy fontos kritikai szempont: sok GraphRAG-implementáció valójában csak "adat-augmentáció", nem valódi gráf-bejárás.']
+      },
+      huggingface: {
+        title: 'Hugging Face',
+        short: 'A Hub (modell-tárhely) és a transformers könyvtár (futtató API) — gyakorlati bevezető pipeline()-tól az AutoModel szintig.',
+        desc: ['Az első sor kód (pipeline()) a leggyorsabb út egy modell futtatásához — és mikor kell mélyebbre menni AutoModel/AutoTokenizer szintre.', 'Gyakorlati óvintézkedések: hardver-igény, verzió-rögzítés, bizalmi lánc, mielőtt éles rendszerbe építenéd.']
+      },
+      'enterprise-ai': {
+        title: 'Vállalati AI',
+        short: 'Kormányzás, GDPR, SOC 2 — hogyan vezess be AI-t szervezetben úgy, hogy auditálható és kormányzott maradjon.',
+        desc: ['A 68 százalékpontos szakadék adopciós szándék és tényleges bevezetés között, és a "shadow AI" jelenség, ami emiatt kialakul.', 'GDPR-megfelelés (nem elég az EU-régió), SOC 2 öt kritériuma, és konkrét checklist eszközbevezetés előtt.']
+      },
+      'harness-engineering': {
+        title: 'Harness engineering',
+        short: 'Agent = Model + Harness — a rendszer, ami a modell valószínűségi gondolkodását megbízható cselekvéssé alakítja.',
+        desc: ['Öt réteg (tool orchestration, verification, context/memory, guardrails, observability), amikből egy production-szintű harness felépül.', 'A vállalati AI-kudarcok 65%-a harness-defekt, nem reasoning-hiány — konkrét, mért Azure SRE Agent esettel.']
+      },
+      'ai-code-review': {
+        title: 'AI code review',
+        short: 'CodeRabbit, Greptile, Qodo és a mezőny — konkrét pontossági számok, és miért nem helyettesítik az emberi review-t.',
+        desc: ['Recall vs. precizitás konkrét számokkal (52,5% vs. 36,7%), és melyik eszköz melyik csapat-korlátra ad választ.', 'A határ, amit egyik eszköz sem lép át: architekturális döntés és üzleti logika továbbra is emberi ítélőképességet igényel.']
+      },
+      'ai-workflow-automation': {
+        title: 'AI workflow automatizáció',
+        short: 'Zapier, Make, n8n — vizuális alternatíva a saját kódolt agent-rendszerekhez, ha a feladat ismétlődő, több-eszközös.',
+        desc: ['Három platform, három célközönség: Zapier (legegyszerűbb), Make (vizuális középút), n8n (fejlesztői mélység, self-hosting).', 'Az árazási modell (task vs. execution) nagyságrendi különbséget jelenthet nagy volumennél — mindig a saját volumenre számolj.']
+      },
+      llmops: {
+        title: 'LLMOps',
+        short: 'A DevOps, amit a promptok igényelnek — a prompt a kód, és minden változtatás valódi API-hívást igényel a teszteléshez.',
+        desc: ['A három-kapus eval-pipeline: séma-teszt (gyors) → Ragas/faithfulness → LLM-as-Judge (csak jelentős változásnál), plusz emberi jóváhagyás.', 'Döntési keret: mikor indokolt a teljes LLMOps-apparátus, és hogyan bővítsd ki a meglévő MLOps-infrastruktúrát.']
       }
     }
   },
@@ -467,8 +537,58 @@ const graphText = {
       },
       'agent-architecture': {
         title: 'How an AI Agent Decides',
-        short: 'The ReAct loop: reason, act, observe, repeat \u2014 and the \u201cwhen is it done\u201d problem.',
-        desc: ['How the model decides which tool to call (tool-definition-based selection), and why an agent has no built-in sense of \u201cdone.\u201d', 'Three tool categories (data, action, orchestration) as a practical design lens for risk management.']
+        short: 'The ReAct loop: reason, act, observe, repeat — and the “when is it done” problem.',
+        desc: ['How the model decides which tool to call (tool-definition-based selection), and why an agent has no built-in sense of “done.”', 'Three tool categories (data, action, orchestration) as a practical design lens for risk management.']
+      },
+      'ai-history': {
+        title: 'AI History',
+        short: 'The cycles that led here — from Turing to today’s reasoning and agentic era, with two AI winters along the way.',
+        desc: ['Two major AI winters (the perceptron/XOR critique and the collapse of expert systems) both follow the same pattern: overpromise, disappointment, funding cuts.', 'From the 2017 transformer paper through the ChatGPT moment to today’s reasoning and agentic era — and what the cycles teach about judging today’s hype.']
+      },
+      'model-types': {
+        title: 'Model Types Map',
+        short: 'LLM, SLM, LAM, VLM, LCM and the rest of the acronym soup — all built on the same transformer base, specialized differently.',
+        desc: ['Three axes organize the map: size (LLM vs. SLM), modality (VLM, MLM, SAM), and action (LAM) — not separate technologies, but specializations.', 'The 2026 reality: hierarchical, hybrid systems where multiple model types work together, not a single “one model for everything.”']
+      },
+      'open-weight': {
+        title: 'Open Weight Models',
+        short: '“Open weight” ≠ “open source” — the license often matters more as a decision factor than the benchmark score.',
+        desc: ['Most “open” models (Llama, Qwen, Mistral, Gemma, DeepSeek) only publish the weights, not the training data or code — a distinction that matters for business decisions too.', 'Six major labs compete in 2026, with differing license terms (Apache 2.0 vs. custom community licenses) and strengths.']
+      },
+      graphrag: {
+        title: 'GraphRAG',
+        short: 'When relationships matter, not just similarity — and why one of RAG’s inventors is skeptical of the approach itself.',
+        desc: ['Entity extraction, relationship extraction, community detection and summarization — how a knowledge graph gets built from raw text.', 'An important critical point: many GraphRAG implementations are really just “data augmentation,” not true graph traversal.']
+      },
+      huggingface: {
+        title: 'Hugging Face',
+        short: 'The Hub (model repository) and the transformers library (runtime API) — a practical guide from pipeline() to the AutoModel level.',
+        desc: ['The first line of code (pipeline()) is the fastest way to run a model — and when it’s time to go deeper with AutoModel/AutoTokenizer.', 'Practical precautions: hardware requirements, version pinning, trust chain, before building it into production.']
+      },
+      'enterprise-ai': {
+        title: 'Enterprise AI',
+        short: 'Governance, GDPR, SOC 2 — how to roll out AI in an organization so it stays auditable and governed.',
+        desc: ['The 68-percentage-point gap between adoption intent and actual deployment, and the “shadow AI” phenomenon that results from it.', 'GDPR compliance (an EU region alone isn’t enough), the five SOC 2 criteria, and a concrete checklist before adopting a tool.']
+      },
+      'harness-engineering': {
+        title: 'Harness Engineering',
+        short: 'Agent = Model + Harness — the system that turns a model’s probabilistic reasoning into reliable action.',
+        desc: ['Five layers (tool orchestration, verification, context/memory, guardrails, observability) that make up a production-grade harness.', '65% of enterprise AI failures are harness defects, not reasoning gaps — with a concrete, measured Azure SRE Agent case.']
+      },
+      'ai-code-review': {
+        title: 'AI Code Review',
+        short: 'CodeRabbit, Greptile, Qodo, and the field — concrete accuracy numbers, and why none of them replace human review.',
+        desc: ['Recall vs. precision with concrete numbers (52.5% vs. 36.7%), and which tool answers which team constraint.', 'The line none of these tools cross: architectural decisions and business logic still require human judgment.']
+      },
+      'ai-workflow-automation': {
+        title: 'AI Workflow Automation',
+        short: 'Zapier, Make, n8n — a visual alternative to custom-coded agent systems when the task is repetitive and multi-tool.',
+        desc: ['Three platforms, three audiences: Zapier (simplest), Make (visual middle ground), n8n (developer depth, self-hosting).', 'The pricing model (task-based vs. execution-based) can mean an order-of-magnitude difference at high volume — always calculate for your own volume.']
+      },
+      llmops: {
+        title: 'LLMOps',
+        short: 'The DevOps that prompts require — the prompt is code, and every change needs a real API call to test.',
+        desc: ['The three-gate eval pipeline: schema test (fast) → Ragas/faithfulness → LLM-as-Judge (only for major changes), plus human sign-off.', 'A decision framework: when full LLMOps tooling is warranted, and how to extend — not replace — existing MLOps infrastructure.']
       }
     }
   }

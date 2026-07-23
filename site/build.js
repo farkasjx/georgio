@@ -51,6 +51,11 @@ const PAGE_ORDER = [
   { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
   { key: 'ai-safety',             label: 'Alignment és red teaming', labelEn: 'Alignment and Red Teaming', dot: '#ef4444' },
   { key: 'agent-architecture',    label: 'Agent architektúra',      labelEn: 'Agent Architecture',       dot: '#22d3ee' },
+  { key: 'huggingface',           label: 'Hugging Face',            labelEn: 'Hugging Face',             dot: '#fdba74' },
+  { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
+  { key: 'harness-engineering',   label: 'Harness engineering',     labelEn: 'Harness Engineering',      dot: '#0d9488' },
+  { key: 'ai-code-review',        label: 'AI code review',          labelEn: 'AI Code Review',           dot: '#8b5cf6' },
+  { key: 'ai-workflow-automation', label: 'Workflow automatizáció', labelEn: 'Workflow Automation',      dot: '#f43f5e' },
 
   /* ── Modell-belső működés ── */
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
@@ -62,6 +67,7 @@ const PAGE_ORDER = [
   { key: 'architecture',          label: 'Egy modell anatómiája',   labelEn: 'Anatomy of a Model',       dot: '#818cf8' },
   { key: 'tokenization',          label: 'Tokenizáció',             labelEn: 'Tokenization',             dot: '#2dd4bf' },
   { key: 'randomness',            label: 'Véletlenszerűség',        labelEn: 'Randomness',               dot: '#fb7185' },
+  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
 
   /* ── Modell & hardver ── */
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
@@ -75,6 +81,9 @@ const PAGE_ORDER = [
   { key: 'model-training',        label: 'Modelltanítás',           labelEn: 'Model Training',           dot: '#d97706' },
   { key: 'fine-tuning',           label: 'Fine-tuning technikák',   labelEn: 'Fine-Tuning Techniques',  dot: '#0ea5e9' },
   { key: 'evaluation',            label: 'Evaluation & benchmarkok', labelEn: 'Evaluation & Benchmarks',  dot: '#84cc16' },
+  { key: 'model-types',           label: 'Modelltípusok térképe',   labelEn: 'Model Types Map',           dot: '#a3e635' },
+  { key: 'open-weight',           label: 'Nyílt súlyú modellek',    labelEn: 'Open Weight Models',        dot: '#38bdf8' },
+  { key: 'llmops',                label: 'LLMOps',                  labelEn: 'LLMOps',                    dot: '#65a30d' },
 
   /* ── Tudás & kontextus ── */
   { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
@@ -85,6 +94,7 @@ const PAGE_ORDER = [
   { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
   { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },
   { key: 'embedding-models',      label: 'Embedding modellek',      labelEn: 'Embedding Models',          dot: '#f59e0b' },
+  { key: 'graphrag',              label: 'GraphRAG',                labelEn: 'GraphRAG',                  dot: '#c026d3' },
 ];
 
 /* ── NYELVEK ──
