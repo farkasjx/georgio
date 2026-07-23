@@ -208,9 +208,9 @@ const graphText = {
         desc: ['Nem RAG-helyettesítő, hanem kurált, verzió-kontrollált tudásreprezentáció — a RAG és a vektor-DB gyakran erre épülhet rá lekérdezéskor.', 'Az AGENTS.md/CLAUDE.md konvenciót (AI Config fájlok) és az MCP-vel elérhető tudást is közös keretbe helyezi.']
       },
       hallucination: {
-        title: 'Halucináció',
+        title: 'Hallucináció',
         short: 'Miért generál a modell téves állításokat, és hogyan mérhető, csökkenthető.',
-        desc: ['A halucináció gyökere gyakran a tudás-limitben vagy a hiányos kontextusban keresendő — ezért kapcsolódik szorosan a RAG-hoz és a knowledge cutoff témához.', 'A csökkentésében a jó promptolás és az RLHF finomhangolás is szerepet játszik.']
+        desc: ['A hallucináció gyökere gyakran a tudás-limitben vagy a hiányos kontextusban keresendő — ezért kapcsolódik szorosan a RAG-hoz és a knowledge cutoff témához.', 'A csökkentésében a jó promptolás és az RLHF finomhangolás is szerepet játszik.']
       },
       'knowledge-cutoff': {
         title: 'Tudás limit',
@@ -223,9 +223,9 @@ const graphText = {
         desc: ['Az RLHF (és rokon technikák) döntik el, mennyire lesz a modell segítőkész, óvatos vagy éppen halucináció-hajlamos.', 'Ez a láthatatlan réteg épp úgy befolyásolja a promptra adott választ, mint maga a prompt szövege.']
       },
       'kv-cache': {
-        title: 'KV cache',
+        title: 'KV-cache',
         short: 'A key-value cache mechanizmusa és memóriaigénye hosszú kontextusoknál.',
-        desc: ['A KV cache teszi gyorssá a token-generálást, cserébe egyenesen arányos memóriát fogyaszt a kontextus hosszával.', 'Ez az egyik fő oka annak, hogy a hosszú kontextus a látenciát és a hardverigényt is megnöveli.']
+        desc: ['A KV-cache teszi gyorssá a token-generálást, cserébe egyenesen arányos memóriát fogyaszt a kontextus hosszával.', 'Ez az egyik fő oka annak, hogy a hosszú kontextus a látenciát és a hardverigényt is megnöveli.']
       },
       ollama: {
         title: 'Lokális LLM',

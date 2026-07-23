@@ -1,6 +1,6 @@
 ---
 page: hardware
-title: Hardveres alapok — GPU, VRAM, CUDA
+title: Hardware — GPU, VRAM, CUDA
 sidebar_groups:
   - Elmélet
   - VRAM-matek
@@ -8,8 +8,8 @@ sidebar_groups:
   - Gyakorlat
   - Referencia
 hero:
-  eyebrow: "Hardver · Fejlesztői Tanulási Terv"
-  title: "Hardveres alapok — <em>GPU, VRAM, CUDA</em>"
+  eyebrow: "Hardware · Fejlesztői Tanulási Terv"
+  title: "Hardware — <em>GPU, VRAM, CUDA</em>"
   lead: "Miért a GPU futtat egy LLM-et, mit tárol pontosan a VRAM, és hogyan számold ki előre, befér-e egy modell a kártyádba. NVIDIA vs. AMD, CUDA vs. ROCm, és a modellméret → VRAM képlet, ami a <em>dense/MoE</em> és a <em>KV-cache</em> tutorialok alapja."
   stats:
     - { val: "10", lbl: "Szakasz" }
@@ -17,7 +17,7 @@ hero:
     - { val: "1", lbl: "Ábra" }
     - { val: "GB/param", lbl: "A flagship képlet" }
 footer:
-  left: "AI Hub · Hardveres alapok"
+  left: "AI Hub · Hardware"
   right: "Hardver · Összeállítva 2026 júliusában"
 ---
 

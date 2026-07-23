@@ -150,6 +150,7 @@ body::before {
 .sidebar {
   width: var(--nav-w);
   flex-shrink: 0;
+  align-self: flex-start;
   position: sticky;
   top: var(--top-h);
   height: calc(100vh - var(--top-h));

@@ -94,6 +94,6 @@
 
   "vektor adatbázis": { "page": "vectordb", "id": "vec-0", "variants": ["vector database"] },
   "koszinusz hasonlóság": { "page": "vectordb", "id": "vec-1", "variants": ["cosine similarity"] },
-  "halucináció": { "page": "hallucination", "id": "hal-0", "variants": ["hallucination"] },
+  "hallucináció": { "page": "hallucination", "id": "hal-0", "variants": ["halucináció", "hallucination"] },
   "knowledge cutoff": { "page": "knowledge-cutoff", "id": "kc-0", "variants": ["tudás limit"] }
 }

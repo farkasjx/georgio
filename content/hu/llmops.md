@@ -112,7 +112,7 @@ A jó eval-pipeline nem egyetlen, mindenre használt teszt — egy **rétegzett 
 <p class="topic-tagline">Cél: adj egy gyakorlati döntési keretet — ne minden projekt igényli a teljes apparátust.</p>
 
 ::::: callout label="A döntési szempontok"
-Az LLMOps teljes bevezetése különösen indokolt, ha: **szabályozott** iparágban dolgozol (egészségügy, jog, pénzügy), ahol a halucinációnak (lásd a <em>Halucináció</em> tutorialt) valós következménye van; **nyílt súlyú modellt finomhangolsz** (lásd a <em>Fine-tuning technikák</em> tutorialt) — a tréning MLOps-kérdés, de a kiszolgálás és monitorozás már LLMOps; vagy hagyományos ML-t **és** LLM-generálást is kombinálsz ugyanabban a pipeline-ban.
+Az LLMOps teljes bevezetése különösen indokolt, ha: **szabályozott** iparágban dolgozol (egészségügy, jog, pénzügy), ahol a hallucinációnak (lásd a <em>Hallucináció</em> tutorialt) valós következménye van; **nyílt súlyú modellt finomhangolsz** (lásd a <em>Fine-tuning technikák</em> tutorialt) — a tréning MLOps-kérdés, de a kiszolgálás és monitorozás már LLMOps; vagy hagyományos ML-t **és** LLM-generálást is kombinálsz ugyanabban a pipeline-ban.
 :::::
 
 ::::: callout warning label="A gyakorlati kiindulópont"
