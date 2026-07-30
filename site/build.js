@@ -42,9 +42,10 @@ const GA_MEASUREMENT_ID = 'G-HLRPY0MH9C';
 const PAGE_ORDER = [
   { key: 'map',                   label: 'Interaktív térkép',       labelEn: 'Interactive Map',         dot: '#7dd3fc', special: 'map' },
   { key: 'glossary',              label: 'Fogalomtár',              labelEn: 'Glossary',                 dot: '#eab308' },
-  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
 
   /* ── Alapelmélet & architektúra ── */
+  { key: 'ml-fundamentals',       label: 'Gépi tanulás alapjai',    labelEn: 'ML Fundamentals',           dot: '#0284c7' },
+  { key: 'neural-network-basics', label: 'Neurális hálók alapjai',  labelEn: 'Neural Network Basics',     dot: '#16a34a' },
   { key: 'architecture',          label: 'Egy modell anatómiája',   labelEn: 'Anatomy of a Model',       dot: '#818cf8' },
   { key: 'tokenization',          label: 'Tokenizáció',             labelEn: 'Tokenization',             dot: '#2dd4bf' },
   { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
@@ -99,7 +100,18 @@ const PAGE_ORDER = [
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'llmops',                label: 'LLMOps',                  labelEn: 'LLMOps',                    dot: '#65a30d' },
   { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
+  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
+
+  /* ═══ PYTHON AZ AI-HOZ — külön réteg, nem a 6 fő klaszter egyike ═══
+     Ez a szekció szándékosan a lista VÉGÉN, elkülönítve áll: nem elméleti
+     vagy fogalmi tartalom, hanem kód-központú, gyakorlati eszköztár, amire
+     az elméleti cikkek (RAG, MCP, agentek) végén lévő kereszthivatkozások
+     mutatnak vissza. Lásd a python-*.md fájlok "Kapcsolódó" blokkjait. */
+  { key: 'python-ai-environment', label: 'Python-környezet',        labelEn: 'Python Environment',        dot: '#eede4d' },
+  { key: 'python-ai-sdks',        label: 'A hivatalos SDK-k',       labelEn: 'The Official SDKs',         dot: '#4b8bbe' },
+  { key: 'python-async-ai',       label: 'Async Python az AI-hoz',  labelEn: 'Async Python for AI',       dot: '#306998' },
+  { key: 'python-data-handling',  label: 'Adatkezelés AI-hoz',      labelEn: 'Data Handling for AI',      dot: '#ffd43b' },
 ];
 
 /* ── NYELVEK ──

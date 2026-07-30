@@ -33,6 +33,8 @@ const graphNodesBase = [
   { id: 'multimodal',              cluster: 'fundamentals', color: '#c084fc', x: 1120,  y: 340 },
   { id: 'model-types',             cluster: 'fundamentals', color: '#a3e635', x: 100,  y: 580 },
   { id: 'model-size',              cluster: 'fundamentals', color: '#98d016', x: 440,  y: 580 },
+  { id: 'ml-fundamentals',         cluster: 'fundamentals', color: '#0284c7', x: 780,  y: 580 },
+  { id: 'neural-network-basics',   cluster: 'fundamentals', color: '#16a34a', x: 1120, y: 580 },
 
   /* ── Tanítás & finomhangolás (bal-közép) ── */
   { id: 'model-training',          cluster: 'training', color: '#d97706', x: 100,  y: 960 },
@@ -117,6 +119,8 @@ const graphEdges = [
   ['open-weight','ollama'], ['open-weight','fine-tuning'], ['open-weight','quantization-quality'], ['open-weight','hardware'],
   ['graphrag','rag'], ['graphrag','vectordb'],
   ['rag-architectures','rag'], ['rag-architectures','graphrag'], ['rag-architectures','agent-architecture'],
+  ['ml-fundamentals','model-training'], ['ml-fundamentals','evaluation'], ['ml-fundamentals','fine-tuning'],
+  ['neural-network-basics','architecture'], ['neural-network-basics','model-training'], ['neural-network-basics','ml-fundamentals'],
   ['huggingface','open-weight'], ['huggingface','fine-tuning'], ['huggingface','tokenization'], ['huggingface','quantization-quality'],
   ['enterprise-ai','security'], ['enterprise-ai','mcp'], ['enterprise-ai','ai-safety'],
   ['harness-engineering','agentic-coding'], ['harness-engineering','agent-architecture'], ['harness-engineering','aiconfig'], ['harness-engineering','security'],
@@ -336,6 +340,16 @@ const graphText = {
         title: 'RAG architektúrák',
         short: 'Naiv, advanced, modular, agentic — négy generáció egy komplexitási létrán, konkrét latencia- és költségszámokkal.',
         desc: ['Nem "melyik a legjobb", hanem "melyik illik a feladathoz" — a naiv RAG legitim végállapot, az agentic RAG 10x drágább, de 62%-kal csökkentheti a hallucinációt.', 'Az adaptive routing minta: egy osztályozó irányítja a kérdéseket a hozzájuk illő architektúrához, ez adja az optimális költség-minőség egyensúlyt.']
+      },
+      'ml-fundamentals': {
+        title: 'Gépi tanulás alapjai',
+        short: 'A fogalmak, amikre minden más épül: felügyelt tanulás, regresszió vs. klasszifikáció, train/validation/test, overfitting.',
+        desc: ['A "jósolj → mérd a hibát → korrigálj" hurok, amit a Hogyan tanul egy modell tutorialban láttál, ugyanaz a felügyelt tanulási minta — csak az LLM-eknél a "címke" maga a következő szó.', 'Az overfitting/underfitting és a bias-variance kompromisszum konkrét, számokkal illusztrált példával.']
+      },
+      'neural-network-basics': {
+        title: 'Neurális hálók alapjai',
+        short: 'A belépő pont a transformer előtt: mi az a neuron, réteg, és miért kell a nemlinearitás.',
+        desc: ['Aktivációs függvény nélkül 100 réteg ugyanannyit érne, mint 1 — ez az egyetlen ok, amiért egyáltalán érdemes mély hálót építeni.', 'A híd az Egy modell anatómiája tutorialhoz: a feed-forward réteg ennek az általános elvnek egy konkrét megvalósítása.']
       },
       huggingface: {
         title: 'Hugging Face',
@@ -579,6 +593,16 @@ const graphText = {
         title: 'RAG Architectures',
         short: 'Naive, advanced, modular, agentic — four generations on a complexity ladder, with concrete latency and cost figures.',
         desc: ['Not “which is best” but “which fits the task” — naive RAG is a legitimate end state, agentic RAG costs 10x more but can cut hallucination by 62%.', 'The adaptive routing pattern: a classifier directs queries to the architecture that fits them, giving the optimal cost-quality balance.']
+      },
+      'ml-fundamentals': {
+        title: 'Machine Learning Fundamentals',
+        short: 'The concepts everything else builds on: supervised learning, regression vs. classification, train/validation/test, overfitting.',
+        desc: ['The “predict → measure the error → correct” loop from How a Model Learns is the same supervised learning pattern — for LLMs, the “label” is simply the next word.', 'Overfitting/underfitting and the bias-variance tradeoff, with a concrete, number-backed example.']
+      },
+      'neural-network-basics': {
+        title: 'Neural Network Basics',
+        short: 'The entry point before the transformer: what a neuron and a layer are, and why nonlinearity matters.',
+        desc: ['Without an activation function, 100 layers would be worth the same as 1 — this is the only reason it\u2019s ever worth building a deep network at all.', 'The bridge to Anatomy of a Model: the feed-forward layer is a concrete implementation of this general principle.']
       },
       huggingface: {
         title: 'Hugging Face',

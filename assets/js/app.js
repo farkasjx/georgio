@@ -5,11 +5,12 @@
 /* ── PAGE NAVIGATION ── */
 const pages = [
   'map', 'tools', 'glossary', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
-  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history',
+  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history', 'ml-fundamentals', 'neural-network-basics',
   'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops',
-  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures'
+  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures',
+  'python-ai-environment', 'python-ai-sdks', 'python-async-ai', 'python-data-handling'
 ];
 
 /* ── Kereszthivatkozás más oldal egy adott szekciójára (pl. Fogalomtár linkjei) ──
