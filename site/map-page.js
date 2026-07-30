@@ -16,6 +16,7 @@ export function renderMapPage(ui) {
       <button class="map-btn" id="btn-zoom-out">${ui.mapZoomOut}</button>
       <button class="map-btn" id="btn-reset">${ui.mapReset}</button>
       <button class="map-btn" id="btn-overlap">${ui.mapOverlapButton}</button>
+      <a class="map-btn pymap-link" href="#" id="btn-python-map">🐍 ${ui.pyMapButton}</a>
       <button class="map-btn map-filter-toggle" id="map-filter-toggle">${ui.mapFilterToggleLabel}</button>
       <div class="map-chip-group" id="map-chip-group">
         <button class="map-btn map-chip chip-active" data-filter="all">${ui.mapFilterAll}</button>

@@ -754,6 +754,15 @@ td {
 
 #page-map.active { display: block; }
 
+#page-python-map {
+  display: none;
+  position: fixed;
+  inset: var(--top-h) 0 0 0;
+  z-index: 50;
+}
+
+#page-python-map.active { display: block; }
+
 .map-shell {
   position: relative;
   width: 100%; height: 100%;
@@ -1653,3 +1662,126 @@ section[id], .tech[id] {
 @media (max-width: 640px) {
   .back-to-top { right: 16px; bottom: 16px; width: 40px; height: 40px; }
 }
+
+/* ════════════════════════════════
+   PYTHON MINI-TÉRKÉP
+   Szándékosan egyszerűbb, mint a fő .map-shell — nincs pan/zoom/drag
+   (lásd assets/js/app.js initPythonMap), csak statikus elrendezés egy
+   scrollozható konténerben. A .map-node és .path osztályokat újra-
+   használja a fő térképről a vizuális konzisztencia kedvéért.
+   ════════════════════════════════ */
+.pymap-shell {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--top-h) + 32px) 32px 60px;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(75, 139, 190, 0.14), transparent 32%),
+    radial-gradient(circle at 85% 25%, rgba(255, 212, 59, 0.10), transparent 32%),
+    var(--bg);
+  overflow-y: auto;
+}
+
+.pymap-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  transition: color .15s;
+}
+.pymap-back:hover { color: var(--text); }
+
+.pymap-header {
+  max-width: 640px;
+  margin: 24px 0 40px;
+}
+.pymap-title {
+  font-family: var(--sans);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.pymap-intro {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.pymap-canvas {
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.pymap-connections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* a node-ok kattinthatók (nem húzhatók), ez felülírja a .map-node
+   alapértelmezett grab-kurzorát a pymap-node kiegészítő osztállyal */
+.pymap-node {
+  cursor: pointer;
+}
+.pymap-node:hover {
+  border-color: var(--text-dim);
+  transform: translateY(-2px);
+}
+.pymap-node:active { cursor: pointer; }
+
+/* detail panel — a fő térkép .map-panel-jével azonos vizuális minta,
+   de mivel a pymap-shell nem fixed fullscreen, ez is középre igazított
+   modal-ként jelenik meg, az .overlap-panel mintáját követve */
+.pymap-panel {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0.95);
+  width: min(400px, calc(100vw - 48px));
+  background: rgba(7,8,12,0.97);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s, visibility .25s;
+  z-index: 45;
+  padding: 28px;
+}
+.pymap-panel.open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%,-50%) scale(1);
+}
+
+.pymap-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+[data-theme="light"] .pymap-panel { background: rgba(250,249,247,0.97); }
+
+@media (max-width: 960px) {
+  .pymap-canvas {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .pymap-connections { display: none; }
+  .pymap-node {
+    position: static !important;
+    width: 100% !important;
+  }
+}
+

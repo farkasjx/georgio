@@ -17,6 +17,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderPage, applyAutoLinks, buildSearchIndex, HLJS_CSS } from '../engine/index.js';
 import { renderMapPage } from './map-page.js';
+import { renderPythonMapPage } from './python-map-page.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -103,15 +104,17 @@ const PAGE_ORDER = [
   { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
 
-  /* ═══ PYTHON AZ AI-HOZ — külön réteg, nem a 6 fő klaszter egyike ═══
-     Ez a szekció szándékosan a lista VÉGÉN, elkülönítve áll: nem elméleti
-     vagy fogalmi tartalom, hanem kód-központú, gyakorlati eszköztár, amire
-     az elméleti cikkek (RAG, MCP, agentek) végén lévő kereszthivatkozások
-     mutatnak vissza. Lásd a python-*.md fájlok "Kapcsolódó" blokkjait. */
-  { key: 'python-ai-environment', label: 'Python-környezet',        labelEn: 'Python Environment',        dot: '#eede4d' },
-  { key: 'python-ai-sdks',        label: 'A hivatalos SDK-k',       labelEn: 'The Official SDKs',         dot: '#4b8bbe' },
-  { key: 'python-async-ai',       label: 'Async Python az AI-hoz',  labelEn: 'Async Python for AI',       dot: '#306998' },
-  { key: 'python-data-handling',  label: 'Adatkezelés AI-hoz',      labelEn: 'Data Handling for AI',      dot: '#ffd43b' },
+  /* ═══ PYTHON AZ AI-HOZ — külön mini-térkép oldalon él, NEM a dropdown-ban ═══
+     A hideFromMenu:true miatt ez a 4 bejegyzés kimarad a page-switcher
+     dropdown-ból, de MEGMARAD a PAGE_ORDER-ben, mert a build.js innen
+     dönti el, mely .md fájlokat renderelje egyáltalán (lásd buildOneLocale
+     "for (const p of PAGE_ORDER) pages[p.key] = renderPage(...)"). A
+     python-map-page.js/python-map-data.js saját, egyszerűsített mini-térképet
+     ad ezeknek — a fő térkép "🐍 Python" gombjáról érhető el. */
+  { key: 'python-ai-environment', label: 'Python-környezet',        labelEn: 'Python Environment',        dot: '#eede4d', hideFromMenu: true },
+  { key: 'python-ai-sdks',        label: 'A hivatalos SDK-k',       labelEn: 'The Official SDKs',         dot: '#4b8bbe', hideFromMenu: true },
+  { key: 'python-async-ai',       label: 'Async Python az AI-hoz',  labelEn: 'Async Python for AI',       dot: '#306998', hideFromMenu: true },
+  { key: 'python-data-handling',  label: 'Adatkezelés AI-hoz',      labelEn: 'Data Handling for AI',      dot: '#ffd43b', hideFromMenu: true },
 ];
 
 /* ── NYELVEK ──
@@ -161,6 +164,10 @@ const LOCALES = [
       mapRelatedTopics: 'Kapcsolódó témák',
       mapOpenButton: 'Megnyitás →',
       mapOverlapButton: '⛓ Átfedések',
+      pyMapButton: 'Python',
+      pyMapTitle: 'Python az AI-hoz',
+      pyMapIntro: 'Nem Python-alapozó — a kifejezetten AI-fejlesztéshez kellő eszköztár: környezet, hivatalos SDK-k, async hívások, adatkezelés. Kattints egy csomópontra a részletekért.',
+      pyMapBackToMain: '← Vissza a fő térképre',
       mapOverlapTitle: 'Mennyire fonódnak össze a témák',
       mapOverlapIntro: 'A vonalvastagság azt mutatja, hány cikk hivatkozik át a két klaszter között — a térkép 134 kapcsolatából 75 (56%) klaszterhatáron átnyúló. A klaszterek besorolása segít a navigációban, de a témák a valóságban sokszor összefonódnak.',
       mapOverlapFundamentals: 'Alapelmélet & architektúra',
@@ -218,6 +225,10 @@ const LOCALES = [
       mapRelatedTopics: 'Related topics',
       mapOpenButton: 'Open →',
       mapOverlapButton: '⛓ Overlaps',
+      pyMapButton: 'Python',
+      pyMapTitle: 'Python for AI',
+      pyMapIntro: 'Not a Python primer — the toolkit specifically needed for AI development: environment, official SDKs, async calls, data handling. Click a node for details.',
+      pyMapBackToMain: '← Back to the main map',
       mapOverlapTitle: 'How intertwined the topics are',
       mapOverlapIntro: 'Line thickness shows how many articles cross-reference between the two clusters — 75 of the map\'s 134 connections (56%) cross a cluster boundary. Clustering helps with navigation, but the topics genuinely overlap a lot in reality.',
       mapOverlapFundamentals: 'Fundamentals & Architecture',
@@ -242,7 +253,7 @@ const LOCALES = [
 function buildHtml(pages, locale) {
   // az oldalváltó dropdown elemei (a sidebar tetején jelenik meg, nem a topbarban)
   const defaultPage = PAGE_ORDER.find(p => p.key === 'map');
-  const pageSwitcherItems = PAGE_ORDER.map(p => {
+  const pageSwitcherItems = PAGE_ORDER.filter(p => !p.hideFromMenu).map(p => {
     const isDefault = p.key === 'map';
     const label = locale.code === 'hu' ? p.label : p.labelEn;
     return `      <button class="ps-item${isDefault ? ' active' : ''}" data-page="${p.key}" data-label="${label}" data-dot="${p.dot}">
@@ -272,6 +283,7 @@ function buildHtml(pages, locale) {
 
   const ui = locale.ui;
   const mapPage = renderMapPage(ui);
+  const pythonMapPage = renderPythonMapPage(ui);
 
   const pageList = PAGE_ORDER
     .filter(p => p.key !== 'map')
@@ -388,6 +400,8 @@ function buildHtml(pages, locale) {
 
 ${mapPage}
 
+${pythonMapPage}
+
 <!-- ════════ MAIN SHELL ════════ -->
 <div class="shell" id="shell">
   <aside class="sidebar">
@@ -430,6 +444,7 @@ window.__I18N__ = ${JSON.stringify(ui)};
 window.__CONTENT_VERSIONS__ = ${JSON.stringify(contentVersions)};
 </script>
 <script src="${AP}content-graph-data.js"></script>
+<script src="${AP}python-map-data.js"></script>
 <script src="${AP}app.js"></script>
 <script src="${AP}search.js"></script>
 </body>
