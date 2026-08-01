@@ -115,6 +115,14 @@ const PAGE_ORDER = [
   { key: 'python-ai-sdks',        label: 'A hivatalos SDK-k',       labelEn: 'The Official SDKs',         dot: '#4b8bbe', hideFromMenu: true },
   { key: 'python-async-ai',       label: 'Async Python az AI-hoz',  labelEn: 'Async Python for AI',       dot: '#306998', hideFromMenu: true },
   { key: 'python-data-handling',  label: 'Adatkezelés AI-hoz',      labelEn: 'Data Handling for AI',      dot: '#ffd43b', hideFromMenu: true },
+  { key: 'python-classes-ai',           label: 'Osztályok és AI-kliensek', labelEn: 'Classes and AI Clients',        dot: '#7c9885', hideFromMenu: true },
+  { key: 'python-typing-pydantic',      label: 'Típusannotáció és Pydantic', labelEn: 'Type Annotations and Pydantic', dot: '#e07a5f', hideFromMenu: true },
+  { key: 'python-decorators-ai',        label: 'Dekorátorok a gyakorlatban', labelEn: 'Decorators in Practice',      dot: '#81b29a', hideFromMenu: true },
+  { key: 'python-generators-ai',        label: 'Generátorok és iterátorok', labelEn: 'Generators and Iterators',   dot: '#f2cc8f', hideFromMenu: true },
+  { key: 'python-context-managers-ai',  label: 'Kontextuskezelők a gyakorlatban', labelEn: 'Context Managers in Practice', dot: '#3d5a80', hideFromMenu: true },
+  { key: 'python-exceptions-ai',        label: 'Kivételkezelés és hibaosztályok', labelEn: 'Exception Handling and Custom Error Classes', dot: '#98c1d9', hideFromMenu: true },
+  { key: 'python-testing-ai',           label: 'Tesztelés AI-alkalmazásokhoz', labelEn: 'Testing AI Applications',   dot: '#ee6c4d', hideFromMenu: true },
+  { key: 'python-packaging-deployment', label: 'Csomagolás és deployment', labelEn: 'Packaging and Deployment Basics', dot: '#293241', hideFromMenu: true },
 ];
 
 /* ── NYELVEK ──

@@ -17,7 +17,7 @@ export function renderPythonMapPage(ui) {
     </div>
 
     <div class="pymap-canvas" id="pymap-canvas">
-      <svg class="pymap-connections" id="pymap-svg" viewBox="0 0 1120 600"></svg>
+      <svg class="pymap-connections" id="pymap-svg" viewBox="0 0 1360 720"></svg>
       <!-- a node-okat a python-map.js generálja futásidőben, a
            PYTHON_MAP_NODES adatból, hogy egy helyen (JS) legyen
            karbantartva a cím/leírás, ne duplikálva HTML-ben is -->

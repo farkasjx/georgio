@@ -1713,8 +1713,8 @@ section[id], .tech[id] {
 .pymap-canvas {
   position: relative;
   width: 100%;
-  max-width: 1120px;
-  height: 600px;
+  max-width: 1360px;
+  height: 720px;
   margin: 0 auto;
 }
 
