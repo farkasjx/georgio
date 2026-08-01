@@ -8,9 +8,8 @@ const pages = [
   'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history', 'ml-fundamentals', 'neural-network-basics',
   'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
-  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops',
-  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures',
-  'python-ai-environment', 'python-ai-sdks', 'python-async-ai', 'python-data-handling'
+  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops', 'ai-copyright-law', 'ai-regulation-liability',
+  'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures'
 ];
 
 /* ── Kereszthivatkozás más oldal egy adott szekciójára (pl. Fogalomtár linkjei) ──
@@ -48,23 +47,15 @@ function showPage(id) {
 
   // map page is fullscreen fixed; other pages live in shell
   const mapPage = document.getElementById('page-map');
-  const pythonMapPage = document.getElementById('page-python-map');
   const shell   = document.getElementById('shell');
   const sidebar = document.getElementById('sidebar-nav');
 
   if (id === 'map') {
     mapPage.classList.add('active');
-    if (pythonMapPage) pythonMapPage.classList.remove('active');
     shell.style.display = 'none';
     initMap();
-  } else if (id === 'python-map') {
-    mapPage.classList.remove('active');
-    if (pythonMapPage) pythonMapPage.classList.add('active');
-    shell.style.display = 'none';
-    initPythonMap();
   } else {
     mapPage.classList.remove('active');
-    if (pythonMapPage) pythonMapPage.classList.remove('active');
     shell.style.display = 'flex';
 
     document.querySelectorAll('.page').forEach(p => {
@@ -306,6 +297,7 @@ const CLUSTER_REGION_COLOR = {
   knowledge:    '#1613d4',
   safety:       '#e06c75',
   practice:     '#fb923c',
+  context:      '#eab308',
 };
 
 function drawClusterRegions(svgEl) {
@@ -376,7 +368,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 3500, H = 2050;
+  const W = 5280, H = 1860;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -607,15 +599,6 @@ function initMap() {
     }
   });
 
-  // 🐍 Python-térkép gomb: átvált a python-map speciális oldalra
-  const pythonMapBtn = document.getElementById('btn-python-map');
-  if (pythonMapBtn) {
-    pythonMapBtn.addEventListener('click', e => {
-      e.preventDefault();
-      showPage('python-map');
-    });
-  }
-
   // haszálati hint popup: "?" gombbal bármikor megnyitható, "Értem"-mel
   // vagy háttérre kattintva zárható; az automatikus, első-látogatásos
   // megnyitást az initMapHint() intézi (lásd lejjebb)
@@ -660,68 +643,6 @@ function updateAllEdges() {
    utána csak a "?" gombbal — ugyanaz a localStorage-mintás, egyszeri
    megjelenítési elv, mint a tartalom-frissítés popupnál (initVersionTracking) ── */
 const MAP_HINT_SEEN_KEY = 'aihub-map-hint-seen';
-
-/* ── Python mini-térkép: sokkal egyszerűbb, mint a fő initMap() —
-   nincs pan/zoom/drag, csak statikus node-ok, élek, és kattintásra
-   megnyíló panel. 4 elemnél a teljes gráf-gépezet felesleges lenne. ── */
-let pythonMapInitialized = false;
-
-function initPythonMap() {
-  if (pythonMapInitialized) return;
-  pythonMapInitialized = true;
-  if (typeof pythonNodes === 'undefined') return;
-
-  const canvas = document.getElementById('pymap-canvas');
-  const svgEl  = document.getElementById('pymap-svg');
-  const panel  = document.getElementById('pymap-panel');
-  const NODE_W = 250, NODE_H = 150;
-
-  // élek — ugyanaz az egyszerű cubic-bezier minta, mint a fő térképen
-  pythonEdges.forEach(([a, b]) => {
-    const na = pythonNodes.find(n => n.id === a);
-    const nb = pythonNodes.find(n => n.id === b);
-    if (!na || !nb) return;
-    const ax = na.x + NODE_W/2, ay = na.y + NODE_H/2;
-    const bx = nb.x + NODE_W/2, by = nb.y + NODE_H/2;
-    const mx = (ax+bx)/2;
-    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('class', 'path');
-    path.setAttribute('d', `M${ax},${ay} C${mx},${ay} ${mx},${by} ${bx},${by}`);
-    svgEl.appendChild(path);
-  });
-
-  // node-ok — statikus div-ek, nincs drag, csak kattintás nyitja a panelt
-  pythonNodes.forEach(node => {
-    const el = document.createElement('div');
-    el.className = 'map-node pymap-node';
-    el.id = `pymap-node-${node.id}`;
-    el.style.cssText = `left:${node.x}px;top:${node.y}px;--node-color:${node.color}`;
-    el.innerHTML = `
-      <div class="node-dot" style="background:${node.color}"></div>
-      <div class="node-title">${node.title}</div>
-      <div class="node-desc">${node.short}</div>`;
-    el.addEventListener('click', () => openPythonPanel(node));
-    canvas.appendChild(el);
-  });
-
-  document.getElementById('pymap-panel-close').addEventListener('click', () => {
-    panel.classList.remove('open');
-  });
-
-  const backBtn = document.getElementById('pymap-back-btn');
-  if (backBtn) {
-    backBtn.addEventListener('click', e => { e.preventDefault(); showPage('map'); });
-  }
-}
-
-function openPythonPanel(node) {
-  const panel = document.getElementById('pymap-panel');
-  document.getElementById('pymap-panel-title').textContent = node.title;
-  document.getElementById('pymap-panel-desc').innerHTML = `<p>${node.short}</p>`;
-  const openBtn = document.getElementById('pymap-panel-open-btn');
-  openBtn.onclick = () => showPage(node.id);
-  panel.classList.add('open');
-}
 
 function initMapHint(hintPopup) {
   if (!hintPopup) return;

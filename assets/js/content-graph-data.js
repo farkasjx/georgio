@@ -22,7 +22,7 @@
      bal-lent:  model      (Modell & hardver)
      jobb-lent: knowledge  (Tudás & kontextus)             */
 const graphNodesBase = [
-  /* ── Alapelmélet & architektúra (bal-fent) ── */
+  /* ── Alapelmélet & architektúra (bal oszlop) ── */
   { id: 'architecture',            cluster: 'fundamentals', color: '#818cf8', x: 100,  y: 100 },
   { id: 'tokenization',            cluster: 'fundamentals', color: '#2dd4bf', x: 440,  y: 100 },
   { id: 'reasoning',               cluster: 'fundamentals', color: '#fb923c', x: 780,  y: 100 },
@@ -34,53 +34,57 @@ const graphNodesBase = [
   { id: 'model-types',             cluster: 'fundamentals', color: '#a3e635', x: 100,  y: 580 },
   { id: 'model-size',              cluster: 'fundamentals', color: '#98d016', x: 440,  y: 580 },
   { id: 'ml-fundamentals',         cluster: 'fundamentals', color: '#0284c7', x: 780,  y: 580 },
-  { id: 'neural-network-basics',   cluster: 'fundamentals', color: '#16a34a', x: 1120, y: 580 },
+  { id: 'neural-network-basics',   cluster: 'fundamentals', color: '#16a34a', x: 1120,  y: 580 },
 
-  /* ── Tanítás & finomhangolás (bal-közép) ── */
-  { id: 'model-training',          cluster: 'training', color: '#d97706', x: 100,  y: 960 },
-  { id: 'fine-tuning',             cluster: 'training', color: '#0ea5e9', x: 440,  y: 960 },
-  { id: 'rlhf',                    cluster: 'training', color: '#c9a9ac', x: 780,  y: 960 },
-  { id: 'open-weight',             cluster: 'training', color: '#38bdf8', x: 1120,  y: 960 },
-  { id: 'huggingface',             cluster: 'training', color: '#fdba74', x: 1460,  y: 960 },
+  /* ── Tanítás & finomhangolás (közép oszlop, felül) ── */
+  { id: 'model-training',          cluster: 'training', color: '#d97706', x: 1960,  y: 100 },
+  { id: 'fine-tuning',             cluster: 'training', color: '#0ea5e9', x: 2300,  y: 100 },
+  { id: 'rlhf',                    cluster: 'training', color: '#c9a9ac', x: 2640,  y: 100 },
+  { id: 'open-weight',             cluster: 'training', color: '#38bdf8', x: 2980,  y: 100 },
+  { id: 'huggingface',             cluster: 'training', color: '#fdba74', x: 3320,  y: 100 },
 
-  /* ── Infrastruktúra & optimalizálás (bal-közép-lent) ── */
-  { id: 'hardware',                cluster: 'infra', color: '#f0edeb', x: 100,  y: 1340 },
-  { id: 'quantization-quality',    cluster: 'infra', color: '#00ff55', x: 440,  y: 1340 },
-  { id: 'kv-cache',                cluster: 'infra', color: '#8a5a2a', x: 780,  y: 1340 },
-  { id: 'latency',                 cluster: 'infra', color: '#523986', x: 1120,  y: 1340 },
-  { id: 'model-routing',           cluster: 'infra', color: '#496b8f', x: 1460,  y: 1340 },
+  /* ── Infrastruktúra & optimalizálás (közép oszlop) ── */
+  { id: 'hardware',                cluster: 'infra', color: '#f0edeb', x: 1960,  y: 560 },
+  { id: 'quantization-quality',    cluster: 'infra', color: '#00ff55', x: 2300,  y: 560 },
+  { id: 'kv-cache',                cluster: 'infra', color: '#8a5a2a', x: 2640,  y: 560 },
+  { id: 'latency',                 cluster: 'infra', color: '#523986', x: 2980,  y: 560 },
+  { id: 'model-routing',           cluster: 'infra', color: '#496b8f', x: 3320,  y: 560 },
 
-  /* ── Megbízhatóság & biztonság (bal-lent) ── */
-  { id: 'ai-safety',               cluster: 'safety', color: '#ef4444', x: 100,  y: 1720 },
-  { id: 'security',                cluster: 'safety', color: '#e06c75', x: 440,  y: 1720 },
-  { id: 'evaluation',              cluster: 'safety', color: '#84cc16', x: 780,  y: 1720 },
+  /* ── Megbízhatóság & biztonság (közép oszlop) ── */
+  { id: 'ai-safety',               cluster: 'safety', color: '#ef4444', x: 1960,  y: 1020 },
+  { id: 'security',                cluster: 'safety', color: '#e06c75', x: 2300,  y: 1020 },
+  { id: 'evaluation',              cluster: 'safety', color: '#84cc16', x: 2640,  y: 1020 },
 
-  /* ── Gyakorlat & eszközök (jobb-fent) ── */
-  { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 2050,  y: 100 },
-  { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 2390,  y: 100 },
-  { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 2730,  y: 100 },
-  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 3070,  y: 100 },
-  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 2050,  y: 340 },
-  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 2390,  y: 340 },
-  { id: 'harness-engineering',     cluster: 'practice', color: '#0d9488', x: 2730,  y: 340 },
-  { id: 'ai-code-review',          cluster: 'practice', color: '#8b5cf6', x: 3070,  y: 340 },
-  { id: 'ai-workflow-automation',  cluster: 'practice', color: '#f43f5e', x: 2050,  y: 580 },
-  { id: 'mcp',                     cluster: 'practice', color: '#359a9c', x: 2390,  y: 580 },
-  { id: 'llmops',                  cluster: 'practice', color: '#65a30d', x: 2730,  y: 580 },
-  { id: 'enterprise-ai',           cluster: 'practice', color: '#dc2626', x: 3070,  y: 580 },
-  { id: 'ai-history',              cluster: 'practice', color: '#fcd34d', x: 2050,  y: 820 },
-  { id: 'ollama',                  cluster: 'practice', color: '#4ec9c9', x: 2390,  y: 820 },
+  /* ── Kontextus & szabályozás (közép oszlop, alul) ── */
+  { id: 'ai-history',              cluster: 'context', color: '#fcd34d', x: 1960,  y: 1480 },
+  { id: 'enterprise-ai',           cluster: 'context', color: '#dc2626', x: 2300,  y: 1480 },
+  { id: 'ai-copyright-law',        cluster: 'context', color: '#b45309', x: 2640,  y: 1480 },
+  { id: 'ai-regulation-liability', cluster: 'context', color: '#6d28d9', x: 2980,  y: 1480 },
 
-  /* ── Tudás & kontextus (jobb-lent) ── */
-  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 2050,  y: 1200 },
-  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 2390,  y: 1200 },
-  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 2730,  y: 1200 },
-  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 2050,  y: 1440 },
-  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 2390,  y: 1440 },
-  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 2730,  y: 1440 },
-  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 2050,  y: 1680 },
-  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 2390,  y: 1680 },
-  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 2730,  y: 1680 },
+  /* ── Gyakorlat & eszközök (jobb oszlop, felül) ── */
+  { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 3820,  y: 100 },
+  { id: 'prompting',               cluster: 'practice', color: '#e8a84a', x: 4160,  y: 100 },
+  { id: 'aiconfig',                cluster: 'practice', color: '#f472b6', x: 4500,  y: 100 },
+  { id: 'vibecoding',              cluster: 'practice', color: '#60a5fa', x: 4840,  y: 100 },
+  { id: 'agentic-coding',          cluster: 'practice', color: '#34d399', x: 3820,  y: 340 },
+  { id: 'agent-architecture',      cluster: 'practice', color: '#22d3ee', x: 4160,  y: 340 },
+  { id: 'harness-engineering',     cluster: 'practice', color: '#0d9488', x: 4500,  y: 340 },
+  { id: 'ai-code-review',          cluster: 'practice', color: '#8b5cf6', x: 4840,  y: 340 },
+  { id: 'ai-workflow-automation',  cluster: 'practice', color: '#f43f5e', x: 3820,  y: 580 },
+  { id: 'mcp',                     cluster: 'practice', color: '#359a9c', x: 4160,  y: 580 },
+  { id: 'llmops',                  cluster: 'practice', color: '#65a30d', x: 4500,  y: 580 },
+  { id: 'ollama',                  cluster: 'practice', color: '#4ec9c9', x: 4840,  y: 580 },
+
+  /* ── Tudás & kontextus (jobb oszlop, alul) ── */
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 3820,  y: 1040 },
+  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 4160,  y: 1040 },
+  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 4500,  y: 1040 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 3820,  y: 1280 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 4160,  y: 1280 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 4500,  y: 1280 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 3820,  y: 1520 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 4160,  y: 1520 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 4500,  y: 1520 },
 ];
 
 const graphEdges = [
@@ -111,6 +115,8 @@ const graphEdges = [
   ['tokenization','architecture'], ['tokenization','knowledge-cutoff'], ['tokenization','model-training'],
   ['randomness','reasoning'], ['randomness','hallucination'], ['randomness','agentic-coding'],
   ['evaluation','agentic-coding'], ['evaluation','model-size'], ['evaluation','randomness'],
+  ['ai-copyright-law','ai-safety'], ['ai-copyright-law','open-weight'], ['ai-copyright-law','ai-regulation-liability'],
+  ['ai-regulation-liability','ai-safety'], ['ai-regulation-liability','enterprise-ai'], ['ai-regulation-liability','agent-architecture'],
   ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
@@ -138,7 +144,8 @@ const graphText = {
       infra:        'Infrastruktúra & optimalizálás',
       knowledge:    'Tudás & kontextus',
       safety:       'Megbízhatóság & biztonság',
-      practice:     'Gyakorlat & eszközök'
+      practice:     'Gyakorlat & eszközök',
+      context:      'Kontextus & szabályozás'
     },
     nodes: {
       tools: {
@@ -301,6 +308,16 @@ const graphText = {
         short: 'Benchmarkok és korlátaik: MMLU, GPQA, SWE-bench — mit mérnek valójában, és miért nem szabad túl komolyan venni egy leaderboard-helyezést.',
         desc: ['A szaturáció (MMLU 88%+ a csúcson) és a kontamináció problémája — amikor egy teszt már nem különböztet meg semmit, vagy a modell "megjegyezte" a vizsgát.', 'Gyakorlati eljárás modellválasztáshoz: durva szűrés benchmarkkal, majd saját, releváns tesztkészlettel való megerősítés.']
       },
+      'ai-copyright-law': {
+        title: 'AI és szerzői jog',
+        short: 'Hol tart most a jogi csata — szabad-e szerzői jogvédett művön tanítani, és kié a szerzői jog egy AI-generált tartalmon.',
+        desc: ['A Bartz kontra Anthropic ügy 1,5 milliárd dolláros egyezsége szétválasztotta a tanítás (fair use) és a kalózkodás (jogsértés) kérdését.', 'Az emberi szerzőség követelménye véglegesen letisztult 2026 márciusában (Thaler kontra Perlmutter) — tiszta AI-generálás nem védhető szerzői joggal.']
+      },
+      'ai-regulation-liability': {
+        title: 'AI szabályozás és felelősség',
+        short: 'Ki dönt az AI jogi kereteiről, és ki felel, ha egy autonóm AI-ügynök kárt okoz — az EU központosított és az USA töredezett modellje szemben.',
+        desc: ['Az EU AI Act 2026. augusztus 2-től válik teljesen kikényszeríthetővé, míg az USA-nak nincs átfogó szövetségi AI-törvénye, csak töredezett állami szabályozás.', 'A "felelősség-vákuum" probléma: autonóm AI-ügynököknél a hagyományos fejlesztő-üzemeltető-felhasználó felelősségi lánc egyre nehezebben alkalmazható.']
+      },
       'embedding-models': {
         title: 'Embedding modellek',
         short: 'Hogyan készül a vektortér, amit a RAG és a keresés használ — kontrasztív tanulás, pozitív/negatív párok.',
@@ -391,7 +408,8 @@ const graphText = {
       infra:        'Infrastructure & Optimization',
       knowledge:    'Knowledge & Context',
       safety:       'Reliability & Safety',
-      practice:     'Practice & Tools'
+      practice:     'Practice & Tools',
+      context:      'Context & Regulation'
     },
     nodes: {
       tools: {
@@ -553,6 +571,16 @@ const graphText = {
         title: 'How We Measure a Model\u2019s Knowledge',
         short: 'Benchmarks and their limits: MMLU, GPQA, SWE-bench \u2014 what they actually measure, and why a leaderboard rank shouldn\u2019t be taken too seriously.',
         desc: ['The saturation problem (MMLU 88%+ at the top) and contamination \u2014 when a test stops discriminating, or the model has \u201cmemorized\u201d the exam.', 'A practical model-selection method: coarse filtering with benchmarks, then confirmation with your own relevant test set.']
+      },
+      'ai-copyright-law': {
+        title: 'AI and Copyright Law',
+        short: 'Where the legal battle stands — is training on copyrighted work allowed, and who owns the copyright on AI-generated content.',
+        desc: ['The Bartz v. Anthropic $1.5 billion settlement split the training (fair use) question from the piracy (infringement) question.', 'The human authorship requirement was settled for good in March 2026 (Thaler v. Perlmutter) — purely AI-generated works cannot be copyrighted.']
+      },
+      'ai-regulation-liability': {
+        title: 'AI Regulation and Legal Liability',
+        short: 'Who decides the legal frameworks for AI, and who is liable when an autonomous AI agent causes harm — the EU’s centralized model versus the US’s fragmented one.',
+        desc: ['The EU AI Act becomes fully enforceable from August 2, 2026, while the US has no comprehensive federal AI law, only a patchwork of state regulations.', 'The “liability vacuum” problem: the traditional developer-deployer-user liability chain is increasingly hard to apply to autonomous AI agents.']
       },
       'embedding-models': {
         title: 'Embedding Models',

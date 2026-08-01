@@ -17,7 +17,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderPage, applyAutoLinks, buildSearchIndex, HLJS_CSS } from '../engine/index.js';
 import { renderMapPage } from './map-page.js';
-import { renderPythonMapPage } from './python-map-page.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -45,8 +44,6 @@ const PAGE_ORDER = [
   { key: 'glossary',              label: 'Fogalomtár',              labelEn: 'Glossary',                 dot: '#eab308' },
 
   /* ── Alapelmélet & architektúra ── */
-  { key: 'ml-fundamentals',       label: 'Gépi tanulás alapjai',    labelEn: 'ML Fundamentals',           dot: '#0284c7' },
-  { key: 'neural-network-basics', label: 'Neurális hálók alapjai',  labelEn: 'Neural Network Basics',     dot: '#16a34a' },
   { key: 'architecture',          label: 'Egy modell anatómiája',   labelEn: 'Anatomy of a Model',       dot: '#818cf8' },
   { key: 'tokenization',          label: 'Tokenizáció',             labelEn: 'Tokenization',             dot: '#2dd4bf' },
   { key: 'reasoning',             label: 'Reasoning',               labelEn: 'Reasoning',                dot: '#fb923c' },
@@ -57,6 +54,8 @@ const PAGE_ORDER = [
   { key: 'multimodal',            label: 'Multimodális modellek',   labelEn: 'Multimodal Models',        dot: '#c084fc' },
   { key: 'model-types',           label: 'Modelltípusok térképe',   labelEn: 'Model Types Map',           dot: '#a3e635' },
   { key: 'model-size',            label: 'Model paraméterek',       labelEn: 'Model parameters',         dot: '#98d016' },
+  { key: 'ml-fundamentals',       label: 'Gépi tanulás alapjai',    labelEn: 'ML Fundamentals',           dot: '#0284c7' },
+  { key: 'neural-network-basics', label: 'Neurális hálók alapjai',  labelEn: 'Neural Network Basics',     dot: '#16a34a' },
 
   /* ── Tanítás & finomhangolás ── */
   { key: 'model-training',        label: 'Modelltanítás',           labelEn: 'Model Training',           dot: '#d97706' },
@@ -72,21 +71,16 @@ const PAGE_ORDER = [
   { key: 'latency',               label: 'Latency',                 labelEn: 'Latency',                  dot: '#523986' },
   { key: 'model-routing',         label: 'Model routing',           labelEn: 'Model routing',            dot: '#496b8f' },
 
-  /* ── Tudás & kontextus ── */
-  { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
-  { key: 'rag-architectures',     label: 'RAG architektúrák',       labelEn: 'RAG Architectures',         dot: '#0891b2' },
-  { key: 'graphrag',              label: 'GraphRAG',                labelEn: 'GraphRAG',                  dot: '#c026d3' },
-  { key: 'vectordb',              label: 'Vector adatbázisok',      labelEn: 'Vector databases',         dot: '#17cb11' },
-  { key: 'embedding-models',      label: 'Embedding modellek',      labelEn: 'Embedding Models',          dot: '#f59e0b' },
-  { key: 'memory',                label: 'Memory',                 labelEn: 'Memory',                   dot: '#e1c9cb' },
-  { key: 'okf',                   label: 'Open Knowledge Format',   labelEn: 'Open Knowledge Format',    dot: '#a78bfa' },
-  { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
-  { key: 'hallucination',         label: 'Hallucináció',            labelEn: 'Hallucination',            dot: '#a3ce40' },
-
   /* ── Megbízhatóság & biztonság ── */
   { key: 'ai-safety',             label: 'Alignment és red teaming', labelEn: 'Alignment and Red Teaming', dot: '#ef4444' },
   { key: 'security',              label: 'Biztonság & OWASP',       labelEn: 'Security & OWASP',         dot: '#e06c75' },
   { key: 'evaluation',            label: 'Evaluation & benchmarkok', labelEn: 'Evaluation & Benchmarks',  dot: '#84cc16' },
+
+  /* ── Kontextus & szabályozás ── */
+  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
+  { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
+  { key: 'ai-copyright-law',      label: 'AI és szerzői jog',       labelEn: 'AI and Copyright Law',     dot: '#b45309' },
+  { key: 'ai-regulation-liability', label: 'AI szabályozás és felelősség', labelEn: 'AI Regulation and Legal Liability', dot: '#6d28d9' },
 
   /* ── Gyakorlat & eszközök ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },
@@ -100,29 +94,18 @@ const PAGE_ORDER = [
   { key: 'ai-workflow-automation', label: 'Workflow automatizáció', labelEn: 'Workflow Automation',      dot: '#f43f5e' },
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'llmops',                label: 'LLMOps',                  labelEn: 'LLMOps',                    dot: '#65a30d' },
-  { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
-  { key: 'ai-history',            label: 'AI történelem',           labelEn: 'AI History',               dot: '#fcd34d' },
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
 
-  /* ═══ PYTHON AZ AI-HOZ — külön mini-térkép oldalon él, NEM a dropdown-ban ═══
-     A hideFromMenu:true miatt ez a 4 bejegyzés kimarad a page-switcher
-     dropdown-ból, de MEGMARAD a PAGE_ORDER-ben, mert a build.js innen
-     dönti el, mely .md fájlokat renderelje egyáltalán (lásd buildOneLocale
-     "for (const p of PAGE_ORDER) pages[p.key] = renderPage(...)"). A
-     python-map-page.js/python-map-data.js saját, egyszerűsített mini-térképet
-     ad ezeknek — a fő térkép "🐍 Python" gombjáról érhető el. */
-  { key: 'python-ai-environment', label: 'Python-környezet',        labelEn: 'Python Environment',        dot: '#eede4d', hideFromMenu: true },
-  { key: 'python-ai-sdks',        label: 'A hivatalos SDK-k',       labelEn: 'The Official SDKs',         dot: '#4b8bbe', hideFromMenu: true },
-  { key: 'python-async-ai',       label: 'Async Python az AI-hoz',  labelEn: 'Async Python for AI',       dot: '#306998', hideFromMenu: true },
-  { key: 'python-data-handling',  label: 'Adatkezelés AI-hoz',      labelEn: 'Data Handling for AI',      dot: '#ffd43b', hideFromMenu: true },
-  { key: 'python-classes-ai',           label: 'Osztályok és AI-kliensek', labelEn: 'Classes and AI Clients',        dot: '#7c9885', hideFromMenu: true },
-  { key: 'python-typing-pydantic',      label: 'Típusannotáció és Pydantic', labelEn: 'Type Annotations and Pydantic', dot: '#e07a5f', hideFromMenu: true },
-  { key: 'python-decorators-ai',        label: 'Dekorátorok a gyakorlatban', labelEn: 'Decorators in Practice',      dot: '#81b29a', hideFromMenu: true },
-  { key: 'python-generators-ai',        label: 'Generátorok és iterátorok', labelEn: 'Generators and Iterators',   dot: '#f2cc8f', hideFromMenu: true },
-  { key: 'python-context-managers-ai',  label: 'Kontextuskezelők a gyakorlatban', labelEn: 'Context Managers in Practice', dot: '#3d5a80', hideFromMenu: true },
-  { key: 'python-exceptions-ai',        label: 'Kivételkezelés és hibaosztályok', labelEn: 'Exception Handling and Custom Error Classes', dot: '#98c1d9', hideFromMenu: true },
-  { key: 'python-testing-ai',           label: 'Tesztelés AI-alkalmazásokhoz', labelEn: 'Testing AI Applications',   dot: '#ee6c4d', hideFromMenu: true },
-  { key: 'python-packaging-deployment', label: 'Csomagolás és deployment', labelEn: 'Packaging and Deployment Basics', dot: '#293241', hideFromMenu: true },
+  /* ── Tudás & kontextus ── */
+  { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },
+  { key: 'rag-architectures',     label: 'RAG architektúrák',       labelEn: 'RAG Architectures',         dot: '#0891b2' },
+  { key: 'graphrag',              label: 'GraphRAG',                labelEn: 'GraphRAG',                  dot: '#c026d3' },
+  { key: 'vectordb',              label: 'Vector adatbázisok',      labelEn: 'Vector databases',         dot: '#17cb11' },
+  { key: 'embedding-models',      label: 'Embedding modellek',      labelEn: 'Embedding Models',          dot: '#f59e0b' },
+  { key: 'memory',                label: 'Memory',                 labelEn: 'Memory',                   dot: '#e1c9cb' },
+  { key: 'okf',                   label: 'Open Knowledge Format',   labelEn: 'Open Knowledge Format',    dot: '#a78bfa' },
+  { key: 'knowledge-cutoff',      label: 'Tudás limit',             labelEn: 'Knowledge cutoff',         dot: '#896671' },
+  { key: 'hallucination',         label: 'Hallucináció',            labelEn: 'Hallucination',            dot: '#a3ce40' },
 ];
 
 /* ── NYELVEK ──
@@ -166,25 +149,23 @@ const LOCALES = [
       mapFilterKnowledge: 'Tudás & kontextus',
       mapFilterSafety: 'Megbízhatóság & biztonság',
       mapFilterPractice: 'Gyakorlat & eszközök',
+      mapFilterContext: 'Kontextus & szabályozás',
       mapHint: 'Húzd az egeret · görgővel zoom · kattints egy csomópontra a megnyitáshoz',
       mapHintButtonLabel: 'Használati segítség',
       mapHintGotIt: 'Értem',
       mapRelatedTopics: 'Kapcsolódó témák',
       mapOpenButton: 'Megnyitás →',
       mapOverlapButton: '⛓ Átfedések',
-      pyMapButton: 'Python',
-      pyMapTitle: 'Python az AI-hoz',
-      pyMapIntro: 'Nem Python-alapozó — a kifejezetten AI-fejlesztéshez kellő eszköztár: környezet, hivatalos SDK-k, async hívások, adatkezelés. Kattints egy csomópontra a részletekért.',
-      pyMapBackToMain: '← Vissza a fő térképre',
       mapOverlapTitle: 'Mennyire fonódnak össze a témák',
-      mapOverlapIntro: 'A vonalvastagság azt mutatja, hány cikk hivatkozik át a két klaszter között — a térkép 134 kapcsolatából 75 (56%) klaszterhatáron átnyúló. A klaszterek besorolása segít a navigációban, de a témák a valóságban sokszor összefonódnak.',
+      mapOverlapIntro: 'A vonalvastagság azt mutatja, hány cikk hivatkozik át a két klaszter között — a térkép 146 kapcsolatából 85 (58%) klaszterhatáron átnyúló. A klaszterek besorolása segít a navigációban, de a témák a valóságban sokszor összefonódnak.',
       mapOverlapFundamentals: 'Alapelmélet & architektúra',
       mapOverlapPractice: 'Gyakorlat & eszközök',
       mapOverlapTraining: 'Tanítás & finomhangolás',
       mapOverlapInfra: 'Infrastruktúra & optimalizálás',
       mapOverlapKnowledge: 'Tudás & kontextus',
       mapOverlapSafety: 'Megbízhatóság & biztonság',
-      mapOverlapFoot: 'A legerősebb híd az Alapelmélet & architektúra és a Gyakorlat & eszközök klaszterek között van — sok cikk (pl. a multimodális modellek vagy a base/instruct téma) egyszerre elméleti alap és gyakorlati, eszköz-jellegű téma.',
+      mapOverlapContext: 'Kontextus & szabályozás',
+      mapOverlapFoot: 'A legerősebb híd az Alapelmélet & architektúra és a Tanítás & finomhangolás klaszterek között van — sok cikk (pl. a modelltípusok vagy a nyílt súlyú modellek témája) egyszerre elméleti alap és a modell létrejöttéhez kötődő téma.',
       termPreviewOpenLabel: 'Teljes cikk megnyitása →',
       cookieBannerTitle: 'Sütik és látogatottság-mérés',
       cookieBannerBody: 'Az oldal Google Analytics-et használ, hogy lássuk, mely tartalmak hasznosak — ehhez a böngésződben sütiket helyezne el. Ez csak akkor aktiválódik, ha elfogadod.',
@@ -227,25 +208,23 @@ const LOCALES = [
       mapFilterKnowledge: 'Knowledge & Context',
       mapFilterSafety: 'Reliability & Safety',
       mapFilterPractice: 'Practice & Tools',
+      mapFilterContext: 'Context & Regulation',
       mapHint: 'Drag to pan · scroll to zoom · click a node to open it',
       mapHintButtonLabel: 'Usage help',
       mapHintGotIt: 'Got it',
       mapRelatedTopics: 'Related topics',
       mapOpenButton: 'Open →',
       mapOverlapButton: '⛓ Overlaps',
-      pyMapButton: 'Python',
-      pyMapTitle: 'Python for AI',
-      pyMapIntro: 'Not a Python primer — the toolkit specifically needed for AI development: environment, official SDKs, async calls, data handling. Click a node for details.',
-      pyMapBackToMain: '← Back to the main map',
       mapOverlapTitle: 'How intertwined the topics are',
-      mapOverlapIntro: 'Line thickness shows how many articles cross-reference between the two clusters — 75 of the map\'s 134 connections (56%) cross a cluster boundary. Clustering helps with navigation, but the topics genuinely overlap a lot in reality.',
+      mapOverlapIntro: 'Line thickness shows how many articles cross-reference between the two clusters — 85 of the map\'s 146 connections (58%) cross a cluster boundary. Clustering helps with navigation, but the topics genuinely overlap a lot in reality.',
       mapOverlapFundamentals: 'Fundamentals & Architecture',
       mapOverlapPractice: 'Practice & Tools',
       mapOverlapTraining: 'Training & Fine-tuning',
       mapOverlapInfra: 'Infrastructure & Optimization',
       mapOverlapKnowledge: 'Knowledge & Context',
       mapOverlapSafety: 'Reliability & Safety',
-      mapOverlapFoot: 'The strongest bridge is between Fundamentals & Architecture and Practice & Tools — many articles (e.g. multimodal models or base/instruct) are simultaneously a theoretical foundation and a practical, tool-oriented topic.',
+      mapOverlapContext: 'Context & Regulation',
+      mapOverlapFoot: 'The strongest bridge is between Fundamentals & Architecture and Training & Fine-tuning — many articles (e.g. model types or open weight models) are simultaneously a theoretical foundation and a topic tied to how the model itself came to be.',
       termPreviewOpenLabel: 'Open full article →',
       cookieBannerTitle: 'Cookies & analytics',
       cookieBannerBody: 'This site uses Google Analytics to see which content is useful — this would place cookies in your browser. It only activates if you accept.',
@@ -291,7 +270,6 @@ function buildHtml(pages, locale) {
 
   const ui = locale.ui;
   const mapPage = renderMapPage(ui);
-  const pythonMapPage = renderPythonMapPage(ui);
 
   const pageList = PAGE_ORDER
     .filter(p => p.key !== 'map')
@@ -408,8 +386,6 @@ function buildHtml(pages, locale) {
 
 ${mapPage}
 
-${pythonMapPage}
-
 <!-- ════════ MAIN SHELL ════════ -->
 <div class="shell" id="shell">
   <aside class="sidebar">
@@ -452,7 +428,6 @@ window.__I18N__ = ${JSON.stringify(ui)};
 window.__CONTENT_VERSIONS__ = ${JSON.stringify(contentVersions)};
 </script>
 <script src="${AP}content-graph-data.js"></script>
-<script src="${AP}python-map-data.js"></script>
 <script src="${AP}app.js"></script>
 <script src="${AP}search.js"></script>
 </body>
