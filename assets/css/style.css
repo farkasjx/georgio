@@ -885,6 +885,11 @@ svg.connections {
   opacity: 1;
 }
 
+.cluster-region-layer {
+  filter: blur(40px);
+  will-change: transform;
+}
+
 .cluster-region {
   transition: opacity .25s ease;
 }

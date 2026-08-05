@@ -42,24 +42,25 @@ const graphNodesBase = [
   { id: 'rlhf',                    cluster: 'training', color: '#c9a9ac', x: 2640,  y: 100 },
   { id: 'open-weight',             cluster: 'training', color: '#38bdf8', x: 2980,  y: 100 },
   { id: 'huggingface',             cluster: 'training', color: '#fdba74', x: 3320,  y: 100 },
+  { id: 'diy-model-training',      cluster: 'training', color: '#84a98c', x: 1960,  y: 340 },
 
   /* ── Infrastruktúra & optimalizálás (közép oszlop) ── */
-  { id: 'hardware',                cluster: 'infra', color: '#f0edeb', x: 1960,  y: 560 },
-  { id: 'quantization-quality',    cluster: 'infra', color: '#00ff55', x: 2300,  y: 560 },
-  { id: 'kv-cache',                cluster: 'infra', color: '#8a5a2a', x: 2640,  y: 560 },
-  { id: 'latency',                 cluster: 'infra', color: '#523986', x: 2980,  y: 560 },
-  { id: 'model-routing',           cluster: 'infra', color: '#496b8f', x: 3320,  y: 560 },
+  { id: 'hardware',                cluster: 'infra', color: '#f0edeb', x: 1960,  y: 780 },
+  { id: 'quantization-quality',    cluster: 'infra', color: '#00ff55', x: 2300,  y: 780 },
+  { id: 'kv-cache',                cluster: 'infra', color: '#8a5a2a', x: 2640,  y: 780 },
+  { id: 'latency',                 cluster: 'infra', color: '#523986', x: 2980,  y: 780 },
+  { id: 'model-routing',           cluster: 'infra', color: '#496b8f', x: 3320,  y: 780 },
 
   /* ── Megbízhatóság & biztonság (közép oszlop) ── */
-  { id: 'ai-safety',               cluster: 'safety', color: '#ef4444', x: 1960,  y: 1020 },
-  { id: 'security',                cluster: 'safety', color: '#e06c75', x: 2300,  y: 1020 },
-  { id: 'evaluation',              cluster: 'safety', color: '#84cc16', x: 2640,  y: 1020 },
+  { id: 'ai-safety',               cluster: 'safety', color: '#ef4444', x: 1960,  y: 1240 },
+  { id: 'security',                cluster: 'safety', color: '#e06c75', x: 2300,  y: 1240 },
+  { id: 'evaluation',              cluster: 'safety', color: '#84cc16', x: 2640,  y: 1240 },
 
   /* ── Kontextus & szabályozás (közép oszlop, alul) ── */
-  { id: 'ai-history',              cluster: 'context', color: '#fcd34d', x: 1960,  y: 1480 },
-  { id: 'enterprise-ai',           cluster: 'context', color: '#dc2626', x: 2300,  y: 1480 },
-  { id: 'ai-copyright-law',        cluster: 'context', color: '#b45309', x: 2640,  y: 1480 },
-  { id: 'ai-regulation-liability', cluster: 'context', color: '#6d28d9', x: 2980,  y: 1480 },
+  { id: 'ai-history',              cluster: 'context', color: '#fcd34d', x: 1960,  y: 1700 },
+  { id: 'enterprise-ai',           cluster: 'context', color: '#dc2626', x: 2300,  y: 1700 },
+  { id: 'ai-copyright-law',        cluster: 'context', color: '#b45309', x: 2640,  y: 1700 },
+  { id: 'ai-regulation-liability', cluster: 'context', color: '#6d28d9', x: 2980,  y: 1700 },
 
   /* ── Gyakorlat & eszközök (jobb oszlop, felül) ── */
   { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 3820,  y: 100 },
@@ -128,6 +129,7 @@ const graphEdges = [
   ['ml-fundamentals','model-training'], ['ml-fundamentals','evaluation'], ['ml-fundamentals','fine-tuning'],
   ['neural-network-basics','architecture'], ['neural-network-basics','model-training'], ['neural-network-basics','ml-fundamentals'],
   ['huggingface','open-weight'], ['huggingface','fine-tuning'], ['huggingface','tokenization'], ['huggingface','quantization-quality'],
+  ['diy-model-training','model-training'], ['diy-model-training','tokenization'], ['diy-model-training','fine-tuning'], ['diy-model-training','architecture'], ['diy-model-training','hardware'],
   ['enterprise-ai','security'], ['enterprise-ai','mcp'], ['enterprise-ai','ai-safety'],
   ['harness-engineering','agentic-coding'], ['harness-engineering','agent-architecture'], ['harness-engineering','aiconfig'], ['harness-engineering','security'],
   ['ai-code-review','agentic-coding'], ['ai-code-review','evaluation'], ['ai-code-review','enterprise-ai'],
@@ -372,6 +374,11 @@ const graphText = {
         title: 'Hugging Face',
         short: 'A Hub (modell-tárhely) és a transformers könyvtár (futtató API) — gyakorlati bevezető pipeline()-tól az AutoModel szintig.',
         desc: ['Az első sor kód (pipeline()) a leggyorsabb út egy modell futtatásához — és mikor kell mélyebbre menni AutoModel/AutoTokenizer szintre.', 'Gyakorlati óvintézkedések: hardver-igény, verzió-rögzítés, bizalmi lánc, mielőtt éles rendszerbe építenéd.']
+      },
+      'diy-model-training': {
+        title: 'Saját, puritán modell',
+        short: 'Hogyan építs és taníts egy kicsi, egy nyelven beszélő modellt nulláról — nanochat/nanoGPT, saját tokenizáló, konkrét parancsok.',
+        desc: ['Reális elvárás: 10-25 millió paraméter, otthoni GPU-n, órák alatt — nem termékfejlesztés, hanem a tanítási folyamat megértése végigcsinálva.', 'A FineWeb-Edu kisebb mintái mint tanítóadat, és egy saját, kis szótárú tokenizáló, ami hatékonyabban kihasználja a szűkös paramétereket.']
       },
       'enterprise-ai': {
         title: 'Vállalati AI',
@@ -636,6 +643,11 @@ const graphText = {
         title: 'Hugging Face',
         short: 'The Hub (model repository) and the transformers library (runtime API) — a practical guide from pipeline() to the AutoModel level.',
         desc: ['The first line of code (pipeline()) is the fastest way to run a model — and when it’s time to go deeper with AutoModel/AutoTokenizer.', 'Practical precautions: hardware requirements, version pinning, trust chain, before building it into production.']
+      },
+      'diy-model-training': {
+        title: 'Building a Minimal Model',
+        short: 'How to build and train a small, single-language model from scratch — nanochat/nanoGPT, a custom tokenizer, concrete commands.',
+        desc: ['A realistic expectation: 10-25 million parameters, on a home GPU, in hours — not product development, but understanding the training process by doing it.', 'FineWeb-Edu\u2019s smaller samples as training data, and a custom, small-vocabulary tokenizer that uses limited parameters more efficiently.']
       },
       'enterprise-ai': {
         title: 'Enterprise AI',

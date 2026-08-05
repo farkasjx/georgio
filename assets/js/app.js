@@ -6,7 +6,7 @@
 const pages = [
   'map', 'tools', 'glossary', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
   'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history', 'ml-fundamentals', 'neural-network-basics',
-  'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation',
+  'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation', 'diy-model-training',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops', 'ai-copyright-law', 'ai-regulation-liability',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures'
@@ -307,19 +307,15 @@ function drawClusterRegions(svgEl) {
     byCluster[n.cluster].push(n);
   });
 
-  // Gaussian blur szűrő a régiók puha, "felhő-szerű" szélei­hez — a klaszterek
-  // a valóságban erősen összefonódnak (56%-uk kereszthivatkozás más
-  // klaszterekbe), egy éles, szaggatott körvonal ezt a valóságnál
-  // mesterségesen szigorúbb elhatárolásnak mutatná.
-  const defs = svgEl.querySelector('defs') || svgEl.insertBefore(document.createElementNS('http://www.w3.org/2000/svg','defs'), svgEl.firstChild);
-  const filter = document.createElementNS('http://www.w3.org/2000/svg','filter');
-  filter.setAttribute('id', 'cluster-region-blur');
-  filter.setAttribute('x', '-30%'); filter.setAttribute('y', '-30%');
-  filter.setAttribute('width', '160%'); filter.setAttribute('height', '160%');
-  const blur = document.createElementNS('http://www.w3.org/2000/svg','feGaussianBlur');
-  blur.setAttribute('stdDeviation', '40');
-  filter.appendChild(blur);
-  defs.appendChild(filter);
+  // A régiók puha, "felhő-szerű" széleit CSS filter:blur() adja, NEM SVG
+  // feGaussianBlur — az SVG-szűrő minden egyes pan/zoom képkockánál
+  // újraszámolódna a transzformált geometrián, ami akadozó mozgást okozott.
+  // A .cluster-region-layer saját compositing rétegre kerül (will-change),
+  // így a böngésző a blur-t egyszer számolja ki, utána csak mozgatja/skálázza
+  // a kész réteget — ugyanaz a vizuális eredmény, sima pan/zoom mellett.
+  const regionLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
+  regionLayer.setAttribute('class', 'cluster-region-layer');
+  svgEl.appendChild(regionLayer);
 
   Object.keys(byCluster).forEach(cluster => {
     const nodes = byCluster[cluster];
@@ -339,8 +335,7 @@ function drawClusterRegions(svgEl) {
     rect.setAttribute('rx', 80);
     rect.setAttribute('fill', color);
     rect.setAttribute('fill-opacity', '0.12');
-    rect.setAttribute('filter', 'url(#cluster-region-blur)');
-    svgEl.appendChild(rect);
+    regionLayer.appendChild(rect);
 
     const label = document.createElementNS('http://www.w3.org/2000/svg','text');
     label.setAttribute('class', 'cluster-region-label');
@@ -368,7 +363,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 5280, H = 1860;
+  const W = 5280, H = 1940;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);

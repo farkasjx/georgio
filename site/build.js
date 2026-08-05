@@ -63,6 +63,7 @@ const PAGE_ORDER = [
   { key: 'rlhf',                  label: 'RLHF',                    labelEn: 'RLHF',                     dot: '#2b2426' },
   { key: 'open-weight',           label: 'Nyílt súlyú modellek',    labelEn: 'Open Weight Models',        dot: '#38bdf8' },
   { key: 'huggingface',           label: 'Hugging Face',            labelEn: 'Hugging Face',             dot: '#fdba74' },
+  { key: 'diy-model-training',    label: 'Saját, puritán modell',   labelEn: 'Building a Minimal Model', dot: '#84a98c' },
 
   /* ── Infrastruktúra & optimalizálás ── */
   { key: 'hardware',              label: 'Hardware',                labelEn: 'Hardware',                 dot: '#f0edeb' },
