@@ -86,5 +86,3 @@
 [data-theme="light"] .topbar    { background: rgba(255,255,255,0.92); }
 [data-theme="light"] .map-btn   { background: rgba(255,255,255,0.9); }
 [data-theme="light"] .map-panel { background: rgba(250,249,247,0.97); }
-[data-theme="light"] .map-hint-btn    { background: rgba(255,255,255,0.9); }
-[data-theme="light"] .map-hint-popup  { background: rgba(250,249,247,0.97); }

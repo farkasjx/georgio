@@ -300,421 +300,74 @@ const CLUSTER_REGION_COLOR = {
   context:      '#eab308',
 };
 
-function drawClusterRegions(svgEl) {
+function initMap() {
+  if (mapInitialized) return;
+  mapInitialized = true;
+
+  const container = document.getElementById('cardmap-clusters');
+  if (!container) return;
+
+  // klaszter-sorrend úgy, ahogy a PAGE_ORDER/dropdown-ban is szerepelnek —
+  // ez adja a kártya-szekciók megjelenési sorrendjét
+  const clusterOrder = ['fundamentals', 'training', 'infra', 'safety', 'context', 'practice', 'knowledge'];
+
   const byCluster = {};
   graphNodes.forEach(n => {
     if (!byCluster[n.cluster]) byCluster[n.cluster] = [];
     byCluster[n.cluster].push(n);
   });
 
-  // A régiók puha, "felhő-szerű" széleit CSS filter:blur() adja, NEM SVG
-  // feGaussianBlur — az SVG-szűrő minden egyes pan/zoom képkockánál
-  // újraszámolódna a transzformált geometrián, ami akadozó mozgást okozott.
-  // A .cluster-region-layer saját compositing rétegre kerül (will-change),
-  // így a böngésző a blur-t egyszer számolja ki, utána csak mozgatja/skálázza
-  // a kész réteget — ugyanaz a vizuális eredmény, sima pan/zoom mellett.
-  const regionLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
-  regionLayer.setAttribute('class', 'cluster-region-layer');
-  svgEl.appendChild(regionLayer);
-
-  Object.keys(byCluster).forEach(cluster => {
+  clusterOrder.forEach(cluster => {
     const nodes = byCluster[cluster];
-    const minX = Math.min(...nodes.map(n => n.x)) - REGION_PAD;
-    const minY = Math.min(...nodes.map(n => n.y)) - REGION_PAD;
-    const maxX = Math.max(...nodes.map(n => n.x + NODE_W)) + REGION_PAD;
-    const maxY = Math.max(...nodes.map(n => n.y + NODE_H)) + REGION_PAD;
-    const color = CLUSTER_REGION_COLOR[cluster] || '#888';
+    if (!nodes || !nodes.length) return;
 
-    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-    rect.setAttribute('class', 'cluster-region');
-    rect.dataset.cluster = cluster;
-    rect.setAttribute('x', minX);
-    rect.setAttribute('y', minY);
-    rect.setAttribute('width', maxX - minX);
-    rect.setAttribute('height', maxY - minY);
-    rect.setAttribute('rx', 80);
-    rect.setAttribute('fill', color);
-    rect.setAttribute('fill-opacity', '0.12');
-    regionLayer.appendChild(rect);
+    const section = document.createElement('section');
+    section.className = 'cardmap-section';
+    section.dataset.cluster = cluster;
 
-    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
-    label.setAttribute('class', 'cluster-region-label');
-    label.dataset.cluster = cluster;
-    label.setAttribute('x', minX + 28);
-    label.setAttribute('y', minY + 46);
-    label.setAttribute('fill', color);
-    label.textContent = (clusterLabels[cluster] || '').toUpperCase();
-    svgEl.appendChild(label);
-  });
-}
+    const header = document.createElement('div');
+    header.className = 'cardmap-section-header';
+    const dot = document.createElement('span');
+    dot.className = 'cardmap-section-dot';
+    dot.style.background = CLUSTER_REGION_COLOR[cluster] || '#888';
+    const title = document.createElement('span');
+    title.className = 'cardmap-section-title';
+    title.textContent = clusterLabels[cluster] || cluster;
+    const count = document.createElement('span');
+    count.className = 'cardmap-section-count';
+    count.textContent = nodes.length;
+    header.appendChild(dot);
+    header.appendChild(title);
+    header.appendChild(count);
+    section.appendChild(header);
 
-
-function initMap() {
-  if (mapInitialized) return;
-  mapInitialized = true;
-
-  // gyors, O(1) id -> node kikeresés — korábban minden egyes él-újraszámoláskor
-  // (ami drag közben másodpercenként 60x is lefuthat) graphNodes.find()-ot
-  // hívtunk, ami a teljes 46 elemű tömböt végigmenné minden egyes híváskor
-  const nodeById = new Map(graphNodes.map(n => [n.id, n]));
-
-  const shell  = document.getElementById('map-shell');
-  const canvas = document.getElementById('map-canvas');
-  const svgEl  = document.getElementById('map-svg');
-  const panel  = document.getElementById('map-panel');
-
-  const W = 5280, H = 2220;
-  canvas.style.width  = W + 'px';
-  canvas.style.height = H + 'px';
-  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svgEl.style.width  = W + 'px';
-  svgEl.style.height = H + 'px';
-
-  // draw cluster background regions (a node-ok és élek MÖGÖTT, hogy a 6 klaszter
-  // vizuálisan is elkülönüljön, ne csak a szűrőgombokkal lehessen szétválasztani)
-  const defs = document.createElementNS('http://www.w3.org/2000/svg','defs');
-  svgEl.appendChild(defs);
-  drawClusterRegions(svgEl);
-
-  // draw edges (a pontos 'd' útvonalat az updateAllEdges() számolja ki)
-  // él-DOM-elemek létrehozása, közben egy node-id -> érintett <path>-elemek
-  // index felépítése (edgesByNode), hogy drag közben ne kelljen a teljes
-  // édge-listát (querySelectorAll('.path')) újra és újra átfésülni
-  const edgesByNode = new Map();
-  graphEdges.forEach(([a,b]) => {
-    const na = nodeById.get(a), nb = nodeById.get(b);
-    if (!na || !nb) return;
-    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
-    path.setAttribute('class','path');
-    path.dataset.a = a;
-    path.dataset.b = b;
-    svgEl.appendChild(path);
-    if (!edgesByNode.has(a)) edgesByNode.set(a, []);
-    if (!edgesByNode.has(b)) edgesByNode.set(b, []);
-    edgesByNode.get(a).push(path);
-    edgesByNode.get(b).push(path);
-  });
-  updateAllEdges();
-
-  // create nodes
-  graphNodes.forEach((node) => {
-    const el = document.createElement('div');
-    el.className = 'map-node';
-    el.id = `node-${node.id}`;
-    el.style.cssText = `left:${node.x}px;top:${node.y}px;--node-color:${node.color}`;
-
-    el.innerHTML = `
-      <span class="node-time">${clusterLabels[node.cluster] || ''}</span>
-      <div class="node-label">${node.title}</div>
-      <div class="node-desc">${node.short}</div>`;
-
-    canvas.appendChild(el);
-  });
-
-  /* ── egységes koordináta-kinyerés egér- és touch-eseményekhez, hogy a
-     pan/zoom/drag logikát ne kelljen duplikálni mobil és desktop között ── */
-  function pointFromEvent(e) {
-    if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    if (e.changedTouches && e.changedTouches.length) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
-    return { x: e.clientX, y: e.clientY };
-  }
-
-  /* ── node mozgatás egérrel/érintéssel — mousedown-tól figyeljük, elmozdult-e,
-     hogy meg tudjuk különböztetni a kattintást (panel nyitás) a húzástól ── */
-  let draggingNode = null, nodeMoved = false;
-  let nodeDragStartX, nodeDragStartY, nodeOrigX, nodeOrigY;
-
-  function startNodeDrag(node, el, e) {
-    draggingNode = node;
-    nodeMoved = false;
-    const p = pointFromEvent(e);
-    nodeDragStartX = p.x;
-    nodeDragStartY = p.y;
-    nodeOrigX = node.x;
-    nodeOrigY = node.y;
-    el.classList.add('dragging');
-  }
-
-  graphNodes.forEach(node => {
-    const el = document.getElementById(`node-${node.id}`);
-    el.addEventListener('mousedown', e => { e.preventDefault(); startNodeDrag(node, el, e); });
-    el.addEventListener('touchstart', e => { startNodeDrag(node, el, e); }, { passive: true });
-  });
-
-  // pan & zoom
-  let tx = -100, ty = -100, scale = 0.5;
-  let dragging = false, startX, startY, startTx, startTy;
-  let pinchStartDist = null, pinchStartScale = null;
-
-  function applyTransform(animate) {
-    canvas.style.transition = animate ? 'transform 0.4s cubic-bezier(.18,.89,.32,1.08)' : 'none';
-    canvas.style.transform  = `translate(${tx}px,${ty}px) scale(${scale})`;
-  }
-  applyTransform(false);
-
-  function startPan(e) {
-    if (e.target.closest('.map-node')) return;
-    dragging = true; shell.classList.add('dragging');
-    const p = pointFromEvent(e);
-    startX = p.x; startY = p.y;
-    startTx = tx; startTy = ty;
-  }
-
-  function movePan(e) {
-    if (draggingNode) {
-      const p = pointFromEvent(e);
-      const dx = (p.x - nodeDragStartX) / scale;
-      const dy = (p.y - nodeDragStartY) / scale;
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) nodeMoved = true;
-      draggingNode.x = nodeOrigX + dx;
-      draggingNode.y = nodeOrigY + dy;
-      const el = document.getElementById(`node-${draggingNode.id}`);
-      el.style.left = draggingNode.x + 'px';
-      el.style.top  = draggingNode.y + 'px';
-      // csak a ténylegesen érintett (előre indexelt) éleket frissítjük —
-      // nem a teljes .path-listát fésüljük át minden mozgás-eseménynél
-      const touched = edgesByNode.get(draggingNode.id);
-      if (touched) {
-        touched.forEach(p => {
-          const na = nodeById.get(p.dataset.a), nb = nodeById.get(p.dataset.b);
-          if (na && nb) p.setAttribute('d', edgePathD(na, nb));
-        });
-      }
-      return;
-    }
-    if (!dragging) return;
-    const p = pointFromEvent(e);
-    tx = startTx + (p.x - startX);
-    ty = startTy + (p.y - startY);
-    applyTransform(false);
-  }
-
-  function endPan() {
-    if (draggingNode) {
-      const el = document.getElementById(`node-${draggingNode.id}`);
-      if (el) el.classList.remove('dragging');
-      if (!nodeMoved) selectNode(draggingNode);
-      draggingNode = null;
-    }
-    dragging = false; shell.classList.remove('dragging');
-    pinchStartDist = null;
-  }
-
-  function touchDist(e) {
-    const [a, b] = e.touches;
-    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-  }
-
-  shell.addEventListener('mousedown', startPan);
-  window.addEventListener('mousemove', movePan);
-  window.addEventListener('mouseup', endPan);
-
-  /* mobil: egyujjas érintés = pan/node-mozgatás (ugyanaz a logika, mint egérrel),
-     kétujjas csippentés = zoom. passive:false kell a preventDefault-hoz, hogy az
-     oldal ne görgessen/zoomoljon a böngésző natív gesztusával egyszerre. */
-  shell.addEventListener('touchstart', e => {
-    if (e.touches.length === 2) {
-      pinchStartDist = touchDist(e);
-      pinchStartScale = scale;
-      return;
-    }
-    startPan(e);
-  }, { passive: true });
-
-  window.addEventListener('touchmove', e => {
-    if (e.touches.length === 2 && pinchStartDist) {
-      e.preventDefault();
-      const factor = touchDist(e) / pinchStartDist;
-      scale = Math.max(0.25, Math.min(2, pinchStartScale * factor));
-      applyTransform(false);
-      return;
-    }
-    if (dragging || draggingNode) e.preventDefault();
-    movePan(e);
-  }, { passive: false });
-
-  window.addEventListener('touchend', endPan);
-  window.addEventListener('touchcancel', endPan);
-
-  shell.addEventListener('wheel', e => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.1 : 0.91;
-    scale = Math.max(0.25, Math.min(2, scale * factor));
-    applyTransform(false);
-  }, { passive: false });
-
-  // zoom buttons
-  document.getElementById('btn-zoom-in').addEventListener('click',  () => { scale = Math.min(2, scale*1.2); applyTransform(true); });
-  document.getElementById('btn-zoom-out').addEventListener('click', () => { scale = Math.max(0.25, scale*0.83); applyTransform(true); });
-  document.getElementById('btn-reset').addEventListener('click',    () => {
-    tx=-100; ty=-100; scale=0.5; applyTransform(true);
-    clearHighlight();
-    panel.classList.remove('open');
-  });
-
-  // filter chips
-  const chipGroup = document.getElementById('map-chip-group');
-  const filterToggle = document.getElementById('map-filter-toggle');
-  if (filterToggle && chipGroup) {
-    filterToggle.addEventListener('click', () => chipGroup.classList.toggle('open'));
-  }
-  document.querySelectorAll('.map-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const f = chip.dataset.filter;
-      activeFilter = f;
-      document.querySelectorAll('.map-chip').forEach(c => c.classList.toggle('chip-active', c.dataset.filter === f));
-      filterNodes(f);
-      if (chipGroup) chipGroup.classList.remove('open'); // mobilon: válaszd ki és csukódjon be
+    const grid = document.createElement('div');
+    grid.className = 'cardmap-grid';
+    nodes.forEach(node => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'cardmap-card';
+      card.style.setProperty('--card-color', node.color);
+      card.innerHTML = `
+        <div class="cardmap-card-dot" style="background:${node.color}"></div>
+        <div class="cardmap-card-title">${node.title}</div>
+        <div class="cardmap-card-desc">${node.short}</div>`;
+      card.addEventListener('click', () => openPanel(node));
+      grid.appendChild(card);
     });
-  });
-  shell.addEventListener('mousedown', e => {
-    if (chipGroup && chipGroup.classList.contains('open') && !e.target.closest('.map-chip-group') && !e.target.closest('#map-filter-toggle')) {
-      chipGroup.classList.remove('open');
-    }
+    section.appendChild(grid);
+    container.appendChild(section);
   });
 
   document.getElementById('panel-close').addEventListener('click', () => {
-    panel.classList.remove('open');
-    clearHighlight();
+    document.getElementById('map-panel').classList.remove('open');
   });
-
-  // klaszter-átfedés panel: nyitás/zárás gombbal, háttérre kattintva, vagy Escape-re
-  const overlapPanel = document.getElementById('overlap-panel');
-  const overlapBtn = document.getElementById('btn-overlap');
-  const overlapClose = document.getElementById('overlap-panel-close');
-  if (overlapBtn && overlapPanel) {
-    overlapBtn.addEventListener('click', () => overlapPanel.classList.toggle('open'));
-  }
-  if (overlapClose && overlapPanel) {
-    overlapClose.addEventListener('click', () => overlapPanel.classList.remove('open'));
-  }
-  shell.addEventListener('mousedown', e => {
-    if (overlapPanel && overlapPanel.classList.contains('open') && !e.target.closest('.overlap-panel') && !e.target.closest('#btn-overlap')) {
-      overlapPanel.classList.remove('open');
-    }
-  });
-
-  // haszálati hint popup: "?" gombbal bármikor megnyitható, "Értem"-mel
-  // vagy háttérre kattintva zárható; az automatikus, első-látogatásos
-  // megnyitást az initMapHint() intézi (lásd lejjebb)
-  const hintPopup = document.getElementById('map-hint-popup');
-  const hintBtn = document.getElementById('map-hint-btn');
-  const hintClose = document.getElementById('map-hint-popup-close');
-  const hintGotIt = document.getElementById('map-hint-popup-gotit');
-  if (hintBtn && hintPopup) {
-    hintBtn.addEventListener('click', () => hintPopup.classList.toggle('open'));
-  }
-  if (hintClose && hintPopup) {
-    hintClose.addEventListener('click', () => hintPopup.classList.remove('open'));
-  }
-  if (hintGotIt && hintPopup) {
-    hintGotIt.addEventListener('click', () => hintPopup.classList.remove('open'));
-  }
-  shell.addEventListener('mousedown', e => {
-    if (hintPopup && hintPopup.classList.contains('open') && !e.target.closest('.map-hint-popup') && !e.target.closest('#map-hint-btn')) {
-      hintPopup.classList.remove('open');
-    }
-  });
-  initMapHint(hintPopup);
-}
-
-/* ── él-útvonalak kiszámítása a node középpontjai alapján (mozgatható node-ok miatt dinamikus) ── */
-function edgePathD(na, nb) {
-  const ax = na.x+125, ay = na.y+75, bx = nb.x+125, by = nb.y+75;
-  const mx = (ax+bx)/2, my = (ay+by)/2;
-  return `M${ax},${ay} C${mx},${ay} ${mx},${by} ${bx},${by}`;
-}
-
-function updateAllEdges() {
-  document.querySelectorAll('.path').forEach(p => {
-    const na = graphNodes.find(n => n.id === p.dataset.a);
-    const nb = graphNodes.find(n => n.id === p.dataset.b);
-    if (na && nb) p.setAttribute('d', edgePathD(na, nb));
-  });
-}
-
-/* ── kijelölés: kiszínezi a csomóponthoz tartozó éleket és a szomszédos node-okat ── */
-/* ── térkép haszálati hint: első alkalommal automatikusan megjelenik,
-   utána csak a "?" gombbal — ugyanaz a localStorage-mintás, egyszeri
-   megjelenítési elv, mint a tartalom-frissítés popupnál (initVersionTracking) ── */
-const MAP_HINT_SEEN_KEY = 'aihub-map-hint-seen';
-
-function initMapHint(hintPopup) {
-  if (!hintPopup) return;
-  let seen = null;
-  try { seen = localStorage.getItem(MAP_HINT_SEEN_KEY); } catch (e) { seen = null; }
-  if (!seen) {
-    hintPopup.classList.add('open');
-    try { localStorage.setItem(MAP_HINT_SEEN_KEY, '1'); } catch (e) {}
-  }
-}
-
-function clearHighlight() {
-  document.querySelectorAll('.path').forEach(p => p.classList.remove('highlight'));
-  document.querySelectorAll('.map-node').forEach(n => n.classList.remove('node-active', 'node-related'));
-}
-
-function selectNode(node) {
-  clearHighlight();
-  const el = document.getElementById(`node-${node.id}`);
-  if (el) el.classList.add('node-active');
-  document.querySelectorAll('.path').forEach(p => {
-    if (p.dataset.a !== node.id && p.dataset.b !== node.id) return;
-    p.classList.add('highlight');
-    const otherId = p.dataset.a === node.id ? p.dataset.b : p.dataset.a;
-    const otherEl = document.getElementById(`node-${otherId}`);
-    if (otherEl) otherEl.classList.add('node-related');
-  });
-  openPanel(node);
-}
-
-function filterNodes(filter) {
-  graphNodes.forEach(n => {
-    const el = document.getElementById(`node-${n.id}`);
-    if (!el) return;
-    const show = filter === 'all' || n.cluster === filter;
-    el.style.opacity = show ? '1' : '0.15';
-    el.style.pointerEvents = show ? 'auto' : 'none';
-  });
-
-  document.querySelectorAll('.path').forEach(p => {
-    const a = graphNodes.find(n => n.id === p.dataset.a);
-    const b = graphNodes.find(n => n.id === p.dataset.b);
-    const show = filter === 'all' || (a && a.cluster === filter) || (b && b.cluster === filter);
-    p.style.opacity = show ? '1' : '0.08';
-  });
-
-  document.querySelectorAll('.cluster-region, .cluster-region-label').forEach(el => {
-    const show = filter === 'all' || el.dataset.cluster === filter;
-    el.style.opacity = show ? '1' : '0.12';
-  });
-}
-
-/* related csomópontok az élek alapján, dinamikusan (nincs kézzel karbantartott lista) */
-function getRelatedNodes(id) {
-  const relatedIds = new Set();
-  graphEdges.forEach(([a, b]) => {
-    if (a === id) relatedIds.add(b);
-    if (b === id) relatedIds.add(a);
-  });
-  return [...relatedIds].map(rid => graphNodes.find(n => n.id === rid)).filter(Boolean);
 }
 
 function openPanel(node) {
   const panel = document.getElementById('map-panel');
   document.getElementById('panel-title').textContent = node.title;
-  document.getElementById('panel-phase').textContent = clusterLabels[node.cluster] || '';
   document.getElementById('panel-desc').innerHTML = node.desc.map(p => `<p>${p}</p>`).join('');
-
-  const related = getRelatedNodes(node.id);
-  document.getElementById('panel-related').innerHTML = related
-    .map(r => `<li data-goto="${r.id}" style="cursor:pointer">${r.title}</li>`).join('');
-  document.querySelectorAll('#panel-related li').forEach(li => {
-    li.addEventListener('click', () => {
-      const target = graphNodes.find(n => n.id === li.dataset.goto);
-      if (target) selectNode(target);
-    });
-  });
 
   const openBtn = document.getElementById('panel-open-btn');
   openBtn.onclick = () => showPage(node.id);
