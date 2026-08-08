@@ -64,6 +64,8 @@ const PAGE_ORDER = [
   { key: 'open-weight',           label: 'Nyílt súlyú modellek',    labelEn: 'Open Weight Models',        dot: '#38bdf8' },
   { key: 'huggingface',           label: 'Hugging Face',            labelEn: 'Hugging Face',             dot: '#fdba74' },
   { key: 'diy-model-training',    label: 'Saját, puritán modell',   labelEn: 'Building a Minimal Model', dot: '#84a98c' },
+  { key: 'code-llm-architecture', label: 'Kódoló modellek',         labelEn: 'Code-Generation Models',   dot: '#5eaaa8' },
+  { key: 'domain-specific-models', label: 'Speciális területre tanított modellek', labelEn: 'Domain-Specific Models', dot: '#9d4edd' },
 
   /* ── Infrastruktúra & optimalizálás ── */
   { key: 'hardware',              label: 'Hardware',                labelEn: 'Hardware',                 dot: '#f0edeb' },

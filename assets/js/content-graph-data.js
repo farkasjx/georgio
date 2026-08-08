@@ -43,6 +43,8 @@ const graphNodesBase = [
   { id: 'open-weight',             cluster: 'training', color: '#38bdf8', x: 2980,  y: 100 },
   { id: 'huggingface',             cluster: 'training', color: '#fdba74', x: 3320,  y: 100 },
   { id: 'diy-model-training',      cluster: 'training', color: '#84a98c', x: 1960,  y: 340 },
+  { id: 'code-llm-architecture',   cluster: 'training', color: '#5eaaa8', x: 2300,  y: 340 },
+  { id: 'domain-specific-models',  cluster: 'training', color: '#9d4edd', x: 2640,  y: 340 },
 
   /* ── Infrastruktúra & optimalizálás (közép oszlop) ── */
   { id: 'hardware',                cluster: 'infra', color: '#f0edeb', x: 1960,  y: 780 },
@@ -130,6 +132,8 @@ const graphEdges = [
   ['neural-network-basics','architecture'], ['neural-network-basics','model-training'], ['neural-network-basics','ml-fundamentals'],
   ['huggingface','open-weight'], ['huggingface','fine-tuning'], ['huggingface','tokenization'], ['huggingface','quantization-quality'],
   ['diy-model-training','model-training'], ['diy-model-training','tokenization'], ['diy-model-training','fine-tuning'], ['diy-model-training','architecture'], ['diy-model-training','hardware'],
+  ['code-llm-architecture','model-training'], ['code-llm-architecture','architecture'], ['code-llm-architecture','domain-specific-models'], ['code-llm-architecture','agentic-coding'],
+  ['domain-specific-models','fine-tuning'], ['domain-specific-models','model-training'], ['domain-specific-models','open-weight'], ['domain-specific-models','knowledge-cutoff'], ['domain-specific-models','code-llm-architecture'],
   ['enterprise-ai','security'], ['enterprise-ai','mcp'], ['enterprise-ai','ai-safety'],
   ['harness-engineering','agentic-coding'], ['harness-engineering','agent-architecture'], ['harness-engineering','aiconfig'], ['harness-engineering','security'],
   ['ai-code-review','agentic-coding'], ['ai-code-review','evaluation'], ['ai-code-review','enterprise-ai'],
@@ -379,6 +383,16 @@ const graphText = {
         title: 'Saját, puritán modell',
         short: 'Hogyan építs és taníts egy kicsi, egy nyelven beszélő modellt nulláról — nanochat/nanoGPT, saját tokenizáló, konkrét parancsok.',
         desc: ['Reális elvárás: 10-25 millió paraméter, otthoni GPU-n, órák alatt — nem termékfejlesztés, hanem a tanítási folyamat megértése végigcsinálva.', 'A FineWeb-Edu kisebb mintái mint tanítóadat, és egy saját, kis szótárú tokenizáló, ami hatékonyabban kihasználja a szűkös paramétereket.']
+      },
+      'code-llm-architecture': {
+        title: 'Kódoló modellek',
+        short: 'A Fill-in-the-Middle (FIM) tanítási trükk — hogyan tanul meg egy modell a kód közepébe illeszteni, nem csak folytatni.',
+        desc: ['A tanítóadat tudatosan kevert (60% kód, 10% matek, 30% nyelv) — a "csak kódon" tanítás elveszítené a kérés-megértési képességet.', 'Kód-specifikus adattisztítás: repository- és fájl-szintű deduplikáció, konkrét sorhossz- és alfabetikus-arány szűrők.']
+      },
+      'domain-specific-models': {
+        title: 'Speciális területre tanított modellek',
+        short: 'Három út a specializáláshoz (fine-tuning, DAPT, nulláról tanítás) — és a catastrophic forgetting kockázata, ha túl agresszíven csinálod.',
+        desc: ['A Domain-Adaptive Pretraining mint köztes út — miért jön a fine-tuning elé, nem helyette, ha a modell nem érti eléggé a domain szaknyelvét.', 'Konkrét mitigáló technikák a felejtés ellen: replay buffer (5-20% általános adat), alacsony tanulási ráta, LoRA/DoRA.']
       },
       'enterprise-ai': {
         title: 'Vállalati AI',
@@ -648,6 +662,16 @@ const graphText = {
         title: 'Building a Minimal Model',
         short: 'How to build and train a small, single-language model from scratch — nanochat/nanoGPT, a custom tokenizer, concrete commands.',
         desc: ['A realistic expectation: 10-25 million parameters, on a home GPU, in hours — not product development, but understanding the training process by doing it.', 'FineWeb-Edu\u2019s smaller samples as training data, and a custom, small-vocabulary tokenizer that uses limited parameters more efficiently.']
+      },
+      'code-llm-architecture': {
+        title: 'Code-Generation Models',
+        short: 'The Fill-in-the-Middle (FIM) training trick — how a model learns to insert into the middle of code, not just continue it.',
+        desc: ['The training data is deliberately mixed (60% code, 10% math, 30% language) — code-only training would lose the ability to understand requests.', 'Code-specific data cleaning: repository- and file-level deduplication, concrete line-length and alphabetic-ratio filters.']
+      },
+      'domain-specific-models': {
+        title: 'Domain-Specific Models',
+        short: 'Three paths to specialization (fine-tuning, DAPT, training from scratch) — and the catastrophic forgetting risk if you push too hard.',
+        desc: ['Domain-Adaptive Pretraining as a middle path — why it comes before fine-tuning, not instead of it, when the model doesn’t understand the domain’s vocabulary well enough.', 'Concrete mitigation techniques against forgetting: replay buffer (5-20% general-purpose data), low learning rate, LoRA/DoRA.']
       },
       'enterprise-ai': {
         title: 'Enterprise AI',
