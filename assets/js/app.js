@@ -352,27 +352,12 @@ function initMap() {
         <div class="cardmap-card-dot" style="background:${node.color}"></div>
         <div class="cardmap-card-title">${node.title}</div>
         <div class="cardmap-card-desc">${node.short}</div>`;
-      card.addEventListener('click', () => openPanel(node));
+      card.addEventListener('click', () => showPage(node.id));
       grid.appendChild(card);
     });
     section.appendChild(grid);
     container.appendChild(section);
   });
-
-  document.getElementById('panel-close').addEventListener('click', () => {
-    document.getElementById('map-panel').classList.remove('open');
-  });
-}
-
-function openPanel(node) {
-  const panel = document.getElementById('map-panel');
-  document.getElementById('panel-title').textContent = node.title;
-  document.getElementById('panel-desc').innerHTML = node.desc.map(p => `<p>${p}</p>`).join('');
-
-  const openBtn = document.getElementById('panel-open-btn');
-  openBtn.onclick = () => showPage(node.id);
-
-  panel.classList.add('open');
 }
 
 /* ─────────────────────────────────────────────

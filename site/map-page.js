@@ -21,16 +21,8 @@ export function renderMapPage(ui) {
       <!-- a klaszter-szekciókat és a cikk-kártyákat az app.js renderCardMap()
            generálja futásidőben, a graphNodes/graphClusterLabels adatból,
            hogy egy helyen (JS) legyen karbantartva a cím/leírás, ne
-           duplikálva HTML-ben is -->
-    </div>
-
-    <!-- detail panel — kattintásra megnyíló, rövid leírás + megnyitás gomb,
-         ugyanaz a vizuális minta, mint korábban -->
-    <div class="map-panel" id="map-panel">
-      <button class="panel-close" id="panel-close">✕</button>
-      <div class="panel-title" id="panel-title"></div>
-      <div class="panel-desc" id="panel-desc"></div>
-      <button class="map-btn panel-open-btn" id="panel-open-btn">${ui.mapOpenButton}</button>
+           duplikálva HTML-ben is. Kattintásra közvetlenül a cikkre navigál
+           (showPage), nincs köztes részlet-panel. -->
     </div>
   </div>
 </div>`;
