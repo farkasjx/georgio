@@ -99,6 +99,11 @@ const PAGE_ORDER = [
   { key: 'mcp',                   label: 'MCP',                     labelEn: 'MCP',                      dot: '#359a9c' },
   { key: 'llmops',                label: 'LLMOps',                  labelEn: 'LLMOps',                    dot: '#65a30d' },
   { key: 'ollama',                label: 'Lokális LLM',             labelEn: 'Local LLM',                dot: '#4ec9c9' },
+  { key: 'cost-optimization',     label: 'Költség-optimalizálás',   labelEn: 'Cost Optimization',        dot: '#c77dff' },
+  { key: 'fine-tuning-workflow',  label: 'Fine-tuning workflow',    labelEn: 'Fine-Tuning Workflow',     dot: '#588157' },
+  { key: 'browser-agents',        label: 'Böngésző-ügynökök',       labelEn: 'AI Browser Agents',        dot: '#e76f51' },
+  { key: 'prompt-versioning',     label: 'Prompt-verziózás',        labelEn: 'Prompt Versioning',        dot: '#457b9d' },
+  { key: 'llm-observability',     label: 'Observability & monitoring', labelEn: 'Observability & Monitoring', dot: '#bc6c25' },
 
   /* ── Tudás & kontextus ── */
   { key: 'rag',                   label: 'RAG',                     labelEn: 'RAG',                      dot: '#1613d4' },

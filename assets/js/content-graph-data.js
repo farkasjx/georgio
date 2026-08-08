@@ -78,17 +78,22 @@ const graphNodesBase = [
   { id: 'llmops',                  cluster: 'practice', color: '#65a30d', x: 4500,  y: 580 },
   { id: 'ollama',                  cluster: 'practice', color: '#4ec9c9', x: 4840,  y: 580 },
   { id: 'multi-agent-systems',     cluster: 'practice', color: '#6f9c8a', x: 3820,  y: 820 },
+  { id: 'cost-optimization',       cluster: 'practice', color: '#c77dff', x: 4160,  y: 820 },
+  { id: 'fine-tuning-workflow',    cluster: 'practice', color: '#588157', x: 4500,  y: 820 },
+  { id: 'browser-agents',          cluster: 'practice', color: '#e76f51', x: 4840,  y: 820 },
+  { id: 'prompt-versioning',       cluster: 'practice', color: '#457b9d', x: 3820,  y: 1060 },
+  { id: 'llm-observability',       cluster: 'practice', color: '#bc6c25', x: 4160,  y: 1060 },
 
   /* ── Tudás & kontextus (jobb oszlop, alul) ── */
-  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 3820,  y: 1260 },
-  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 4160,  y: 1260 },
-  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 4500,  y: 1260 },
-  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 3820,  y: 1500 },
-  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 4160,  y: 1500 },
-  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 4500,  y: 1500 },
-  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 3820,  y: 1740 },
-  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 4160,  y: 1740 },
-  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 4500,  y: 1740 },
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 3820,  y: 1500 },
+  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 4160,  y: 1500 },
+  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 4500,  y: 1500 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 3820,  y: 1740 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 4160,  y: 1740 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 4500,  y: 1740 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 3820,  y: 1980 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 4160,  y: 1980 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 4500,  y: 1980 },
 ];
 
 const graphEdges = [
@@ -125,6 +130,11 @@ const graphEdges = [
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
   ['multi-agent-systems','agent-architecture'], ['multi-agent-systems','mcp'], ['multi-agent-systems','harness-engineering'], ['multi-agent-systems','agentic-coding'],
+  ['cost-optimization','model-routing'], ['cost-optimization','kv-cache'], ['cost-optimization','reasoning'], ['cost-optimization','multi-agent-systems'],
+  ['fine-tuning-workflow','fine-tuning'], ['fine-tuning-workflow','open-weight'], ['fine-tuning-workflow','ollama'], ['fine-tuning-workflow','evaluation'], ['fine-tuning-workflow','domain-specific-models'],
+  ['browser-agents','security'], ['browser-agents','agent-architecture'], ['browser-agents','mcp'], ['browser-agents','ai-workflow-automation'],
+  ['prompt-versioning','prompting'], ['prompt-versioning','llmops'], ['prompt-versioning','cost-optimization'],
+  ['llm-observability','llmops'], ['llm-observability','cost-optimization'], ['llm-observability','multi-agent-systems'], ['llm-observability','prompt-versioning'],
   ['ai-history','reasoning'], ['ai-history','base-vs-instruct'], ['ai-history','architecture'],
   ['model-types','architecture'], ['model-types','multimodal'], ['model-types','agent-architecture'], ['model-types','dense-moe'],
   ['open-weight','ollama'], ['open-weight','fine-tuning'], ['open-weight','quantization-quality'], ['open-weight','hardware'],
@@ -345,6 +355,31 @@ const graphText = {
         title: 'Multi-agent rendszerek',
         short: 'Amikor egy ügynök nem elég — hub-and-spoke minta, az Anthropic saját kutatási rendszere 90,2%-os javulással, és a leggyakoribb hibamódok.',
         desc: ['A piac 66,4%-a a hub-and-spoke (orchestrator-worker) mintát választja — nem a bonyolultabb, akadémiai "swarm" architektúrákat.', 'A MAST-taxonómia szerint a hibák 41,77%-a specifikáció-eltérésből ered — konkrét védekező technikákkal (resource ownership, verifier agent).']
+      },
+      'cost-optimization': {
+        title: 'Költség-optimalizálás',
+        short: 'Prompt caching, batch API, prompt-tömörítés — négy technika, amik egymásra épülve 60-90%-kal csökkenthetik az API-számlát.',
+        desc: ['A prompt caching 50-90%-os megtakarítást ad a static-first prompt-struktúrával, a batch API pedig 50%-os kedvezményt — a kettő együtt kb. 25%-ra csökkenti az effektív költséget.', 'Egy konkrét, publikált esettanulmány: 180$/hó → 70$/hó, 61%-os csökkenés, egyetlen délután alatt bevezetve.']
+      },
+      'fine-tuning-workflow': {
+        title: 'Fine-tuning workflow',
+        short: 'Adattól a betanított modellig — konkrét formátumok, hiperparaméterek, és mikor éri meg egyáltalán a fine-tuning a RAG vagy a prompt engineering helyett.',
+        desc: ['500-5000 jó minőségű példa (ChatML, ShareGPT, Alpaca formátumban) jobb eredményt ad, mint egy tízszer nagyobb, de zajos adathalmaz.', 'Konzervatív induló hiperparaméterek (1e-5 – 5e-5 tanulási ráta, LoRA rank 64-128), és a loss-görbe figyelése az overfitting elkerüléséhez.']
+      },
+      'browser-agents': {
+        title: 'AI böngésző-ügynökök',
+        short: 'Claude in Chrome, Operator — amikor az AI a te bejelentkezett sessionödben kattint, navigál, kitölt. Két architektúra, és egy egyedi biztonsági kockázat.',
+        desc: ['A marketinges OSWorld-pontszám (72,5%) és a valós, hosszú-horizontú feladat-megoldási arány (20,6%) drámaian eltér egymástól.', 'A prompt injection itt azonosság-átvételi kockázat, nem csak kellemetlen kimenet — az ügynök a te sessionödben cselekszik.']
+      },
+      'prompt-versioning': {
+        title: 'Prompt-verziózás és csapatmunka',
+        short: 'A prompt kód — verziózás, A/B tesztelés, rollback nélkül a módosítások magas kockázatú deploy-okká válnak, a hibakeresés archeológiává.',
+        desc: ['A "release label" mechanizmus kód-újratelepítés nélküli deploy-t ad — sose "pull latest" productionban, mindig egy megjelölt verzióra rögzítve.', 'A piac élesen konszolidálódott 2025-2026-ban (Humanloop leállt, Helicone karbantartási módba került) — ellenőrizd, aktívan fejlesztik-e még az eszközt.']
+      },
+      'llm-observability': {
+        title: 'Observability és monitoring',
+        short: 'Mit mérj egy éles AI-rendszernél — LLM-monitoring vs. agent-observability, konkrét eszközök, és a mérési overhead ára.',
+        desc: ['Négy alapréteg (tracing, költség, minőség, prompt-verzió), és agenteknél extra dimenziók: hűség, biztonság, eszközválasztás helyessége.', 'A mérési overhead eszközök közt akár tízszeres különbséget mutat — mérd meg a saját rendszereden, mielőtt bevezetnéd.']
       },
       'ai-history': {
         title: 'AI történelem',
@@ -629,6 +664,31 @@ const graphText = {
         title: 'Multi-Agent Systems',
         short: 'When one agent isn’t enough — the hub-and-spoke pattern, Anthropic’s own research system with a 90.2% improvement, and the most common failure modes.',
         desc: ['66.4% of the market chooses the hub-and-spoke (orchestrator-worker) pattern — not the more complex, academic “swarm” architectures.', 'According to the MAST taxonomy, 41.77% of failures stem from spec drift — with concrete mitigations (resource ownership, verifier agent).']
+      },
+      'cost-optimization': {
+        title: 'Cost Optimization',
+        short: 'Prompt caching, batch API, prompt compression — four techniques that stack to cut API bills by 60-90%.',
+        desc: ['Prompt caching saves 50-90% with a static-first prompt structure; the batch API adds a 50% discount — together, roughly 25% of the standard cost.', 'A concrete, published case study: $180/mo → $70/mo, a 61% reduction implemented in a single afternoon.']
+      },
+      'fine-tuning-workflow': {
+        title: 'Fine-Tuning Workflow',
+        short: 'From data to a trained model — concrete formats, hyperparameters, and when fine-tuning is even worth it over RAG or prompt engineering.',
+        desc: ['500-5,000 high-quality examples (in ChatML, ShareGPT, or Alpaca format) beat a ten-times-larger but noisy dataset.', 'Conservative starting hyperparameters (1e-5 – 5e-5 learning rate, LoRA rank 64-128), and watching the loss curve to avoid overfitting.']
+      },
+      'browser-agents': {
+        title: 'AI Browser Agents',
+        short: 'Claude in Chrome, Operator — when AI clicks, navigates, and fills forms inside your logged-in session. Two architectures, and one unique security risk.',
+        desc: ['The marketed OSWorld score (72.5%) and the real, long-horizon task-completion rate (20.6%) differ dramatically.', 'Prompt injection here is an identity-takeover risk, not just an unpleasant output — the agent acts inside your own session.']
+      },
+      'prompt-versioning': {
+        title: 'Prompt Versioning and Team Collaboration',
+        short: 'The prompt is code — without versioning, A/B testing, and rollback, changes become high-risk deploys and debugging becomes archaeology.',
+        desc: ['The “release label” mechanism enables deploy without a code redeploy — never pull latest in production, always pin to a labeled version.', 'The market consolidated sharply in 2025-2026 (Humanloop shut down, Helicone entered maintenance mode) — check whether a tool is still actively developed.']
+      },
+      'llm-observability': {
+        title: 'Observability and Monitoring',
+        short: 'What to measure in a live AI system — LLM monitoring vs. agent observability, concrete tools, and the cost of the measurement overhead itself.',
+        desc: ['Four base layers (tracing, cost, quality, prompt version), plus extra dimensions for agents: faithfulness, safety, correct tool selection.', 'Measurement overhead varies up to tenfold between tools — measure it on your own system before adopting one.']
       },
       'ai-history': {
         title: 'AI History',
