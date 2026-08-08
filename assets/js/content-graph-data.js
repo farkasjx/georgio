@@ -77,17 +77,18 @@ const graphNodesBase = [
   { id: 'mcp',                     cluster: 'practice', color: '#359a9c', x: 4160,  y: 580 },
   { id: 'llmops',                  cluster: 'practice', color: '#65a30d', x: 4500,  y: 580 },
   { id: 'ollama',                  cluster: 'practice', color: '#4ec9c9', x: 4840,  y: 580 },
+  { id: 'multi-agent-systems',     cluster: 'practice', color: '#6f9c8a', x: 3820,  y: 820 },
 
   /* ── Tudás & kontextus (jobb oszlop, alul) ── */
-  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 3820,  y: 1040 },
-  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 4160,  y: 1040 },
-  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 4500,  y: 1040 },
-  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 3820,  y: 1280 },
-  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 4160,  y: 1280 },
-  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 4500,  y: 1280 },
-  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 3820,  y: 1520 },
-  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 4160,  y: 1520 },
-  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 4500,  y: 1520 },
+  { id: 'rag',                     cluster: 'knowledge', color: '#1613d4', x: 3820,  y: 1260 },
+  { id: 'rag-architectures',       cluster: 'knowledge', color: '#0891b2', x: 4160,  y: 1260 },
+  { id: 'graphrag',                cluster: 'knowledge', color: '#c026d3', x: 4500,  y: 1260 },
+  { id: 'vectordb',                cluster: 'knowledge', color: '#17cb11', x: 3820,  y: 1500 },
+  { id: 'embedding-models',        cluster: 'knowledge', color: '#f59e0b', x: 4160,  y: 1500 },
+  { id: 'memory',                  cluster: 'knowledge', color: '#e1c9cb', x: 4500,  y: 1500 },
+  { id: 'okf',                     cluster: 'knowledge', color: '#a78bfa', x: 3820,  y: 1740 },
+  { id: 'knowledge-cutoff',        cluster: 'knowledge', color: '#896671', x: 4160,  y: 1740 },
+  { id: 'hallucination',           cluster: 'knowledge', color: '#a3ce40', x: 4500,  y: 1740 },
 ];
 
 const graphEdges = [
@@ -123,6 +124,7 @@ const graphEdges = [
   ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
+  ['multi-agent-systems','agent-architecture'], ['multi-agent-systems','mcp'], ['multi-agent-systems','harness-engineering'], ['multi-agent-systems','agentic-coding'],
   ['ai-history','reasoning'], ['ai-history','base-vs-instruct'], ['ai-history','architecture'],
   ['model-types','architecture'], ['model-types','multimodal'], ['model-types','agent-architecture'], ['model-types','dense-moe'],
   ['open-weight','ollama'], ['open-weight','fine-tuning'], ['open-weight','quantization-quality'], ['open-weight','hardware'],
@@ -338,6 +340,11 @@ const graphText = {
         title: 'Hogyan dönt egy AI agent',
         short: 'A ReAct hurok: gondolkodj, cselekedj, figyeld meg, ismételd — és a "mikor van vége" probléma.',
         desc: ['Hogyan dönti el a modell, melyik eszközt hívja (tool-definíció alapú választás), és miért nincs beépített "kész" fogalma egy agentnek.', 'Három eszköz-kategória (data, action, orchestration) mint gyakorlati tervezési szempont a kockázat-kezeléshez.']
+      },
+      'multi-agent-systems': {
+        title: 'Multi-agent rendszerek',
+        short: 'Amikor egy ügynök nem elég — hub-and-spoke minta, az Anthropic saját kutatási rendszere 90,2%-os javulással, és a leggyakoribb hibamódok.',
+        desc: ['A piac 66,4%-a a hub-and-spoke (orchestrator-worker) mintát választja — nem a bonyolultabb, akadémiai "swarm" architektúrákat.', 'A MAST-taxonómia szerint a hibák 41,77%-a specifikáció-eltérésből ered — konkrét védekező technikákkal (resource ownership, verifier agent).']
       },
       'ai-history': {
         title: 'AI történelem',
@@ -617,6 +624,11 @@ const graphText = {
         title: 'How an AI Agent Decides',
         short: 'The ReAct loop: reason, act, observe, repeat — and the “when is it done” problem.',
         desc: ['How the model decides which tool to call (tool-definition-based selection), and why an agent has no built-in sense of “done.”', 'Three tool categories (data, action, orchestration) as a practical design lens for risk management.']
+      },
+      'multi-agent-systems': {
+        title: 'Multi-Agent Systems',
+        short: 'When one agent isn’t enough — the hub-and-spoke pattern, Anthropic’s own research system with a 90.2% improvement, and the most common failure modes.',
+        desc: ['66.4% of the market chooses the hub-and-spoke (orchestrator-worker) pattern — not the more complex, academic “swarm” architectures.', 'According to the MAST taxonomy, 41.77% of failures stem from spec drift — with concrete mitigations (resource ownership, verifier agent).']
       },
       'ai-history': {
         title: 'AI History',

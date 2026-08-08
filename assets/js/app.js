@@ -5,7 +5,7 @@
 /* ── PAGE NAVIGATION ── */
 const pages = [
   'map', 'tools', 'glossary', 'prompting', 'aiconfig', 'mcp', 'security', 'reasoning', 'vibecoding', 'agentic-coding', 'multimodal', 'diffusion', 'base-vs-instruct',
-  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'ai-history', 'ml-fundamentals', 'neural-network-basics',
+  'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'multi-agent-systems', 'ai-history', 'ml-fundamentals', 'neural-network-basics',
   'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation', 'diy-model-training', 'code-llm-architecture', 'domain-specific-models',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
   'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops', 'ai-copyright-law', 'ai-regulation-liability',
@@ -363,7 +363,7 @@ function initMap() {
   const svgEl  = document.getElementById('map-svg');
   const panel  = document.getElementById('map-panel');
 
-  const W = 5280, H = 1940;
+  const W = 5280, H = 1980;
   canvas.style.width  = W + 'px';
   canvas.style.height = H + 'px';
   svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);

@@ -92,6 +92,7 @@ const PAGE_ORDER = [
   { key: 'vibecoding',            label: 'Vibe coding',             labelEn: 'Vibe Coding',              dot: '#60a5fa' },
   { key: 'agentic-coding',        label: 'Agentic kódolás',         labelEn: 'Agentic Coding',           dot: '#34d399' },
   { key: 'agent-architecture',    label: 'Agent architektúra',      labelEn: 'Agent Architecture',       dot: '#22d3ee' },
+  { key: 'multi-agent-systems',   label: 'Multi-agent rendszerek',  labelEn: 'Multi-Agent Systems',      dot: '#6f9c8a' },
   { key: 'harness-engineering',   label: 'Harness engineering',     labelEn: 'Harness Engineering',      dot: '#0d9488' },
   { key: 'ai-code-review',        label: 'AI code review',          labelEn: 'AI Code Review',           dot: '#8b5cf6' },
   { key: 'ai-workflow-automation', label: 'Workflow automatizáció', labelEn: 'Workflow Automation',      dot: '#f43f5e' },
