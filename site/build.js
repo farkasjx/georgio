@@ -84,6 +84,7 @@ const PAGE_ORDER = [
   { key: 'enterprise-ai',         label: 'Vállalati AI',            labelEn: 'Enterprise AI',            dot: '#dc2626' },
   { key: 'ai-copyright-law',      label: 'AI és szerzői jog',       labelEn: 'AI and Copyright Law',     dot: '#b45309' },
   { key: 'ai-regulation-liability', label: 'AI szabályozás és felelősség', labelEn: 'AI Regulation and Legal Liability', dot: '#6d28d9' },
+  { key: 'conversation-data-training', label: 'Beszélgetés-adat és tanítás', labelEn: 'Conversation Data and Training', dot: '#2a9d8f' },
 
   /* ── Gyakorlat & eszközök ── */
   { key: 'tools',                 label: 'AI Eszközök',             labelEn: 'AI Tools',                 dot: '#4ecb8d' },

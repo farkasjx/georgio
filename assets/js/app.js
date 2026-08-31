@@ -8,7 +8,7 @@ const pages = [
   'architecture', 'tokenization', 'randomness', 'ai-safety', 'agent-architecture', 'multi-agent-systems', 'ai-history', 'ml-fundamentals', 'neural-network-basics', 'cost-optimization', 'fine-tuning-workflow', 'browser-agents', 'prompt-versioning', 'llm-observability',
   'huggingface', 'enterprise-ai', 'harness-engineering', 'ai-code-review', 'ai-workflow-automation', 'diy-model-training', 'code-llm-architecture', 'domain-specific-models',
   'ollama', 'hardware', 'model-size', 'quantization-quality', 'dense-moe', 'kv-cache',
-  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops', 'ai-copyright-law', 'ai-regulation-liability',
+  'latency', 'model-routing', 'model-training', 'fine-tuning', 'evaluation', 'model-types', 'open-weight', 'llmops', 'ai-copyright-law', 'ai-regulation-liability', 'conversation-data-training',
   'rag', 'vectordb', 'memory', 'okf', 'hallucination', 'knowledge-cutoff', 'rlhf', 'embedding-models', 'graphrag', 'rag-architectures'
 ];
 

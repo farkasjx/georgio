@@ -63,6 +63,7 @@ const graphNodesBase = [
   { id: 'enterprise-ai',           cluster: 'context', color: '#dc2626', x: 2300,  y: 1700 },
   { id: 'ai-copyright-law',        cluster: 'context', color: '#b45309', x: 2640,  y: 1700 },
   { id: 'ai-regulation-liability', cluster: 'context', color: '#6d28d9', x: 2980,  y: 1700 },
+  { id: 'conversation-data-training', cluster: 'context', color: '#2a9d8f', x: 3320,  y: 1700 },
 
   /* ── Gyakorlat & eszközök (jobb oszlop, felül) ── */
   { id: 'tools',                   cluster: 'practice', color: '#4ecb8d', x: 3820,  y: 100 },
@@ -126,6 +127,7 @@ const graphEdges = [
   ['evaluation','agentic-coding'], ['evaluation','model-size'], ['evaluation','randomness'],
   ['ai-copyright-law','ai-safety'], ['ai-copyright-law','open-weight'], ['ai-copyright-law','ai-regulation-liability'],
   ['ai-regulation-liability','ai-safety'], ['ai-regulation-liability','enterprise-ai'], ['ai-regulation-liability','agent-architecture'],
+  ['conversation-data-training','rlhf'], ['conversation-data-training','enterprise-ai'], ['conversation-data-training','ai-regulation-liability'], ['conversation-data-training','security'],
   ['embedding-models','vectordb'], ['embedding-models','model-training'], ['embedding-models','fine-tuning'], ['embedding-models','dense-moe'], ['embedding-models','evaluation'],
   ['ai-safety','security'], ['ai-safety','base-vs-instruct'], ['ai-safety','rlhf'],
   ['agent-architecture','reasoning'], ['agent-architecture','mcp'], ['agent-architecture','agentic-coding'], ['agent-architecture','security'],
@@ -335,6 +337,11 @@ const graphText = {
         title: 'AI szabályozás és felelősség',
         short: 'Ki dönt az AI jogi kereteiről, és ki felel, ha egy autonóm AI-ügynök kárt okoz — az EU központosított és az USA töredezett modellje szemben.',
         desc: ['Az EU AI Act 2026. augusztus 2-től válik teljesen kikényszeríthetővé, míg az USA-nak nincs átfogó szövetségi AI-törvénye, csak töredezett állami szabályozás.', 'A "felelősség-vákuum" probléma: autonóm AI-ügynököknél a hagyományos fejlesztő-üzemeltető-felhasználó felelősségi lánc egyre nehezebben alkalmazható.']
+      },
+      'conversation-data-training': {
+        title: 'Beszélgetés-adat és tanítás',
+        short: 'Hogyan kerülnek be a felhasználói beszélgetések a modellek súlyaiba — nem folyamatos tanulás, hanem diszkrét, időszakos tanítási körök.',
+        desc: ['Az Anthropic 2025 augusztusi fordulata: fogyasztói beszélgetések alapból bekerülnek a tanításba, 5 éves megőrzéssel, hacsak nem opt-outolsz 2025. szeptember 28-ig.', 'Egy meglepő kutatás: még PII-mentes beszélgetésekből is 84-90%-os pontossággal kikövetkeztethető életkor, nem és ország, kizárólag a stílus és témaválasztás alapján.']
       },
       'embedding-models': {
         title: 'Embedding modellek',
@@ -645,9 +652,14 @@ const graphText = {
         short: 'Who decides the legal frameworks for AI, and who is liable when an autonomous AI agent causes harm — the EU’s centralized model versus the US’s fragmented one.',
         desc: ['The EU AI Act becomes fully enforceable from August 2, 2026, while the US has no comprehensive federal AI law, only a patchwork of state regulations.', 'The “liability vacuum” problem: the traditional developer-deployer-user liability chain is increasingly hard to apply to autonomous AI agents.']
       },
+      'conversation-data-training': {
+        title: 'Conversation Data and Training',
+        short: 'How user conversations end up in model weights — not continuous learning, but discrete, periodic training runs.',
+        desc: ['Anthropic’s August 2025 policy shift: consumer conversations are used for training by default, retained for 5 years, unless you opt out by September 28, 2025.', 'A surprising finding: even PII-free conversations can reveal age, gender, and country with 84-90% accuracy, based on style and topic alone.']
+      },
       'embedding-models': {
         title: 'Embedding Models',
-        short: 'How the vector space behind RAG and search gets built \u2014 contrastive learning, positive/negative pairs.',
+        short: 'How the vector space behind RAG and search gets built — contrastive learning, positive/negative pairs.',
         desc: ['A separate training objective (similarity-based ordering) that doesn\u2019t follow automatically from a generation-focused pretraining run.', 'Two development paths: a dedicated, smaller encoder vs. turning a large LLM into an embedding generator, plus MTEB as the measuring stick.']
       },
       'ai-safety': {
